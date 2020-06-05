@@ -1,0 +1,293 @@
+org: caiiiycuk
+app: doszone-sls
+service: doszone-sls
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: eu-central-1
+  memorySize: 256
+  versionFunctions: false
+  environment:
+    SESSION_TABLE: "dzsession"
+    STORAGE_TABLE: "dzstorage"
+    TURBO_TABLE: "dzturbo"
+    SUBSCRIPTIONS_TABLE: "dzsubscriptions"
+    GAME_DATA_TABLE: "dzgamedata"
+    RUN_INSTANCE: "jjs-runInstance"
+    PUT_CURL: "jjs-putCurl"
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.SESSION_TABLE}"
+        - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.STORAGE_TABLE}"
+        - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.TURBO_TABLE}"
+        - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.SUBSCRIPTIONS_TABLE}"
+        - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.GAME_DATA_TABLE}"
+        - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.GAME_DATA_TABLE}/index/*"
+    - Effect: Allow
+      Action:
+        - lambda:InvokeFunction
+      Resource:
+        - "arn:aws:lambda:${opt:region, self:provider.region}:*:function:${self:provider.environment.RUN_INSTANCE}"
+        - "arn:aws:lambda:${opt:region, self:provider.region}:*:function:${self:provider.environment.PUT_CURL}"
+    - Effect: Allow
+      Action:
+        - s3:ListBucket
+      Resource:
+        - "arn:aws:s3:::doszone-uploads"
+    - Effect: Allow
+      Action:
+        - s3:Get*
+        - s3:Put*
+      Resource:
+        - "arn:aws:s3:::doszone-uploads/*"
+
+functions:
+  ssoUrl:
+    handler: src/sso-url.ssoUrl
+    name: doszone-sls-ssoUrl
+    events:
+      - http:
+          path: /sso/url
+          method: get
+          cors: true
+  ssoLogin:
+    handler: src/sso-login.ssoLogin
+    name: doszone-sls-ssoLogin
+    events:
+      - http:
+          path: /sso/login
+          method: get
+          cors: true
+  ssoLogout:
+    handler: src/sso-logout.ssoLogout
+    name: doszone-sls-ssoLogout
+    events:
+      - http:
+          path: /sso/logout
+          method: get
+          cors: true
+  storageGet:
+    handler: src/storage-get.storageGet
+    name: doszone-sls-storageGet
+    events:
+      - http:
+          path: /storage/get
+          method: get
+          cors: true
+  storagePut:
+    handler: src/storage-put.storagePut
+    name: doszone-sls-storagePut
+    events:
+      - http:
+          path: /storage/put
+          method: post
+          cors: true
+  personalPut:
+    handler: src/personal-put.personalPut
+    name: doszone-sls-personalPut
+    events:
+      - http:
+          path: /personal/put
+          method: post
+          cors: true
+  personalAcl:
+    handler: src/personal-acl.personalAcl
+    name: doszone-sls-personalAcl
+    events:
+      - http:
+          path: /personal/acl
+          method: post
+          cors: true
+  gameGet:
+    handler: src/game-get.gameGet
+    name: doszone-sls-gameGet
+    events:
+      - http:
+          path: /game/get
+          method: get
+          cors: true
+  gameSearch:
+    handler: src/game-search.gameSearch
+    name: doszone-sls-gameSearch
+    events:
+      - http:
+          path: /game/search
+          method: get
+          cors: true
+  inappWebhook:
+    handler: src/inapp-webhook.inappWebhook
+    name: doszone-sls-inappWebhook
+    events:
+      - http:
+          path: /inapp/webhook
+          method: post
+          cors: true
+  inappGet:
+    handler: src/inapp-get.inappGet
+    name: doszone-sls-inappGet
+    events:
+      - http:
+          path: /inapp/get
+          method: get
+          cors: true
+  turboLimits:
+    handler: src/turbo-limits.turboLimits
+    name: doszone-sls-turboLimits
+    events:
+      - http:
+          path: /turbo/limits
+          method: get
+          cors: true
+  turboConnect:
+    handler: src/turbo-connect.turboConnect
+    name: doszone-sls-turboConnect
+    timeout: 10
+    events:
+      - http:
+          path: /turbo/connect
+          method: get
+          cors: true
+  turboDisconnect:
+    handler: src/turbo-disconnect.turboDisconnect
+    name: doszone-sls-turboDisconnect
+    events:
+      - http:
+          path: /turbo/disconnect
+          method: get
+          cors: true
+  turboDescribe:
+    handler: src/turbo-describe.turboDescribe
+    name: doszone-sls-turboDescribe
+    events:
+      - http:
+          path: /turbo/describe
+          method: get
+          cors: true
+  personalUrl:
+    handler: src/personal-url.personalUrl
+    name: doszone-sls-personalUrl
+    timeout: 10
+    events:
+      - http:
+          path: /personal/url
+          method: get
+          cors: true
+  turboGet:
+    handler: src/turbo-get.turboGet
+    name: doszone-sls-turboGet
+  turboIp:
+    handler: src/turbo-ip.turboIp
+    name: doszone-sls-turboIp
+  turboClose:
+    handler: src/turbo-close.turboClose
+    name: doszone-sls-turboClose
+
+resources:
+  Resources:
+    dzsession:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: nonce
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: nonce
+            KeyType: HASH
+        TableName: ${self:provider.environment.SESSION_TABLE}
+        BillingMode: PAY_PER_REQUEST
+    dzstorage:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: email
+            AttributeType: S
+          -
+            AttributeName: key
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: email
+            KeyType: HASH
+          -
+            AttributeName: key
+            KeyType: RANGE
+        TableName: ${self:provider.environment.STORAGE_TABLE}
+        BillingMode: PAY_PER_REQUEST
+    dzturbo:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: email
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: email
+            KeyType: HASH
+        TableName: ${self:provider.environment.TURBO_TABLE}
+        BillingMode: PAY_PER_REQUEST
+    dzsubsriptions:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: email
+            AttributeType: S
+          -
+            AttributeName: subscription
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: email
+            KeyType: HASH
+          -
+            AttributeName: subscription
+            KeyType: RANGE
+        TableName: ${self:provider.environment.SUBSCRIPTIONS_TABLE}
+        BillingMode: PAY_PER_REQUEST
+    gamedata:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: url
+            AttributeType: S
+          -
+            AttributeName: repTopic
+            AttributeType: N
+        KeySchema:
+          -
+            AttributeName: url
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          -
+            IndexName: repTopic
+            KeySchema:
+            -
+              AttributeName: repTopic
+              KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+        TableName: ${self:provider.environment.GAME_DATA_TABLE}
+        BillingMode: PAY_PER_REQUEST
+
+
+plugins:
+  - serverless-plugin-typescript

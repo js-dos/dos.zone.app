@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Dos.Zone play dos games in browser"
+    />
+    <meta name="google-play-app" content="app-id=zone.dos.app" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5L33M3K6MQ"></script>
+    <script>
+     window.dataLayer = window.dataLayer || [];
+     function gtag(){dataLayer.push(arguments);}
+     gtag('js', new Date());
+     gtag('config', 'G-5L33M3K6MQ');
+    </script>
+
+    <script src="%PUBLIC_URL%/janus/adapter-latest.js"></script>
+    <script src="%PUBLIC_URL%/janus/janus.js"></script>
+    <script src="%PUBLIC_URL%/3rdparty/zipjs/zip.js"></script>
+    <script src="%PUBLIC_URL%/emulators/emulators.js"></script>
+    <script src="%PUBLIC_URL%/emulators-ui/emulators-ui.js"></script>
+
+    <link rel="stylesheet" href="%PUBLIC_URL%/emulators-ui/emulators-ui.css">
+    <title>Dos.Zone</title>
+  </head>
+  <body tabindex="0">
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root" class="bp3-dark"></div>
+    <script type="text/javascript" >
+     Janus.init({ debug: ["warn", "error"] });
+     emulators.pathPrefix = "%PUBLIC_URL%/emulators/";
+     zip.workerScriptsPath = "%PUBLIC_URL%/3rdparty/zipjs/";
+    </script>
+  </body>
+</html>
