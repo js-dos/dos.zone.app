@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@blueprintjs/core": "^3.28.1",
+    "@blueprintjs/icons": "^3.18.0",
     "@capacitor/android": "2.1.2",
     "@capacitor/cli": "^2.1.2",
     "@capacitor/core": "^2.1.2",
@@ -16,9 +18,11 @@
     "@types/react-router-dom": "^5.1.5",
     "i18next": "^19.4.5",
     "i18next-browser-languagedetector": "^4.2.0",
+    "normalize.css": "^8.0.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-i18next": "^11.5.0",
+    "react-markdown": "^4.3.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "typescript": "~3.7.2"

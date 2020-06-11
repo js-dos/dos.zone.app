@@ -1,14 +1,19 @@
 import React from 'react';
+
+import { Navbar, Button, Alignment, Classes } from "@blueprintjs/core";
+import { IconNames } from "@blueprintjs/icons";
+
 import { useTranslation } from 'react-i18next';
 
 import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Link
+    Redirect,
 } from "react-router-dom";
 
 import { Landing } from "./pages/landing";
+import { Navigator } from "./ui/navigator";
 
 function Creator() {
     return <div>Creator</div>;
@@ -19,19 +24,15 @@ function App() {
     const lang = i18n.language;
 
     return <Router>
-        <a href="/en">English</a>
-        <br/>
-        <a href="/ru">Russian</a>
-        <br/>
-        <Link to={"/" + lang}>{t("home")}</Link>
-        <br/>
-        <Link to={"/" + lang + "/creator"}>{t("creator")}</Link>
-
+        <Navigator />
         <Switch>
+            <Route exact path="/">
+                <Redirect to={"/" + lang} />
+            </Route>
             <Route exact path="/:lang/">
                 <Landing />
             </Route>
-            <Route path="/:lang/creator">
+            <Route path="/:lang/studio">
                 <Creator />
             </Route>
         </Switch>
