@@ -4,9 +4,9 @@ import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
 const en = {
-    translation: {
+    navigator: {
         home: "Home",
-        creator: "Creator",
+        studio: "Game Studio",
     },
     landing: {
         header: `
@@ -27,12 +27,28 @@ Don’t be discouraged, this is a great chance to help community! Try our [Game 
 Our database is community drived. Database sources is here. Report about your problem and we will try to solve it asap.
 `,
     },
+    studio: {
+        welcome: "Welcome to Game Studio",
+        description: "Follow steps to create playable game",
+        step: "Step",
+        upload: "Upload",
+        archive: "archive of program",
+        try: "try",
+        choose_file: "Choose file...",
+        zip_error: "Can't read ZIP file: ",
+        executable_not_found: "Archive does not have executables",
+        try_other: "Upload another archive",
+        selected_executable: "Selected executable",
+        select_executable: "Select executable",
+        select_other: "Select other file",
+        use_this: "Use this",
+    }
 }
 
 const ru = {
-    translation: {
+    navigator: {
         home: "Домой",
-        creator: "Упаковщик",
+        studio: "Творческая студия",
     },
     landing: {
         header: `
@@ -54,6 +70,22 @@ DOS.Zone - это управляемая сообществом <span style="col
 
 `,
     },
+    studio: {
+        welcome: "Добро пожаловать в творческую студию",
+        description: "Следуйте инструкции что бы создать игру",
+        step: "Шаг",
+        upload: "Загрузите",
+        archive: "архив с программой",
+        try: "попробуйте",
+        choose_file: "Выберите файл...",
+        zip_error: "Ошибка чтений файла: ",
+        executable_not_found: "Архив не содержит исполняемых файлов",
+        try_other: "Загрузить другой архив",
+        selected_executable: "Исполняемый файл",
+        select_executable: "Выберите исполняемый файл",
+        select_other: "Выбрать другой файл",
+        use_this: "Использовать этот",
+    }
 }
 
 const resources = {

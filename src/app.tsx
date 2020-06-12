@@ -12,12 +12,10 @@ import {
     Redirect,
 } from "react-router-dom";
 
-import { Landing } from "./pages/landing";
 import { Navigator } from "./ui/navigator";
 
-function Creator() {
-    return <div>Creator</div>;
-}
+import { Landing } from "./pages/landing";
+import { GameStudio } from "./pages/game-studio";
 
 function App() {
     const { t, i18n } = useTranslation();
@@ -33,7 +31,7 @@ function App() {
                 <Landing />
             </Route>
             <Route path="/:lang/studio">
-                <Creator />
+                <GameStudio />
             </Route>
         </Switch>
     </Router>;

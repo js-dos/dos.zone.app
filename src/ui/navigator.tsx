@@ -1,8 +1,6 @@
 import React from 'react';
 
-import {
-    Link
-} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { Navbar, Alignment, Classes } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
@@ -11,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 
 export function Navigator() {
-    const { t, i18n } = useTranslation();
+    const { t, i18n } = useTranslation("navigator");
     const lang = i18n.language;
 
     return <Navbar>
