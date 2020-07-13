@@ -2,22 +2,34 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
     H1, H2, Classes, FileInput, Intent, Spinner,
-    Tree, ITreeNode, Button, ButtonGroup
+    Tree, ITreeNode, Button, AnchorButton
 } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 
 import { ZipExecutables } from "../core/zip-explorer";
 import { TFunction } from 'i18next';
+import { Emulators } from "emulators";
+
+import DosBundle from 'emulators/dist/types/dos/bundle/dos-bundle';
+
+import { DosConfigUi } from "./dos-config-ui";
+import { DosConfig } from 'emulators/dist/types/dos/bundle/dos-conf';
+
+declare const emulators: Emulators;
 
 interface State {
     zip?: Uint8Array,
     executables?: string[],
+    executable?: string,
+    config?: DosConfig,
+    bundle?: Uint8Array,
 }
 
 interface StepProps {
     t: TFunction,
     state: State,
     nextStep: (state: State) => void;
+    back: () => void;
     restart: () => void;
 }
 
@@ -75,6 +87,13 @@ const steps = [
         const executables: string[] = state.executables || [];
 
         if (executable !== null) {
+            const next = () => {
+                nextStep({
+                    ...state,
+                    executable: executable as string,
+                });
+            };
+
             return <div>
                 <p>{t("selected_executable")}</p>
                 <div style={{
@@ -93,7 +112,7 @@ const steps = [
                 </div>
                 <br/>
                 <div>
-                    <Button intent={Intent.PRIMARY}>{t("use_this")}</Button>
+                    <Button intent={Intent.PRIMARY} onClick={next}>{t("use_this")}</Button>
                 </div>
             </div>;
         }
@@ -117,7 +136,7 @@ const steps = [
             nodes.push({
                 id: next,
                 label: next,
-                icon: IconNames.PLAY,
+                icon: IconNames.CIRCLE,
             });
         }
         return <div>
@@ -130,6 +149,92 @@ const steps = [
             </div>
         </div>
     },
+
+    (props: StepProps) => {
+        const {t, state, nextStep} = props;
+        const [error, _setError] = useState<string>("");
+        const [loading, setLoading] = useState<boolean>(false);
+        const [config, setConfig] = useState<DosConfig | null>(() => {
+            if (state.config) {
+                return state.config;
+            }
+
+            setTimeout(() => {
+                emulators.dosBundle()
+                         .then((bundle) => {
+                             bundle.autoexec(state.executable + "");
+                             state.config = bundle.config;
+                             setConfig(state.config);
+                         })
+                         .catch(() => setError(new Error("Can't crate dos bundle")));
+            }, 1);
+            return null;
+        });
+
+        const setError = (error: Error) => {
+            _setError(error.message + "\n\n" + JSON.stringify(error.stack));
+        };
+
+        const createArchive = async () => {
+            setLoading(true);
+            const dosBundle = await emulators.dosBundle();
+            dosBundle.config = config as DosConfig;
+
+            const blob = new Blob([state.zip as Uint8Array]);
+            const url = URL.createObjectURL(blob);
+
+            dosBundle
+                .extract(url);
+
+            const archive = await dosBundle.toUint8Array();
+            URL.revokeObjectURL(url);
+
+            nextStep({
+                ...state,
+                bundle: archive,
+            });
+        };
+
+        if (loading || config === null) {
+            return <div>
+                <Spinner/>
+            </div>;
+        }
+
+
+        return <div>
+            {error}
+            <DosConfigUi config={config as DosConfig} t={t}></DosConfigUi>
+            <Button onClick={() => {
+                createArchive().catch(setError);
+            }}>{t("create")}</Button>
+        </div>;
+    },
+
+    (props: StepProps) => {
+        const {t, state, back} = props;
+        const onDownload = () => {
+            const blob = new Blob([state.bundle as Uint8Array], {
+                type: "application/zip"
+            });
+
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "game.jsdos";
+            a.style.display = "none";
+            document.body.appendChild(a);
+
+            a.click();
+            a.remove();
+
+            //TODO: revokeObjectURL
+        };
+        return <div>
+            <Button onClick={back}>{t("back")}</Button>&nbsp;
+            <Button onClick={onDownload}>{t("download")}</Button>
+        </div>;
+    },
 ];
 
 export function GameStudio() {
@@ -137,25 +242,42 @@ export function GameStudio() {
     const [step, setStep] = useState<number>(1);
     const [state, setState] = useState<State>({});
 
-    const stepComponent = React.createElement(steps[step - 1], {
+    const props = {
         t,
         state,
-        nextStep: (state) => {
+        nextStep: (state: State) => {
             setState(state);
             setStep(step + 1);
+        },
+        back: () => {
+            setStep(step - 1);
         },
         restart: () => {
             setState({});
             setStep(1);
         },
-    });
+    };
+
+    const stepComponent = React.createElement(steps[step - 1], props);
 
     return <div className={Classes.TEXT_LARGE}
                 style={{padding: "40px"}}>
         <H1>{t("welcome")}</H1>
         <p>{t("description")}</p>
 
-        <H2>{t("step")} {step}/{steps.length}</H2>
+        <div style={{display: "flex", alignItems: "center"}}>
+            <H2>{t("step")} {step}/{steps.length}</H2>
+            <AnchorButton
+                style={{
+                    marginLeft: "10px",
+                    marginTop: "-20px",
+                    visibility: (step > 1 ? "visible" : "hidden")
+                }}
+                className={Classes.MINIMAL}
+                icon={IconNames.CROSS}
+                intent={Intent.DANGER}
+                onClick={() => props.restart()}></AnchorButton>
+        </div>
         <div>
             {stepComponent}
         </div>

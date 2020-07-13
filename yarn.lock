@@ -4040,6 +4040,11 @@ emojis-list@^3.0.0:
   resolved "https://registry.yarnpkg.com/emojis-list/-/emojis-list-3.0.0.tgz#5570662046ad29e2e916e71aae260abdff4f6a78"
   integrity sha512-/kyM18EfinwXZbno9FyUGeFh87KC8HRQBQGildHZbEuRyWFOmv1U10o9BBp8XVZDVNNuQKyIGIu5ZYAAXJ0V2Q==
 
+emulators@^0.0.23:
+  version "0.0.23"
+  resolved "https://registry.yarnpkg.com/emulators/-/emulators-0.0.23.tgz#cc6627d905680f617112b105e5c69c5f9b0b0de3"
+  integrity sha512-RBQ9a8ShANBy4Sjm8iYdkFxLrZnUZABysF5KFKC/b08NuYJ1BcOv4OoG//J6zFyxksJbvi1ELxZEqgesFtOW1Q==
+
 encodeurl@~1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/encodeurl/-/encodeurl-1.0.2.tgz#ad3ff4c86ec2d029322f5a02c3a9a606c95b3f59"

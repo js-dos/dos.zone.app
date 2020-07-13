@@ -42,6 +42,18 @@ Our database is community drived. Database sources is here. Report about your pr
         select_executable: "Select executable",
         select_other: "Select other file",
         use_this: "Use this",
+        create: "Create archive",
+        download: "Download js-dos bundle",
+        allowed_values: "Allowed values",
+        dosbox_config: "Configure dosbox options",
+        cpu_config: "Configure CPU options",
+        output_config: "Configure output options",
+        mixer_config: "Configure sound options",
+        autoexec_config: "Setup autoexec script",
+        auto: "auto",
+        "true": "Yes",
+        "false": "No",
+        back: "Back",
     }
 }
 
@@ -85,6 +97,18 @@ DOS.Zone - это управляемая сообществом <span style="col
         select_executable: "Выберите исполняемый файл",
         select_other: "Выбрать другой файл",
         use_this: "Использовать этот",
+        create: "Создать архив",
+        download: "Скачать js-dos архив",
+        allowed_values: "Допустимые значения",
+        dosbox_config: "Настройте параметры dosbox",
+        cpu_config: "Настройте параметры эмуляции CPU",
+        output_config: "Настройте параметры вывода",
+        mixer_config: "Настройте параметры звука",
+        autoexec_config: "Скрипт запуска",
+        auto: "Автоматически",
+        "true": "Да",
+        "false": "Нет",
+        back: "Назад",
     }
 }
 
