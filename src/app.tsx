@@ -5,6 +5,8 @@ import { IconNames } from "@blueprintjs/icons";
 
 import { useTranslation } from 'react-i18next';
 
+import { GameStudioGuide } from "./pages/guides/game-studio";
+
 import {
     BrowserRouter as Router,
     Switch,
@@ -32,6 +34,9 @@ function App() {
             </Route>
             <Route path="/:lang/studio">
                 <GameStudio />
+            </Route>
+            <Route path="/:lang/guide/studio">
+                <GameStudioGuide />
             </Route>
         </Switch>
     </Router>;

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Link } from "react-router-dom";
+
 import { useTranslation } from 'react-i18next';
 import {
     H1, H2, Classes, FileInput, Intent, Spinner,
@@ -15,9 +17,13 @@ import DosBundle from 'emulators/dist/types/dos/bundle/dos-bundle';
 import { DosConfigUi } from "./dos-config-ui";
 import { DosConfig } from 'emulators/dist/types/dos/bundle/dos-conf';
 
+import ReactMardown from "react-markdown/with-html";
+import { renderers } from "../core/renderers";
+
 declare const emulators: Emulators;
 
 interface State {
+    name?: string,
     zip?: Uint8Array,
     executables?: string[],
     executable?: string,
@@ -27,6 +33,7 @@ interface State {
 
 interface StepProps {
     t: TFunction,
+    lang: string,
     state: State,
     nextStep: (state: State) => void;
     back: () => void;
@@ -58,7 +65,9 @@ const steps = [
 
                 try {
                     const executables = await ZipExecutables(blob);
+                    const name = file.name.substr(0, file.name.lastIndexOf('.'));
                     nextStep({
+                        name,
                         zip,
                         executables,
                     });
@@ -221,7 +230,7 @@ const steps = [
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = "game.jsdos";
+            a.download = state.name + ".jsdos";
             a.style.display = "none";
             document.body.appendChild(a);
 
@@ -232,7 +241,11 @@ const steps = [
         };
         return <div>
             <Button onClick={back}>{t("back")}</Button>&nbsp;
-            <Button onClick={onDownload}>{t("download")}</Button>
+            <Button onClick={onDownload} intent={Intent.PRIMARY}>{t("download")}</Button>
+            <br/><br/>
+            <ReactMardown renderers={renderers}
+                          source={t("help", {lang: props.lang, game: state.name})}
+                          escapeHtml={false}></ReactMardown>
         </div>;
     },
 ];
@@ -244,6 +257,7 @@ export function GameStudio() {
 
     const props = {
         t,
+        lang: i18n.language,
         state,
         nextStep: (state: State) => {
             setState(state);
@@ -263,7 +277,12 @@ export function GameStudio() {
     return <div className={Classes.TEXT_LARGE}
                 style={{padding: "40px"}}>
         <H1>{t("welcome")}</H1>
-        <p>{t("description")}</p>
+        <p>
+            {t("description")}&nbsp;
+            (<Link to={"/" + i18n.language + "/guide/studio"}>
+                {t("read_guide")}
+            </Link>)
+        </p>
 
         <div style={{display: "flex", alignItems: "center"}}>
             <H2>{t("step")} {step}/{steps.length}</H2>

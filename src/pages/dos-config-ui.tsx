@@ -144,12 +144,12 @@ function RenderOption(props: { option: DosConfigOption,
         </div>;
     }
 
-    if (option.name === "lines") {
-        const onValueChange = (newValue: string) => {
-            option.value = newValue;
-            setValue(newValue);
-        }
+    const onValueChange = (newValue: string) => {
+        option.value = newValue;
+        setValue(newValue);
+    }
 
+    if (option.name === "lines") {
         return <div>
           <Blockquote>
             <EditableText
@@ -165,10 +165,17 @@ function RenderOption(props: { option: DosConfigOption,
         <Button intent={showDescription ? Intent.PRIMARY : Intent.NONE}
                 minimal={true}
                 onClick={() => setShowDescription(!showDescription) }
+                style={ { position: "absolute", right: "12px" } }
                 icon={showDescription ? IconNames.EYE_OPEN : IconNames.EYE_OFF}></Button>
         <br/><br/>
         <Collapse isOpen={showDescription}>
             <Blockquote>{option.description}</Blockquote>
         </Collapse>
+        <Blockquote>
+            <EditableText multiline={false}
+                          value={value + ""}
+                          onChange={onValueChange}>
+            </EditableText>
+        </Blockquote>
     </div>;
 }

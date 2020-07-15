@@ -7,6 +7,33 @@ const en = {
     navigator: {
         home: "Home",
         studio: "Game Studio",
+        database: "Database",
+    },
+    guides: {
+        gameStudio: `
+# Game Studio
+
+Game Studio is a tool for creation \`js-dos bundles\`. You can think about bundle like a single archive that contains everything to run DOS program ([read more](https://js-dos.com/v7/build/docs/#js-dos-bundle--doszone)). Bundles is core part of our database, it allows to easy share DOS games in web.
+
+The process of bundle creation is simple:
+
+1. Click on \`Browse\` button, and choose program archive.
+
+![Browser button](/guides/bundle_guide_1.jpg)
+
+2. Select executable that will be runned when DOS emulator starts.
+
+![Select executable](/guides/bundle_guide_2.jpg)
+
+3. On next step you can change various of dosbox options, but usually defaults is pretty good. Scroll down and press \`create archive\`.
+
+![Create archive](/guides/bundle_guide_3.jpg)
+
+4. Bundle is ready and you can download it.
+
+![Download archive](/guides/bundle_guide_4.jpg)
+
+`
     },
     landing: {
         header: `
@@ -16,7 +43,7 @@ DOS.Zone - is an <span style="color: #DB3737; font-size: larger;">**interactive*
 
 ## Do you want to play your favorite game?
 
-Just use search tools on our [platform](https://talks.dos.zone/c/{{lang}}) to find page of your game. Run you game directly in browser or discuss it with other people.
+Just use search tools on our [database](/{{lang}}/database) to find page of game. Then run game directly in browser or discuss it with other people.
 
 ## What if there is no browser version for my game?
 
@@ -24,7 +51,7 @@ Don’t be discouraged, this is a great chance to help community! Try our [Game 
 
 ## What if my favorite game is missing?
 
-Our database is community drived. Database sources is here. Report about your problem and we will try to solve it asap.
+Our database is community drived. Database sources is [here](https://github.com/caiiiycuk/dos.zone). Report about your problem and we will try to solve it asap.
 `,
     },
     studio: {
@@ -54,6 +81,31 @@ Our database is community drived. Database sources is here. Report about your pr
         "true": "Yes",
         "false": "No",
         back: "Back",
+        read_guide: "read guide",
+        help: `
+### Help to community
+
+You can help community if you [search](https://talks.dos.zone/search?expanded=true&q=%23{{lang}}%20{{game}}) for game in our database and post it in game thread. It will make our database better.
+
+On the game page:
+
+1. Press "Reply" button
+
+![reply](/guides/reply.jpg)
+
+2. Press "Upload" button and select bundle
+
+![upload](/guides/upload.jpg)
+
+Enter description of bundle and press "Reply"
+
+3. Flag the message to add it in post header
+
+![flag](/guides/flag_0.jpg)
+![flag](/guides/flag.jpg)
+
+Thank you!
+`
     }
 }
 
@@ -61,6 +113,34 @@ const ru = {
     navigator: {
         home: "Домой",
         studio: "Творческая студия",
+        database: "База данных",
+    },
+    guides: {
+        gameStudio: `
+# Творческая студия
+
+Творческая студия это инструмент для создания \`пакетов js-dos\`. Он содержит все необходимое для запуска DOS програм ([подробнее](https://js-dos.com/v7/build/docs/#js-dos-bundle--doszone)). Пакеты это основая концепция нашей базы данных, они позволяют шарить DOS игры в вебе.
+
+Процесс создания пакетов прост:
+
+1. Нажмите кнопку \`Browse\` и выберите архив с программой.
+
+![Browser button](/guides/bundle_guide_1.jpg)
+
+2. Выберите запускаемый файл который будет запущен в эмуляторе.
+
+![Select executable](/guides/bundle_guide_2.jpg)
+
+3. На следующем шаге вы можете поменять настройки dosbox, но обычно настройки по умолчанию хорошо подходят. Нажмите \`Создать архив\` внизу страницы.
+
+![Create archive](/guides/bundle_guide_3.jpg)
+
+4. Пакет готов и вы можете скачать его.
+
+![Download archive](/guides/bundle_guide_4.jpg)
+
+Спасибо!
+`
     },
     landing: {
         header: `
@@ -70,7 +150,7 @@ DOS.Zone - это управляемая сообществом <span style="col
 
 ## Хотите поиграть в свою любимую игру?
 
-Воспользуйтесь инструментами поиска нашей [платформы](https://talks.dos.zone/c/{{lang}}), и найдите страничку вашей любимой игры. Запустите игру прямо в браузере или обсудите её с другими фанатами.
+Воспользуйтесь инструментами поиска [базы данных](/{{lang}}/database), и найдите страничку вашей любимой игры. Запустите игру прямо в браузере или обсудите её с другими фанатами.
 
 ## Для моей игры нет версии для браузера
 
@@ -78,7 +158,7 @@ DOS.Zone - это управляемая сообществом <span style="col
 
 ## Моей любимой игры нет в базе данных
 
-Наша база данных управляется сообществом. Её исходный код опубликован здесь. Сообщите нам о проблеме и мы постораемся добавить игру как можно скорее.
+Наша база данных управляется сообществом. Её исходный код опубликован [здесь](https://github.com/caiiiycuk/dos.zone). Сообщите нам о проблеме и мы постораемся добавить игру как можно скорее.
 
 `,
     },
@@ -109,6 +189,29 @@ DOS.Zone - это управляемая сообществом <span style="col
         "true": "Да",
         "false": "Нет",
         back: "Назад",
+        read_guide: "читать руководство",
+        help: `
+### Помогите сообществу
+
+Вы можете помочь сообществу если [найдете](https://talks.dos.zone/search?expanded=true&q=%23{{lang}}%20{{game}}) страницу игры в нашей базе данных и прикрепите ваш архив к игре. Это сделает нашу базуданных лучше.
+
+На странице игры:
+
+1. Нажмите кнопку "Ответить"
+
+![reply](/guides/reply.jpg)
+
+2. Нажмите кнопку "Загрузить" и выберите архив с игрой
+
+![upload](/guides/upload.jpg)
+
+Введите комментарий к вашему архиву, опубликуйте сообщение.
+
+3. Призовите администратора что бы опубликовать архив в шапке игры.
+
+![flag](/guides/flag_0.jpg)
+![flag](/guides/flag.jpg)
+`
     }
 }
 
