@@ -1,5 +1,6 @@
 #!/bin/bash
 
-yarn add emulators
-rm -rf public/emulators/*
-cp -r node_modules/emulators/dist/* public/emulators/
+yarn add js-dos@beta emulators
+rm -rf public/js-dos/*
+cp -r node_modules/js-dos/dist/* public/js-dos/
+cp -r node_modules/emulators/dist/wlibzip* public/js-dos/

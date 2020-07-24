@@ -1,17 +1,13 @@
 import React, { useState, FormEvent } from 'react';
-import DosBundle from 'emulators/dist/types/dos/bundle/dos-bundle';
 import { DosConfigCategory, DosConfigOption, DosConfigValue, DosConfig } from 'emulators/dist/types/dos/bundle/dos-conf';
 
 import {
-    H1, H2, H3, Classes, FileInput, Intent, Spinner,
-    Tree, ITreeNode, Button, AnchorButton,
-    Card,
-    Elevation,
+    H3,
+    Button,
+    Collapse,
+    Intent,
     Callout,
     Blockquote,
-    Label,
-    UL,
-    Collapse,
     RadioGroup,
     Radio,
     EditableText,

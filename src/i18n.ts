@@ -33,17 +33,32 @@ The process of bundle creation is simple:
 
 ![Download archive](/guides/bundle_guide_4.jpg)
 
-`
+`,
+        database: `
+# Games database
+
+Our database is structured like forum, every game have own page, where game can be discussed. All js-dos bundles attached to game page.
+
+To play game in browser just [find game](https://talks.dos.zone/search?expanded=true&q=%23{{lang}}) page and press on js-dos bundle. Feel free to [add](/{{lang}}/studio) new version of game in our database.
+
+You can [query](https://talks.dos.zone/search?expanded=true&q=%23{{lang}}%20tags%3Ajsdos) list of all games that have js-dos bundles.
+
+Take attention that our base support multiple languages, please post messages in correct language.
+
+Our database is community drived. Database sources is [here](https://github.com/caiiiycuk/dos.zone). Report about your problem and we will try to solve it asap.
+`,
     },
     landing: {
-        header: `
+        header_1: `
 # Welcome!
 
 DOS.Zone - is an <span style="color: #DB3737; font-size: larger;">**interactive**</span> database of DOS games. We not only mantain full collection of games, but also provide serivces to play you favoirte game in **browser** or **mobile**.
 
 ## Do you want to play your favorite game?
 
-Just use search tools on our [database](/{{lang}}/database) to find page of game. Then run game directly in browser or discuss it with other people.
+Just use search tools on our [database](#) to find page of game. Then run game directly in browser or discuss it with other people.
+`,
+        header_2: `
 
 ## What if there is no browser version for my game?
 
@@ -53,6 +68,7 @@ Don’t be discouraged, this is a great chance to help community! Try our [Game 
 
 Our database is community drived. Database sources is [here](https://github.com/caiiiycuk/dos.zone). Report about your problem and we will try to solve it asap.
 `,
+        browse_database: "Browse database",
     },
     studio: {
         welcome: "Welcome to Game Studio",
@@ -82,6 +98,8 @@ Our database is community drived. Database sources is [here](https://github.com/
         "false": "No",
         back: "Back",
         read_guide: "read guide",
+        stop: "Stop",
+        start: "Start",
         help: `
 ### Help to community
 
@@ -140,17 +158,33 @@ const ru = {
 ![Download archive](/guides/bundle_guide_4.jpg)
 
 Спасибо!
-`
+`,
+        database: `
+# База данных игр 
+
+Наша база данных построена на основе форума, каждая игра имеет свою страницу для обсуждения. js-dos архивы так же прикреплены к странице игры.
+
+Что бы запустить игру в браузере [найдите](https://talks.dos.zone/search?expanded=true&q=%23{{lang}}) её страницу и запуститье js-dos архив. Вы можете [добавить](/{{lang}}/studio) новую версию игры и помочь сообществу.
+
+[Список](https://talks.dos.zone/search?expanded=true&q=%23{{lang}}%20tags%3Ajsdos) всех игр для которых есть js-dos архив.
+
+Обратите внимание, что наша база данных поддерживает несколько языков, пожалуйтса пишите сообщения в своей ветке.
+
+Наша база данных управляется сообществом. Её исходный код опубликован [здесь](https://github.com/caiiiycuk/dos.zone). Сообщите нам о проблеме и мы постораемся решить её как можно скорее.
+`,
     },
     landing: {
-        header: `
+        header_1: `
 # Добро пожаловать!
 
 DOS.Zone - это управляемая сообществом <span style="color: #DB3737; font-size: larger;">**интерктивная**</span> база данных DOS игр. Мы не только поддерживаем полную коллекцию игр, но и сервисы позваляющие играть в них прямо в **браузере** или **на мобильных устройствах**.
 
 ## Хотите поиграть в свою любимую игру?
 
-Воспользуйтесь инструментами поиска [базы данных](/{{lang}}/database), и найдите страничку вашей любимой игры. Запустите игру прямо в браузере или обсудите её с другими фанатами.
+Воспользуйтесь инструментами поиска [базы данных](#), и найдите страничку вашей любимой игры. Запустите игру прямо в браузере или обсудите её с другими фанатами.
+
+`,
+        header_2: `
 
 ## Для моей игры нет версии для браузера
 
@@ -161,6 +195,7 @@ DOS.Zone - это управляемая сообществом <span style="col
 Наша база данных управляется сообществом. Её исходный код опубликован [здесь](https://github.com/caiiiycuk/dos.zone). Сообщите нам о проблеме и мы постораемся добавить игру как можно скорее.
 
 `,
+        browse_database: "Поиск в базе",
     },
     studio: {
         welcome: "Добро пожаловать в творческую студию",
@@ -190,6 +225,8 @@ DOS.Zone - это управляемая сообществом <span style="col
         "false": "Нет",
         back: "Назад",
         read_guide: "читать руководство",
+        stop: "Остановить",
+        start: "Запустить",
         help: `
 ### Помогите сообществу
 
@@ -229,7 +266,7 @@ i18n
         },
         resources,
         fallbackLng: 'en',
-        debug: true,
+        debug: false,
         interpolation: {
             escapeValue: false,
         }

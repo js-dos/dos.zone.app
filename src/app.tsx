@@ -1,8 +1,5 @@
 import React from 'react';
 
-import { Navbar, Button, Alignment, Classes } from "@blueprintjs/core";
-import { IconNames } from "@blueprintjs/icons";
-
 import { useTranslation } from 'react-i18next';
 
 import { GameStudioGuide } from "./pages/guides/game-studio";
@@ -12,31 +9,43 @@ import {
     Switch,
     Route,
     Redirect,
+    useParams,
 } from "react-router-dom";
 
 import { Navigator } from "./ui/navigator";
 
 import { Landing } from "./pages/landing";
 import { GameStudio } from "./pages/game-studio";
+import { Player } from "./player/player";
+
+function PlayerWrapper() {
+    const { url } = useParams();
+    return <Player bundleUrl={decodeURIComponent(url)}></Player>;
+}
 
 function App() {
-    const { t, i18n } = useTranslation();
+    const { i18n } = useTranslation();
     const lang = i18n.language;
 
     return <Router>
-        <Navigator />
         <Switch>
             <Route exact path="/">
                 <Redirect to={"/" + lang} />
             </Route>
             <Route exact path="/:lang/">
+                <Navigator />
                 <Landing />
             </Route>
             <Route path="/:lang/studio">
+                <Navigator />
                 <GameStudio />
             </Route>
             <Route path="/:lang/guide/studio">
+                <Navigator />
                 <GameStudioGuide />
+            </Route>
+            <Route path="/:lang/player/:url">
+                <PlayerWrapper />
             </Route>
         </Switch>
     </Router>;

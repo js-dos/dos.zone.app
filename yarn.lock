@@ -1103,18 +1103,18 @@
     classnames "^2.2"
     tslib "~1.10.0"
 
-"@capacitor/android@2.1.2":
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/@capacitor/android/-/android-2.1.2.tgz#1b46359b981753b5d0950ad0e37db223402ec0ad"
-  integrity sha512-V24ZwerrFFWkcLYxhoofhg3Hv4BxH76EFr2zeVJOJkiY9yffey0VMjaE10QPyFrSIshbDtEsYwm2gxUc4wxgjA==
+"@capacitor/android@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@capacitor/android/-/android-2.3.0.tgz#6092a219c1d5bf2b541b8c4e9b8bc7794b192601"
+  integrity sha512-5mxRW/3ZJPKZStXcqkuEJemsY1A9JrmhEz3lInRfCRvDZKTJWcR7NLrOawDHHFO3pjjej2jnSbmQHo6EjGuZ9w==
 
-"@capacitor/cli@^2.1.2":
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/@capacitor/cli/-/cli-2.1.2.tgz#d4354308e5912728815d88cabfca2c6b3212cbc5"
-  integrity sha512-xxkkEKCjQAVvFO5UwnBqAMQ/UcmTQfKAVPBGIqTxT20sqPVxqMq4INGJyB+qu+6pbe7KwZKywBS7/zFMw+Ngtg==
+"@capacitor/cli@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@capacitor/cli/-/cli-2.3.0.tgz#29791c6d7e984cec27e661bf5a5dd8d948198310"
+  integrity sha512-MU6T0L3p4cvpkkPUjh63NVzrGMn+u4AS5TCGquj9wJ4sO/r7g1oTfYvLbqi7TjFqliVwVqUuUa7IUYfNuEAdrw==
   dependencies:
     chalk "^2.3.0"
-    commander "^2.12.2"
+    commander "^4.1.1"
     compare-versions "^3.1.0"
     fs-extra "^4.0.3"
     inquirer "6.3.1"
@@ -1125,10 +1125,10 @@
     which "^1.3.0"
     xml2js "^0.4.19"
 
-"@capacitor/core@^2.1.2":
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/@capacitor/core/-/core-2.1.2.tgz#d710b2a873f8c9ba1184a67f6c27bdb2a3a0a4af"
-  integrity sha512-oi+n23h9cJ/yaeMIlrnoeCV5p7pv2XWdT+cXzwh9j72LV+Y/oSGcNgFWGEAR/B1UVlv6LnLLQSs9CUXhNlh+Nw==
+"@capacitor/core@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@capacitor/core/-/core-2.3.0.tgz#e8a16226d8f0873d73e259b96d32ab1f845f02b4"
+  integrity sha512-hiU6Im1R195NB/7U5Zdli5UVUje0JztgwE7r5zaRQKUXyEyHsQ4bOTo2qqPZv9XYXa1QrulfKAgMzBQzt41bVg==
   dependencies:
     tslib "^1.9.0"
 
@@ -3128,7 +3128,7 @@ combined-stream@^1.0.6, combined-stream@~1.0.6:
   dependencies:
     delayed-stream "~1.0.0"
 
-commander@^2.11.0, commander@^2.12.2, commander@^2.20.0:
+commander@^2.11.0, commander@^2.20.0:
   version "2.20.3"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
   integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
@@ -6422,6 +6422,11 @@ jest@24.9.0:
   dependencies:
     import-local "^2.0.0"
     jest-cli "^24.9.0"
+
+js-dos@^7.0.0-beta.7:
+  version "7.0.0-beta.7"
+  resolved "https://registry.yarnpkg.com/js-dos/-/js-dos-7.0.0-beta.7.tgz#6dd3d6600212e0a24826cf1b208d994281f0769c"
+  integrity sha512-2i3KuqFHl+YjxHMFpDoHvSk7b77AYfXo9SgjlfNCIAY2LJAC6JmlWLWewMyuW6ca+1COuVDyPJEfYgoEjxfmkA==
 
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"

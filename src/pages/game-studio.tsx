@@ -12,13 +12,13 @@ import { ZipExecutables } from "../core/zip-explorer";
 import { TFunction } from 'i18next';
 import { Emulators } from "emulators";
 
-import DosBundle from 'emulators/dist/types/dos/bundle/dos-bundle';
-
 import { DosConfigUi } from "./dos-config-ui";
 import { DosConfig } from 'emulators/dist/types/dos/bundle/dos-conf';
 
 import ReactMardown from "react-markdown/with-html";
 import { renderers } from "../core/renderers";
+
+import { Player } from "../player/player";
 
 declare const emulators: Emulators;
 
@@ -42,7 +42,7 @@ interface StepProps {
 
 const steps = [
     (props: StepProps) => {
-        const {t, state, nextStep} = props;
+        const {t, nextStep} = props;
         const [error, setError] = useState<string>("");
         const [loadProgress, setLoadProgress] = useState<number>(0);
         const [reader, setReader] = useState<FileReader|null>(null);
@@ -222,12 +222,15 @@ const steps = [
 
     (props: StepProps) => {
         const {t, state, back} = props;
-        const onDownload = () => {
+        const [url] = useState<string>(() => {
             const blob = new Blob([state.bundle as Uint8Array], {
                 type: "application/zip"
             });
+            return URL.createObjectURL(blob);
+        });
+        const [bundleUrl, setBundleUrl] = useState<string|undefined>(url);
 
-            const url = URL.createObjectURL(blob);
+        const onDownload = () => {
             const a = document.createElement('a');
             a.href = url;
             a.download = state.name + ".jsdos";
@@ -236,12 +239,29 @@ const steps = [
 
             a.click();
             a.remove();
+        }
 
-            //TODO: revokeObjectURL
-        };
+        const onStopStart = () => {
+            if (bundleUrl) {
+                setBundleUrl(undefined);
+            } else {
+                setBundleUrl(url);
+            }
+        }
+
         return <div>
+            <div style={{
+                position: "relative",
+                width: "64vw",
+                height: "40vw",
+                background: "black",
+            }}>
+                <Player bundleUrl={bundleUrl} />
+            </div>
+            <br/>
             <Button onClick={back}>{t("back")}</Button>&nbsp;
-            <Button onClick={onDownload} intent={Intent.PRIMARY}>{t("download")}</Button>
+            <Button onClick={onDownload} intent={Intent.PRIMARY}>{t("download")}</Button>&nbsp;
+            <Button onClick={onStopStart} intent={Intent.WARNING}>{bundleUrl ? t("stop") : t("start")}</Button>
             <br/><br/>
             <ReactMardown renderers={renderers}
                           source={t("help", {lang: props.lang, game: state.name})}
