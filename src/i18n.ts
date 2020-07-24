@@ -257,8 +257,18 @@ const resources = {
     ru,
 }
 
+class ShortLanguageDetector extends LanguageDetector {
+    detect(detectionOrder?: any): string | undefined {
+        let lang = super.detect(detectionOrder);
+        if (lang !== undefined) {
+            lang = lang.split("-")[0];
+        }
+        return lang;
+    }
+}
+
 i18n
-    .use(LanguageDetector)
+    .use(ShortLanguageDetector)
     .use(initReactI18next)
     .init({
         detection: {
