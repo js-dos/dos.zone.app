@@ -1,34 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
     Classes,
     Intent, Overlay,
     Card, Button, Icon
 } from "@blueprintjs/core";
+import { useHistory } from 'react-router-dom';
 import { IconNames } from "@blueprintjs/icons";
 
 import ReactMardown from "react-markdown/with-html";
 import { renderers } from "../core/renderers";
+import { myStorage } from "../core/storage";
 
-import { Plugins } from '@capacitor/core';
-const { Browser } = Plugins;
+import { repositoryUrl, runInTab } from "../core/browser-tab";
 
-
-const repositoryUrl = "https://talks.dos.zone/c/rep/11";
-Browser.prefetch({ urls: [repositoryUrl] });
 
 export function Landing() {
     const { t, i18n } = useTranslation("landing");
     const dbGuide = useTranslation("guides").t("database", {lang: i18n.language});
     const [dbGuideOpened, setDbGuideOpened] = useState<boolean>(false);
+    const history = useHistory();
 
-    function runInTab() {
-        Browser.open({
-            url: repositoryUrl,
-            toolbarColor: "#000000",
-            windowName: "_self",
+    useEffect(() => {
+        myStorage().then((storage) => {
+            if (Object.keys(storage.recentlyPlayed).length > 0) {
+                history.push("/" + i18n.language + "/my");
+            }
         });
-    }
+    }, []);
+
 
     return <div className={[Classes.RUNNING_TEXT, Classes.TEXT_LARGE].join(" ")}
                 style={{padding: "0 40px"}}>
@@ -45,7 +45,7 @@ export function Landing() {
                       escapeHtml={false}></ReactMardown>
 
         <Button large={true}
-                onClick={runInTab}
+                onClick={() => runInTab(repositoryUrl)}
                 intent={Intent.PRIMARY}
                 icon={IconNames.SEARCH}>{t("browse_database")}</Button>
 

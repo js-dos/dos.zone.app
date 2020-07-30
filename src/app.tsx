@@ -18,12 +18,15 @@ import { Navigator } from "./ui/navigator";
 
 import { Landing } from "./pages/landing";
 import { GameStudio } from "./pages/game-studio";
+import { My } from "./pages/my";
+
 import { Player } from "./player/player";
 
 function PlayerWrapper() {
     const { url } = useParams();
     return <Player bundleUrl={decodeURIComponent(url)}></Player>;
 }
+
 
 function App() {
     const { i18n } = useTranslation();
@@ -46,6 +49,10 @@ function App() {
             <Route path="/:lang/guide/studio">
                 <Navigator />
                 <GameStudioGuide />
+            </Route>
+            <Route path={["/:lang/my/:url", "/:lang/my"]}>
+                <Navigator />
+                <My />
             </Route>
             <Route path="/:lang/player/:url">
                 <PlayerWrapper />

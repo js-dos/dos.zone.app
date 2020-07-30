@@ -9,3 +9,75 @@ body {
     bottom: 0;
     right: 0;
 }
+
+.recently-played {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    width: 100%;
+    height: auto;
+    margin-left: 20px;
+}
+
+
+.thumb-frame {
+    background: black !important;
+    position: relative;
+    width: 270px;
+    height: 220px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 20px;
+    border: 2px solid black;
+    border-radius: 10px !important;
+    overflow: hidden;
+}
+
+
+.thumb-frame-selected {
+    border: 2px solid white;
+}
+
+.thumb-title, .thumb-title-2 {
+    background-color: rgba(0, 0, 0, 0.5);
+    text-align: center;
+    color: white;
+    font-weight: bold;
+}
+
+.thumb-title-2 {
+    font-weight: normal;
+}
+
+.thumb-author {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    color: darkgray;
+}
+
+.thumb-screenshot {
+    width: 100%;
+}
+
+.left-margin {
+    margin-left: 20px;
+}
+
+.one-row {
+    display: flex;
+    align-items: baseline;
+}
+
+.one-row button {
+    margin-left: 10px;
+}
+
+.thumb-play {
+    position: absolute;
+    left: calc(50% - 16px);
+    top: calc(50% -  16px);
+    background: rgba(128, 128, 128, 0.7);
+    border-radius: 32px;
+    padding: 5px;
+}

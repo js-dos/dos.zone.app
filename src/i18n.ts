@@ -9,6 +9,10 @@ const en = {
         studio: "Game Studio",
         database: "Database",
     },
+    my: {
+        selected: "Selected",
+        recently_played: "Others",
+    },
     guides: {
         gameStudio: `
 # Game Studio
@@ -132,6 +136,10 @@ const ru = {
         home: "Домой",
         studio: "Творческая студия",
         database: "База данных",
+    },
+    my: {
+        selected: "Выбранная",
+        recently_played: "Другие",
     },
     guides: {
         gameStudio: `
