@@ -12,6 +12,8 @@ import {
     useParams,
 } from "react-router-dom";
 
+import { CapConfig } from "./cap-config";
+
 import { Navigator } from "./ui/navigator";
 
 import { Landing } from "./pages/landing";
@@ -28,6 +30,7 @@ function App() {
     const lang = i18n.language;
 
     return <Router>
+        <CapConfig lang={lang}></CapConfig>
         <Switch>
             <Route exact path="/">
                 <Redirect to={"/" + lang} />

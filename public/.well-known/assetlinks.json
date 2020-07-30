@@ -1,0 +1,9 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "zone.dos.app",
+    "sha256_cert_fingerprints":
+    ["EE:D9:1C:90:5A:33:58:94:56:0F:29:0B:3E:4C:CD:E1:93:C5:EE:6A:B7:74:C1:CC:18:7D:BE:EE:39:81:DC:39"]
+  }
+}]

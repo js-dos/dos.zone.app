@@ -12,10 +12,13 @@ export function Player(props: IPlayerProps) {
     const [dos, setDos] = useState<DosInstance | null>(null);
 
     useEffect(() => {
+        window.screen.orientation.lock('landscape');
+
         const root = rootRef.current as HTMLDivElement;
         const dos = Dos(root);
         setDos(dos);
         return () => {
+            window.screen.orientation.unlock();
             dos.stop();
         };
     }, []);
