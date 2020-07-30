@@ -10,6 +10,7 @@ const { App: CapApp } = Plugins;
 export function CapConfig(props: { lang: string }) {
     let history = useHistory();
     useEffect(() => {
+        const firstUrl = history.location.pathname;
         CapApp.addListener('appUrlOpen', (data: { url: string }) => {
             if (data.url) {
                 const playerIndex = data.url.indexOf("/player/");
@@ -19,11 +20,20 @@ export function CapConfig(props: { lang: string }) {
                     history.push(newUrl);
                 }
             }
-
-            return () => {
-                CapApp.removeAllListeners();
-            };
         });
+
+        CapApp.addListener('backButton', async () => {
+            if (history.length === 1 || history.location.pathname === firstUrl) {
+                CapApp.exitApp();
+                return;
+            }
+
+            history.goBack();
+        });
+
+        return () => {
+            CapApp.removeAllListeners();
+        };
     }, [props.lang]);
     return null;
 };
