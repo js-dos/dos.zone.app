@@ -3,18 +3,32 @@ import { useTranslation } from 'react-i18next';
 import {
     Classes,
     Intent, Overlay,
-    Card, AnchorButton, Icon
+    Card, Button, Icon
 } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 
 import ReactMardown from "react-markdown/with-html";
 import { renderers } from "../core/renderers";
 
+import { Plugins } from '@capacitor/core';
+const { Browser } = Plugins;
+
+
+const repositoryUrl = "https://talks.dos.zone/c/rep/11";
+Browser.prefetch({ urls: [repositoryUrl] });
 
 export function Landing() {
     const { t, i18n } = useTranslation("landing");
     const dbGuide = useTranslation("guides").t("database", {lang: i18n.language});
     const [dbGuideOpened, setDbGuideOpened] = useState<boolean>(false);
+
+    function runInTab() {
+        Browser.open({
+            url: repositoryUrl,
+            toolbarColor: "#000000",
+            windowName: "_self",
+        });
+    }
 
     return <div className={[Classes.RUNNING_TEXT, Classes.TEXT_LARGE].join(" ")}
                 style={{padding: "0 40px"}}>
@@ -30,10 +44,10 @@ export function Landing() {
                       source={t("header_1", {lang: i18n.language})}
                       escapeHtml={false}></ReactMardown>
 
-        <AnchorButton large={true}
-                      href={"https://talks.dos.zone/search?expanded=true&q=%23" + i18n.language + "%20tags%3Ajsdos"}
-                      intent={Intent.PRIMARY}
-                      icon={IconNames.SEARCH}>{t("browse_database")}</AnchorButton>
+        <Button large={true}
+                onClick={runInTab}
+                intent={Intent.PRIMARY}
+                icon={IconNames.SEARCH}>{t("browse_database")}</Button>
 
         <ReactMardown renderers={renderers}
                       source={t("header_2", {lang: i18n.language})}

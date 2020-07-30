@@ -1,0 +1,13 @@
+{
+  "appId": "zone.dos.app",
+  "appName": "DOS Zone",
+  "bundledWebRuntime": false,
+  "npmClient": "yarn",
+  "webDir": "build",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {}
+}

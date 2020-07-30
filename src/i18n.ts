@@ -39,9 +39,9 @@ The process of bundle creation is simple:
 
 Our database is structured like forum, every game have own page, where game can be discussed. All js-dos bundles attached to game page.
 
-To play game in browser just [find game](https://talks.dos.zone/search?expanded=true&q=%23{{lang}}) page and press on js-dos bundle. Feel free to [add](/{{lang}}/studio) new version of game in our database.
+To play game in browser just [find game](https://talks.dos.zone/c/rep/11) page and press on js-dos bundle. Feel free to [add](/{{lang}}/studio) new version of game in our database.
 
-You can [query](https://talks.dos.zone/search?expanded=true&q=%23{{lang}}%20tags%3Ajsdos) list of all games that have js-dos bundles.
+You can [query](https://talks.dos.zone/c/rep/11) list of all games that have js-dos bundles.
 
 Take attention that our base support multiple languages, please post messages in correct language.
 
@@ -164,9 +164,9 @@ const ru = {
 
 Наша база данных построена на основе форума, каждая игра имеет свою страницу для обсуждения. js-dos архивы так же прикреплены к странице игры.
 
-Что бы запустить игру в браузере [найдите](https://talks.dos.zone/search?expanded=true&q=%23{{lang}}) её страницу и запуститье js-dos архив. Вы можете [добавить](/{{lang}}/studio) новую версию игры и помочь сообществу.
+Что бы запустить игру в браузере [найдите](https://talks.dos.zone/c/rep/11) её страницу и запуститье js-dos архив. Вы можете [добавить](/{{lang}}/studio) новую версию игры и помочь сообществу.
 
-[Список](https://talks.dos.zone/search?expanded=true&q=%23{{lang}}%20tags%3Ajsdos) всех игр для которых есть js-dos архив.
+[Список](https://talks.dos.zone/c/rep/11) всех игр для которых есть js-dos архив.
 
 Обратите внимание, что наша база данных поддерживает несколько языков, пожалуйтса пишите сообщения в своей ветке.
 
@@ -257,12 +257,17 @@ const resources = {
     ru,
 }
 
+const supportedLanguages = ["en", "ru", "fr", "de", "es", "zh"];
+
 class ShortLanguageDetector extends LanguageDetector {
     detect(detectionOrder?: any): string | undefined {
-        let lang = super.detect(detectionOrder);
-        if (lang !== undefined) {
-            lang = lang.split("-")[0];
+        let lang = super.detect(detectionOrder) || "en";
+        lang = lang.split("-")[0];
+
+        if (lang === "rep" || supportedLanguages.indexOf(lang) === -1) {
+            lang = "en";
         }
+
         return lang;
     }
 }
