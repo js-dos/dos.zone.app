@@ -1103,10 +1103,10 @@
     classnames "^2.2"
     tslib "~1.10.0"
 
-"@capacitor/android@^2.3.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@capacitor/android/-/android-2.3.0.tgz#6092a219c1d5bf2b541b8c4e9b8bc7794b192601"
-  integrity sha512-5mxRW/3ZJPKZStXcqkuEJemsY1A9JrmhEz3lInRfCRvDZKTJWcR7NLrOawDHHFO3pjjej2jnSbmQHo6EjGuZ9w==
+"@capacitor/android@^2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@capacitor/android/-/android-2.4.0.tgz#e75b01b5ce5b60f4ef400c7867e81fd2c1782b47"
+  integrity sha512-5sJicZjtuBRgtmBuV1kvWnIjlu7bnw2TGGp62UXf0ZrjvMUCYSFHBqIHZ8neffW7a3xM5cdGMUlxJ+HfA9ntAg==
 
 "@capacitor/cli@^2.3.0":
   version "2.3.0"

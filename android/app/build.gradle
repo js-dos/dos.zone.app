@@ -10,21 +10,21 @@ android {
         versionName "1.001"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    buildTypes {
-        signingConfigs {
-            debug {
-                storeFile file('../../etc/doszone.keystore')
-                storePassword 'v62a^wb_}#J4-s.j'
-                keyAlias 'doszone'
-                keyPassword 'v62a^wb_}#J4-s.j'
-            }
-            release {
-                storeFile file('../../etc/doszone.keystore')
-                storePassword 'v62a^wb_}#J4-s.j'
-                keyAlias 'doszone'
-                keyPassword 'v62a^wb_}#J4-s.j'
-            }
+    signingConfigs {
+        debug {
+            storeFile file('../../etc/doszone.keystore')
+            storePassword 'v62a^wb_}#J4-s.j'
+            keyAlias 'doszone'
+            keyPassword 'v62a^wb_}#J4-s.j'
         }
+        release {
+            storeFile file('../../etc/doszone.keystore')
+            storePassword 'v62a^wb_}#J4-s.j'
+            keyAlias 'doszone'
+            keyPassword 'v62a^wb_}#J4-s.j'
+        }
+    }
+    buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
