@@ -47,7 +47,7 @@ export function Dhry2(props: {
                 }
             }
         });
-    }, []);
+    }, [ci]);
 
     return <div className="dhry2-test">
         <h1>Dhrystone Benchmark</h1>
