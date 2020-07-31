@@ -21,16 +21,13 @@ export function Dhry2(props: {
 
             time[timeIndex++] = performance.now();
             if (timeIndex === 2) {
-                const delta = time[1] - time[0];
+                const delta = Math.round((time[1] - time[0]) * 10) / 10;
                 const vaxRating = runs * 1000  / delta / 1757;
                 setTokens([
                     "Runs: ", runs + "",
                     "Time: ", delta + "", " ms",
                     "VAX : ", Math.round(vaxRating * 10) / 10 + "",
                 ]);
-                console.log(runs*1000/delta/1757);
-                //stdout.innerHTML += (id) + ": " + runs + " runs, browser time " + delta + " ms, " +
-                //                    "VAX rating " + (runs * 1000 / delta / 1757) + "\n";
                 runs *= 2;
                 timeIndex = 0;
 
@@ -54,7 +51,7 @@ export function Dhry2(props: {
         <div style={{ display: "flex", flexDirection: "column" }}>
             <p>{tokens[0] || ""} <span style={{color: "#15B371"}}>{tokens[1] || ""}</span></p>
             <p>{tokens[2] || ""} <span style={{color: "#15B371"}}>{tokens[3] || ""}</span>{tokens[4] || ""}</p>
-            <p>{tokens[5] || ""} <span style={{color: "#FFC940"}}>{tokens[6] || ""}</span></p>
+            <p>{tokens[5] || ""} <span style={{color: "#15B371"}}>{tokens[6] || ""}</span></p>
         </div>
         {tokens[7] ? <p style={{textAlign: "center"}}>{tokens[7]}<span style={{color: "#FFC940"}}>{tokens[8] || "..."}</span></p> : null }
     </div>;
