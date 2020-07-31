@@ -13,10 +13,10 @@ export function CapConfig(props: { lang: string }) {
         const firstUrl = history.location.pathname;
         CapApp.addListener('appUrlOpen', (data: { url: string }) => {
             if (data.url) {
-                const playerIndex = data.url.indexOf("/player/");
-                if (playerIndex > 0) {
-                    const bundleUrl = data.url.substr(playerIndex + "/player/".length);
-                    const newUrl = "/" + props.lang + "/player/" + bundleUrl;
+                const myIndex = data.url.indexOf("/my/");
+                if (myIndex > 0) {
+                    const bundleUrl = data.url.substr(myIndex + "/my/".length);
+                    const newUrl = "/" + props.lang + "/my/" + bundleUrl;
                     history.push(newUrl);
                 }
             }

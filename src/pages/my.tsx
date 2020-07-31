@@ -18,6 +18,8 @@ export function My() {
     const history = useHistory();
 
     useEffect(() => {
+        setRecentlyPlayed(null); // reset state
+
         myStorage().then(async (my) => {
             if (url !== undefined && url !== null && url.length > 0) {
                 const decodedUrl = decodeURIComponent(url);

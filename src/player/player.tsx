@@ -17,20 +17,20 @@ export function Player(props: IPlayerProps) {
     const [ci, setCi] = useState<CommandInterface | null>(null);
 
     useEffect(() => {
-        const lockedPromise = window.screen.orientation
-                             .lock('landscape')
-                             .then(() => true)
-                             .catch(() => false);
+        /* const lockedPromise = window.screen.orientation
+         *                      .lock('landscape')
+         *                      .then(() => true)
+         *                      .catch(() => false); */
 
         const root = rootRef.current as HTMLDivElement;
         const dos = Dos(root);
         setDos(dos);
         return () => {
-            lockedPromise.then((locked) => {
-                if (locked) {
-                    window.screen.orientation.unlock();
-                }
-            })
+            /* lockedPromise.then((locked) => {
+             *     if (locked) {
+             *         window.screen.orientation.unlock();
+             *     }
+             * }) */
             dos.stop();
         };
     }, []);
