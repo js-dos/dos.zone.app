@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
-import { Navbar, Alignment, Classes } from "@blueprintjs/core";
+import { Navbar, Alignment, Classes, Button } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 
 import { useTranslation } from 'react-i18next';
@@ -11,12 +11,21 @@ import { useTranslation } from 'react-i18next';
 export function NavigatorBack() {
     const { i18n } = useTranslation("navigator");
     const lang = i18n.language;
+    const history = useHistory();
+
+    function goBack() {
+        if (history.length > 1) {
+            history.goBack();
+        } else {
+            history.push("/" + lang + "/my");
+        }
+    }
 
     return <Navbar fixedToTop={false}>
             <Navbar.Group align={Alignment.LEFT}>
                 <Navbar.Heading>
-                    <Link className={[Classes.BUTTON, Classes.MINIMAL, Classes.ICON + "-" + IconNames.ARROW_LEFT].join(" ")}
-                          to={"/" + lang + "/my"}>DOS.Zone</Link>
+                    <Button icon={IconNames.ARROW_LEFT} minimal={true}
+                          onClick={goBack}>DOS.Zone</Button>
                 </Navbar.Heading>
             </Navbar.Group>
             <Navbar.Group align={Alignment.RIGHT}>
