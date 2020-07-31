@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Redirect, useParams, Link, useHistory } from "react-router-dom";
+import { Redirect, useParams, useHistory } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import { Spinner, Intent, Button } from "@blueprintjs/core";
 
@@ -7,7 +7,8 @@ import { myStorage, RecentlyPlayed } from "../core/storage";
 import { GameThumb } from "./components/game-thumb";
 import { IconNames } from "@blueprintjs/icons";
 
-import { repositoryUrl, runInTab } from "../core/browser-tab";
+import { openRepository } from "../core/browser-tab";
+import { getGameData } from "../core/game-query";
 
 export function My() {
     const [recentlyPlayed, setRecentlyPlayed] = useState<RecentlyPlayed | null>(null);
@@ -29,7 +30,7 @@ export function My() {
                 setRecentlyPlayed(my.recentlyPlayed);
             }
         });
-    }, []);
+    }, [url]);
 
     if (recentlyPlayed === null) {
         return <Spinner></Spinner>;
@@ -45,7 +46,8 @@ export function My() {
     });
 
     const active = selected.length === 0 ? keys[0] : selected;
-    const runUrl = "/" + i18n.language + "/player/" + encodeURIComponent(active);
+    const runUrl = "/" + i18n.language + "/eplayer/" + encodeURIComponent(active);
+    const description = getGameData(active).description[i18n.language]?.description || "";
 
     async function runBundle() {
         const storage = await myStorage();
@@ -58,10 +60,11 @@ export function My() {
         <h1>{t("selected")}</h1>
         <div className="recently-played">
             <GameThumb onClick={runBundle} url={active} selected={true} />
+            <div className="thumb-description">{description}</div>
         </div>
         <div className="one-row">
             <h1>{t("recently_played")}</h1>
-            <Button onClick={() => runInTab(repositoryUrl)} icon={IconNames.SEARCH} intent={Intent.PRIMARY}></Button>
+            <Button onClick={() => openRepository()} icon={IconNames.SEARCH} intent={Intent.PRIMARY}></Button>
         </div>
         <div className="recently-played">{
             keys.map((a) => active === a ? null : <GameThumb onClick={() => setSelected(a)} url={a} key={a} selected={false} />)

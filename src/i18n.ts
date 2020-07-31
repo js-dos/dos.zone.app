@@ -10,7 +10,7 @@ const en = {
         database: "Database",
     },
     my: {
-        selected: "Selected",
+        selected: "Play",
         recently_played: "Others",
     },
     guides: {
@@ -53,6 +53,7 @@ Our database is community drived. Database sources is [here](https://github.com/
 `,
     },
     landing: {
+        my_favorite: "Favorites",
         header_1: `
 # Welcome!
 
@@ -138,7 +139,7 @@ const ru = {
         database: "База данных",
     },
     my: {
-        selected: "Выбранная",
+        selected: "Запустить",
         recently_played: "Другие",
     },
     guides: {
@@ -182,6 +183,7 @@ const ru = {
 `,
     },
     landing: {
+        my_favorite: "Избранное",
         header_1: `
 # Добро пожаловать!
 

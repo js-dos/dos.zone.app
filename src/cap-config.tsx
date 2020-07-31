@@ -34,6 +34,7 @@ export function CapConfig(props: { lang: string }) {
         return () => {
             CapApp.removeAllListeners();
         };
+        // eslint-disable-next-line
     }, [props.lang]);
     return null;
 };

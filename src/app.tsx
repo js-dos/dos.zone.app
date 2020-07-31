@@ -15,11 +15,11 @@ import {
 import { CapConfig } from "./cap-config";
 
 import { Navigator } from "./ui/navigator";
+import { NavigatorBack } from "./ui/navigator-back";
 
 import { Landing } from "./pages/landing";
 import { GameStudio } from "./pages/game-studio";
 import { My } from "./pages/my";
-
 import { Player } from "./player/player";
 
 function PlayerWrapper() {
@@ -53,6 +53,14 @@ function App() {
             <Route path={["/:lang/my/:url", "/:lang/my"]}>
                 <Navigator />
                 <My />
+            </Route>
+            <Route path="/:lang/eplayer/:url">
+                <div className="eplayer-root">
+                    <NavigatorBack />
+                    <div className="eplayer-container">
+                        <PlayerWrapper />
+                    </div>
+                </div>
             </Route>
             <Route path="/:lang/player/:url">
                 <PlayerWrapper />

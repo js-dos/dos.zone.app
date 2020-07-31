@@ -5,26 +5,27 @@ import {
     Intent, Overlay,
     Card, Button, Icon
 } from "@blueprintjs/core";
-import { useHistory } from 'react-router-dom';
 import { IconNames } from "@blueprintjs/icons";
 
 import ReactMardown from "react-markdown/with-html";
 import { renderers } from "../core/renderers";
 import { myStorage } from "../core/storage";
 
-import { repositoryUrl, runInTab } from "../core/browser-tab";
+import { openRepository } from "../core/browser-tab";
+import { useHistory } from 'react-router-dom';
 
 
 export function Landing() {
     const { t, i18n } = useTranslation("landing");
     const dbGuide = useTranslation("guides").t("database", {lang: i18n.language});
     const [dbGuideOpened, setDbGuideOpened] = useState<boolean>(false);
+    const [showRecentlyPlayed, setShowRecentlyPlayed] = useState<boolean>(false);
     const history = useHistory();
 
     useEffect(() => {
         myStorage().then((storage) => {
             if (Object.keys(storage.recentlyPlayed).length > 0) {
-                history.push("/" + i18n.language + "/my");
+                setShowRecentlyPlayed(true);
             }
         });
     }, []);
@@ -43,10 +44,18 @@ export function Landing() {
         }}
                       source={t("header_1", {lang: i18n.language})}
                       escapeHtml={false}></ReactMardown>
+        {showRecentlyPlayed ?
+         <Button large={true}
+                 style={{marginRight: "10px", marginBottom: "10px"}}
+                 onClick={() => history.push("/" + i18n.language + "/my")}
+                 intent={Intent.PRIMARY}
+                 icon={IconNames.HEART}>{t("my_favorite")}</Button> :
+         null}
 
         <Button large={true}
-                onClick={() => runInTab(repositoryUrl)}
-                intent={Intent.PRIMARY}
+                style={{marginBottom: "10px"}}
+                onClick={() => openRepository()}
+                intent={showRecentlyPlayed ? Intent.NONE : Intent.PRIMARY}
                 icon={IconNames.SEARCH}>{t("browse_database")}</Button>
 
         <ReactMardown renderers={renderers}

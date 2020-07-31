@@ -1,12 +1,12 @@
 import { Plugins } from '@capacitor/core';
 const { Browser } = Plugins;
 
-export const repositoryUrl = "https://talks.dos.zone/c/rep/11";
+const repositoryUrl = "https://talks.dos.zone/c/rep/11";
 Browser.prefetch({ urls: [repositoryUrl] });
 
-export function runInTab(url: string) {
+export function openRepository() {
     Browser.open({
-        url: url,
+        url: repositoryUrl,
         toolbarColor: "#000000",
         windowName: "_self",
     });

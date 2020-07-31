@@ -14,7 +14,6 @@ body {
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;
-    width: 100%;
     height: auto;
     margin-left: 20px;
 }
@@ -31,6 +30,13 @@ body {
     border: 2px solid black;
     border-radius: 10px !important;
     overflow: hidden;
+}
+
+.thumb-description {
+    width: 270px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 20px;
 }
 
 
@@ -80,4 +86,42 @@ body {
     background: rgba(128, 128, 128, 0.7);
     border-radius: 32px;
     padding: 5px;
+}
+
+.eplayer-root {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.eplayer-container {
+    position: relative;
+    flex-grow: 1;
+}
+
+.dhry2-test {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: rgba(0, 0, 0, 0.7);
+    font-family: monospace;
+}
+
+.dhry2-test p {
+    font-size: 1.5em;
+}
+
+.dhry2-test span {
+    font-weight: bold;
 }
