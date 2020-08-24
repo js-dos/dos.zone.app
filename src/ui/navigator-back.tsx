@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useHistory } from "react-router-dom";
 
-import { Navbar, Alignment, Classes, Button } from "@blueprintjs/core";
+import { Navbar, Alignment, Button } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 
 import { useTranslation } from 'react-i18next';

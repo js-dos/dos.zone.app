@@ -125,3 +125,13 @@ body {
 .dhry2-test span {
     font-weight: bold;
 }
+
+.touch-options {
+    margin-top: 5px;
+    display: flex;
+    align-items: baseline;
+}
+
+.touch-options button {
+    align-self: center;
+}

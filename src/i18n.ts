@@ -105,6 +105,12 @@ Our database is community drived. Database sources is [here](https://github.com/
         read_guide: "read guide",
         stop: "Stop",
         start: "Start",
+        touch_controls: "Touch controls",
+        touch_description: "Configure how to map gestures into key codes",
+        finger: "Finger",
+        gesture: "Gesture",
+        key: "Key",
+        add: "Add",
         help: `
 ### Help to community
 
@@ -237,6 +243,12 @@ DOS.Zone - это управляемая сообществом <span style="col
         read_guide: "читать руководство",
         stop: "Остановить",
         start: "Запустить",
+        touch_controls: "Управление жестами",
+        touch_description: "Задайте соответствие между жестами и клавишами",
+        finger: "Палец",
+        gesture: "Жест",
+        key: "Клавиша",
+        add: "Добавить",
         help: `
 ### Помогите сообществу
 
