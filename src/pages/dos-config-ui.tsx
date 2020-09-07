@@ -1,5 +1,5 @@
-import React, { useState, FormEvent } from 'react';
-import { DosConfigCategory, DosConfigOption, DosConfigValue, DosConfig } from 'emulators/dist/types/dos/bundle/dos-conf';
+import React, { useState, FormEvent } from "react";
+import { DosConfigCategory, DosConfigOption, DosConfigValue, DosConfig } from "emulators/dist/types/dos/bundle/dos-conf";
 import { EventMapping } from "emulators-ui/dist/types/controls/nipple-arrows";
 import { EmulatorsUi } from "emulators-ui";
 
@@ -17,7 +17,7 @@ import {
     HTMLSelect
 } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
-import { TFunction } from 'i18next';
+import { TFunction } from "i18next";
 
 declare const emulatorsUi: EmulatorsUi;
 
@@ -94,7 +94,7 @@ function TouchControls(props: {
         mapping.push({
             joystickId: 1,
             event: "tap",
-            mapTo: emulatorsUi.controls.namedKeyCodes["KBD_space"],
+            mapTo: emulatorsUi.controls.namedKeyCodes.KBD_space,
         });
         setVersion(version + 1);
     }

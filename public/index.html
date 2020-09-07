@@ -19,9 +19,11 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root" class="bp3-dark"></div>
     <script type="text/javascript" src="%PUBLIC_URL%/3rdparty/zipjs/zip.js"></script>
-    <script type="text/javascript" src="%PUBLIC_URL%/js-dos/js-dos.js"></script>
+    <script src="%PUBLIC_URL%/emulators/emulators.js"></script>
+    <script src="%PUBLIC_URL%/emulators-ui/emulators-ui.js"></script>
+    <link rel="stylesheet" href="%PUBLIC_URL%/emulators-ui/emulators-ui.css">
     <script type="text/javascript" >
-     emulators.pathPrefix = "%PUBLIC_URL%/js-dos/";
+     emulators.pathPrefix = "%PUBLIC_URL%/emulators/";
      zip.workerScriptsPath = "%PUBLIC_URL%/3rdparty/zipjs/";
     </script>
   </body>

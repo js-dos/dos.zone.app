@@ -1,14 +1,24 @@
-import React from 'react';
+import React from "react";
 
 import { Link } from "react-router-dom";
 
-import { Navbar, Alignment, Classes } from "@blueprintjs/core";
+import {
+    Navbar,
+    Alignment,
+    Classes,
+    Button,
+    Intent,
+    Popover,
+    Tooltip,
+    Position
+} from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
+import { useTranslation } from "react-i18next";
 
-import { useTranslation } from 'react-i18next';
+import { LoginButton } from "./login-button";
+import { User } from "../core/auth";
 
-
-export function Navigator() {
+export function Navigator(props: { user: User | null }) {
     const { t, i18n } = useTranslation("navigator");
     const lang = i18n.language;
 
@@ -30,6 +40,9 @@ export function Navigator() {
                 <a href="https://discord.com/invite/hMVYEbG" target="_blank" rel="noopener noreferrer">
                     <img src="/discord.svg" alt="discord" width="24px" />
                 </a>
+            </Navbar.Group>
+            <Navbar.Group align={Alignment.RIGHT}>
+                <LoginButton {...props} />
             </Navbar.Group>
         </Navbar>;
 }

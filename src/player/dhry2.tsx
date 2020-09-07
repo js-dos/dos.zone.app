@@ -39,7 +39,7 @@ export function Dhry2(props: {
                         "PC: ", getComparablePc(vaxRating),
                     ]);
 
-                    //properly exit
+                    // properly exit
                     ci.exit();
                 }
             }
@@ -58,7 +58,7 @@ export function Dhry2(props: {
 }
 
 function getComparablePc(vax: number): string {
-    var index = 0;
+    let index = 0;
     while ((index * 2 + 1) < results.length) {
         if (results[index * 2 + 1] >= vax) {
             break;
@@ -71,7 +71,7 @@ function getComparablePc(vax: number): string {
     return (results[index * 2] + "").trim();
 }
 
-// Reuslts from 
+// Reuslts from
 // http://www.roylongbottom.org.uk/dhrystone%20results.htm
 const results = [
     "AMD 80386 40MHz", 13.7,

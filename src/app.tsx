@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 import { GameStudioGuide } from "./pages/guides/game-studio";
 
@@ -10,17 +10,19 @@ import {
     Route,
     Redirect,
     useParams,
+    useHistory,
 } from "react-router-dom";
 
 import { CapConfig } from "./cap-config";
 
 import { Navigator } from "./ui/navigator";
-import { NavigatorBack } from "./ui/navigator-back";
+import { NavigatorPlayer } from "./ui/navigator-player";
 
 import { Landing } from "./pages/landing";
 import { GameStudio } from "./pages/game-studio";
 import { My } from "./pages/my";
 import { Player } from "./player/player";
+import { User, authenticate, getCachedUser } from "./core/auth";
 
 function PlayerWrapper() {
     const { url } = useParams();
@@ -32,6 +34,12 @@ function App() {
     const { i18n } = useTranslation();
     const lang = i18n.language;
 
+    const [user, setUser] = useState<User|null>(getCachedUser());
+
+    useEffect(() => {
+        authenticate(user).then(setUser);
+    }, []);
+
     return <Router>
         <CapConfig lang={lang}></CapConfig>
         <Switch>
@@ -39,24 +47,24 @@ function App() {
                 <Redirect to={"/" + lang} />
             </Route>
             <Route exact path="/:lang/">
-                <Navigator />
+                <Navigator user={user} />
                 <Landing />
             </Route>
             <Route path="/:lang/studio">
-                <Navigator />
+                <Navigator user={user} />
                 <GameStudio />
             </Route>
             <Route path="/:lang/guide/studio">
-                <Navigator />
+                <Navigator user={user} />
                 <GameStudioGuide />
             </Route>
             <Route path={["/:lang/my/:url", "/:lang/my"]}>
-                <Navigator />
+                <Navigator user={user} />
                 <My />
             </Route>
             <Route path="/:lang/eplayer/:url">
                 <div className="eplayer-root">
-                    <NavigatorBack />
+                    <NavigatorPlayer />
                     <div className="eplayer-container">
                         <PlayerWrapper />
                     </div>
@@ -70,3 +78,4 @@ function App() {
 }
 
 export default App;
+

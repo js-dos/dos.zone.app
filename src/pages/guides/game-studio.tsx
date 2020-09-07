@@ -1,5 +1,5 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
+import React from "react";
+import { useTranslation } from "react-i18next";
 import { Classes } from "@blueprintjs/core";
 
 import ReactMardown from "react-markdown/with-html";

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {
     Classes,
     Intent, Overlay,
@@ -12,7 +12,7 @@ import { renderers } from "../core/renderers";
 import { myStorage } from "../core/storage";
 
 import { openRepository } from "../core/browser-tab";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 
 
 export function Landing() {

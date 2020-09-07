@@ -7,7 +7,7 @@ export function ZipExecutables(zipBlob: Blob) {
             reader.getEntries((entries: any) => {
                 for (const entry of entries) {
                     const filename: string = entry.filename;
-                    if (filename.toLocaleLowerCase().endsWith(".com") || 
+                    if (filename.toLocaleLowerCase().endsWith(".com") ||
                         filename.toLocaleLowerCase().endsWith(".exe") ||
                         filename.toLocaleLowerCase().endsWith(".bat")) {
                         outcome.push(filename);

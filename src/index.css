@@ -135,3 +135,25 @@ body {
 .touch-options button {
     align-self: center;
 }
+
+.input-control-container {
+    display: none;
+    padding: 5px 0 5px 5px;
+    position: absolute;
+    top: 50px;
+    left: 0px;
+    right: 0px;
+    z-index: 999;
+    background: rgb(57, 75, 89);
+    box-shadow: rgba(16, 22, 26, 0.2) 0px 0px 0px 1px, rgba(16, 22, 26, 0) 0px 0px 0px, rgba(16, 22, 26, 0.4) 0px 1px 1px;
+}
+
+.input-control-container input {
+    flex-grow: 1;
+}
+
+.avatar {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+}

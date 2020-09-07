@@ -1,0 +1,68 @@
+org: caiiiycuk
+app: doszone-sls
+service: doszone-sls
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: eu-central-1
+  memorySize: 256
+  versionFunctions: false
+  environment:
+    SESSION_TABLE: "dzsession"
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.SESSION_TABLE}"
+
+
+functions:
+  ssoUrl:
+    handler: src/sso-url.ssoUrl
+    events:
+      - http:
+          path: /sso/url
+          method: get
+          cors: true
+  ssoLogin:
+    handler: src/sso-login.ssoLogin
+    events:
+      - http:
+          path: /sso/login
+          method: get
+          cors: true
+  ssoLogout:
+    handler: src/sso-logout.ssoLogout
+    events:
+      - http:
+          path: /sso/logout
+          method: get
+          cors: true
+
+resources:
+  Resources:
+    dzsession:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.SESSION_TABLE}
+
+plugins:
+  - serverless-plugin-typescript

@@ -1,4 +1,4 @@
-import { Plugins } from '@capacitor/core';
+import { Plugins } from "@capacitor/core";
 const { Browser } = Plugins;
 
 const repositoryUrl = "https://talks.dos.zone/c/rep/11";

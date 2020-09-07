@@ -1,13 +1,21 @@
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
 
-import LanguageDetector from 'i18next-browser-languagedetector';
+import LanguageDetector from "i18next-browser-languagedetector";
 
 const en = {
     navigator: {
         home: "Home",
         studio: "Game Studio",
         database: "Database",
+    },
+    login: {
+        login_tooltip: "Login to activate more features",
+        login_popover: `
+By default js-dos store<br/>
+your game progress in indexed db.<br/>
+This data can be suddenly wiped.<br/>
+`
     },
     my: {
         selected: "Play",
@@ -144,6 +152,15 @@ const ru = {
         studio: "Творческая студия",
         database: "База данных",
     },
+    login: {
+        login_tooltip: "Войдите что бы активировать больше функций",
+        login_popover: `
+По умоланию js-dos хранит<br/>
+прогресс в локальной базе данных.<br/>
+Эти данные могут быть очищенны<br/>
+бразуером.<br/>
+`
+    },
     my: {
         selected: "Запустить",
         recently_played: "Другие",
@@ -175,7 +192,7 @@ const ru = {
 Спасибо!
 `,
         database: `
-# База данных игр 
+# База данных игр
 
 Наша база данных построена на основе форума, каждая игра имеет свою страницу для обсуждения. js-dos архивы так же прикреплены к странице игры.
 
@@ -299,10 +316,10 @@ i18n
     .use(initReactI18next)
     .init({
         detection: {
-            order: ['path', 'querystring', 'cookie', 'localStorage', 'navigator', 'htmlTag', 'subdomain'],
+            order: ["path", "querystring", "cookie", "localStorage", "navigator", "htmlTag", "subdomain"],
         },
         resources,
-        fallbackLng: 'en',
+        fallbackLng: "en",
         debug: false,
         interpolation: {
             escapeValue: false,

@@ -1,9 +1,10 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { DosFactoryType, DosInstance } from "js-dos";
+import React, { useRef, useEffect, useState } from "react";
+import { DosFactoryType, DosInstance } from "emulators-ui/dist/types/js-dos";
 
 import { Dhry2 } from "./dhry2";
-import { CommandInterface } from 'emulators';
-import { dhry2Url } from '../core/storage';
+import { CommandInterface } from "emulators";
+import { dhry2Url } from "../core/storage";
+import { ControlSelector } from "emulators-ui/dist/types/dom/layers";
 
 declare const Dos: DosFactoryType;
 
@@ -21,9 +22,15 @@ export function Player(props: IPlayerProps) {
          *                      .lock('landscape')
          *                      .then(() => true)
          *                      .catch(() => false); */
+        const controlSelector: ControlSelector = {
+            send: () => document.querySelector(".control-send") as HTMLElement,
+            input: () => document.querySelector(".control-input") as HTMLInputElement,
+            save: () => document.querySelector(".control-save") as HTMLElement,
+            fullscreen: () => document.querySelector(".control-fullscreen") as HTMLElement,
+        };
 
         const root = rootRef.current as HTMLDivElement;
-        const dos = Dos(root);
+        const dos = Dos(root, { controlSelector });
         setDos(dos);
         return () => {
             /* lockedPromise.then((locked) => {

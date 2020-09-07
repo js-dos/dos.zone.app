@@ -1,17 +1,17 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 import {
     useHistory,
 } from "react-router-dom";
 
-import { Plugins } from '@capacitor/core';
+import { Plugins } from "@capacitor/core";
 const { App: CapApp } = Plugins;
 
 export function CapConfig(props: { lang: string }) {
-    let history = useHistory();
+    const history = useHistory();
     useEffect(() => {
         const firstUrl = history.location.pathname;
-        CapApp.addListener('appUrlOpen', (data: { url: string }) => {
+        CapApp.addListener("appUrlOpen", (data: { url: string }) => {
             if (data.url) {
                 const myIndex = data.url.indexOf("/my/");
                 if (myIndex > 0) {
@@ -22,7 +22,7 @@ export function CapConfig(props: { lang: string }) {
             }
         });
 
-        CapApp.addListener('backButton', async () => {
+        CapApp.addListener("backButton", async () => {
             if (history.length === 1 || history.location.pathname === firstUrl) {
                 CapApp.exitApp();
                 return;

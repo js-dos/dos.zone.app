@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import {
     H1, H2, Classes, FileInput, Intent, Spinner,
     Tree, ITreeNode, Button, AnchorButton
@@ -9,11 +9,11 @@ import {
 import { IconNames } from "@blueprintjs/icons";
 
 import { ZipExecutables } from "../core/zip-explorer";
-import { TFunction } from 'i18next';
+import { TFunction } from "i18next";
 import { Emulators } from "emulators";
 
 import { DosConfigUi } from "./dos-config-ui";
-import { DosConfig } from 'emulators/dist/types/dos/bundle/dos-conf';
+import { DosConfig } from "emulators/dist/types/dos/bundle/dos-conf";
 
 import ReactMardown from "react-markdown/with-html";
 import { renderers } from "../core/renderers";
@@ -57,15 +57,15 @@ const steps = [
             setError("");
 
             const file = files[0];
-            var reader = new FileReader();
-            reader.addEventListener('load', async (e) => {
+            let reader = new FileReader();
+            reader.addEventListener("load", async (e) => {
                 const zip = new Uint8Array(reader.result as ArrayBuffer);
                 const blob = new Blob([zip]);
                 setLoadProgress(100);
 
                 try {
                     const executables = await ZipExecutables(blob);
-                    const name = file.name.substr(0, file.name.lastIndexOf('.'));
+                    const name = file.name.substr(0, file.name.lastIndexOf("."));
                     nextStep({
                         name,
                         zip,
@@ -77,7 +77,7 @@ const steps = [
                     setLoadProgress(0);
                 }
             });
-            reader.addEventListener('progress', (e) => setLoadProgress(e.loaded / e.total));
+            reader.addEventListener("progress", (e) => setLoadProgress(e.loaded / e.total));
             reader.readAsArrayBuffer(file);
             setReader(reader);
         }
@@ -231,7 +231,7 @@ const steps = [
         const [bundleUrl, setBundleUrl] = useState<string|undefined>(url);
 
         const onDownload = () => {
-            const a = document.createElement('a');
+            const a = document.createElement("a");
             a.href = url;
             a.download = state.name + ".jsdos";
             a.style.display = "none";
