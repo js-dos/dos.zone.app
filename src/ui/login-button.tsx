@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 
 import {
-    Navbar,
-    Alignment,
-    Classes,
     Button,
     Intent,
     Popover,
@@ -32,7 +29,7 @@ export function LoginButton(props: { user: User | null }) {
         const logout = <div><Button onClick={requestLogout}>Logout</Button></div>;
         return <Popover content={logout} position={Position.BOTTOM}>
             <div>
-                <img className="avatar" src={props.user.avatarUrl}/>
+                <img className="avatar" src={props.user.avatarUrl} alt="" />
             </div>
         </Popover>;
     }

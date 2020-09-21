@@ -6,12 +6,8 @@ import {
     Navbar,
     Alignment,
     Classes,
-    Button,
-    Intent,
-    Popover,
-    Tooltip,
-    Position
 } from "@blueprintjs/core";
+
 import { IconNames } from "@blueprintjs/icons";
 import { useTranslation } from "react-i18next";
 

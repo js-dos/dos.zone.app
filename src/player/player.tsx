@@ -9,7 +9,8 @@ import { ControlSelector } from "emulators-ui/dist/types/dom/layers";
 declare const Dos: DosFactoryType;
 
 export interface IPlayerProps {
-    bundleUrl?: string;
+    bundleUrl: string;
+    embedded: boolean;
 }
 
 export function Player(props: IPlayerProps) {
@@ -30,7 +31,9 @@ export function Player(props: IPlayerProps) {
         };
 
         const root = rootRef.current as HTMLDivElement;
-        const dos = Dos(root, { controlSelector });
+        const dos = Dos(root, {
+            controlSelector: props.embedded ? undefined : controlSelector
+        });
         setDos(dos);
         return () => {
             /* lockedPromise.then((locked) => {
@@ -40,7 +43,7 @@ export function Player(props: IPlayerProps) {
              * }) */
             dos.stop();
         };
-    }, []);
+    }, [props.embedded]);
 
     useEffect(() => {
         if (dos === null) {
@@ -52,7 +55,7 @@ export function Player(props: IPlayerProps) {
         } else {
             dos.run(props.bundleUrl).then(setCi);
         }
-    }, [dos, props.bundleUrl]);
+    }, [dos, props.bundleUrl, props.embedded]);
 
     return <div ref={rootRef} className="player">
         { ci === null || props.bundleUrl !== dhry2Url ? null : <Dhry2 ci={ci} /> }

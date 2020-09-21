@@ -48,7 +48,7 @@ export function My() {
     });
 
     const active = selected.length === 0 ? keys[0] : selected;
-    const runUrl = "/" + i18n.language + "/eplayer/" + encodeURIComponent(active);
+    const runUrl = "/" + i18n.language + "/play/" + encodeURIComponent(active);
     const description = getGameData(active).description[i18n.language]?.description || "";
 
     async function runBundle() {

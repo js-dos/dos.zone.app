@@ -14,7 +14,7 @@ export function GameThumb(props: { url: string;
     return <Card onClick={props.onClick} className={["thumb-frame", props.selected ? "thumb-frame-selected" : ""].join(" ")} interactive={true}>
         <div className="thumb-title">{data.game}</div>
         <div className="thumb-title-2">{data.title}</div>
-        <img src={data.screenshot} className="thumb-screenshot"></img>
+        <img src={data.screenshot} className="thumb-screenshot" alt="screenshot"></img>
         <div className="thumb-author">{"@" + data.author}</div>
         {props.selected ? <Icon icon={IconNames.PLAY} iconSize={32} className="thumb-play"></Icon> : null}
     </Card>

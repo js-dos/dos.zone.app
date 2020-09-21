@@ -10,7 +10,6 @@ import {
     Route,
     Redirect,
     useParams,
-    useHistory,
 } from "react-router-dom";
 
 import { CapConfig } from "./cap-config";
@@ -24,9 +23,9 @@ import { My } from "./pages/my";
 import { Player } from "./player/player";
 import { User, authenticate, getCachedUser } from "./core/auth";
 
-function PlayerWrapper() {
+function PlayerWrapper(props: { embedded: boolean }) {
     const { url } = useParams();
-    return <Player bundleUrl={decodeURIComponent(url)}></Player>;
+    return <Player bundleUrl={decodeURIComponent(url)} embedded={props.embedded} ></Player>;
 }
 
 
@@ -38,6 +37,7 @@ function App() {
 
     useEffect(() => {
         authenticate(user).then(setUser);
+        //  eslint-disable-next-line
     }, []);
 
     return <Router>
@@ -62,16 +62,16 @@ function App() {
                 <Navigator user={user} />
                 <My />
             </Route>
-            <Route path="/:lang/eplayer/:url">
-                <div className="eplayer-root">
+            <Route path="/:lang/play/:url">
+                <div className="play-player-root">
                     <NavigatorPlayer />
-                    <div className="eplayer-container">
-                        <PlayerWrapper />
+                    <div className="play-player-container">
+                        <PlayerWrapper embedded={false} />
                     </div>
                 </div>
             </Route>
             <Route path="/:lang/player/:url">
-                <PlayerWrapper />
+                <PlayerWrapper embedded={true} />
             </Route>
         </Switch>
     </Router>;

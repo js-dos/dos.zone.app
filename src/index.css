@@ -88,7 +88,7 @@ body {
     padding: 5px;
 }
 
-.eplayer-root {
+.play-player-root {
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -98,7 +98,7 @@ body {
     bottom: 0;
 }
 
-.eplayer-container {
+.play-player-container {
     position: relative;
     flex-grow: 1;
 }
