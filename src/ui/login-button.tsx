@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 
+import { Link } from "react-router-dom";
+
 import {
+    Classes,
     Button,
     Intent,
     Popover,
@@ -26,8 +29,12 @@ export function LoginButton(props: { user: User | null }) {
     }
 
     if (props.user !== null) {
-        const logout = <div><Button onClick={requestLogout}>Logout</Button></div>;
-        return <Popover content={logout} position={Position.BOTTOM}>
+        const controls = <div>
+            <Link className={[Classes.BUTTON, Classes.MINIMAL, Classes.ICON + "-" + IconNames.COG].join(" ")}
+                  to={"/" + lang + "/profile"}></Link>
+            <Button icon={IconNames.LOG_OUT} minimal={true} onClick={requestLogout}></Button>
+        </div>;
+        return <Popover content={controls} position={Position.BOTTOM}>
             <div>
                 <img className="avatar" src={props.user.avatarUrl} alt="" />
             </div>
@@ -49,14 +56,14 @@ export function LoginButton(props: { user: User | null }) {
     </div>;
 
     return <Popover content={why} position={Position.BOTTOM}>
-    <Tooltip content={t("login_tooltip")} position={Position.BOTTOM}>
-    <div>
-    <Button intent={Intent.DANGER}
-    minimal={true}
-                icon={IconNames.FLASH}>
-        </Button>
-      </div>
-    </Tooltip>
+        <Tooltip content={t("login_tooltip")} position={Position.BOTTOM}>
+            <div>
+                <Button intent={Intent.DANGER}
+                        minimal={true}
+                        icon={IconNames.LOG_IN}>
+                </Button>
+            </div>
+        </Tooltip>
     </Popover>;
 }
 

@@ -1,17 +1,11 @@
-import { GET } from "../core/xhr/GET";
-
-const endpointBase = "https://i2sunu2gs9.execute-api.eu-central-1.amazonaws.com/dev";
-
-const ssoUrl = endpointBase + "/sso/url";
-const ssoLogin = endpointBase + "/sso/login";
-const ssoLogout = endpointBase + "/sso/logout";
+import { GET } from "./xhr/GET";
+import { ssoLogin, ssoLogout, ssoUrl } from "./config";
 
 const userKey = "zone.dos.user";
 
 export async function requestLogin() {
     const response = JSON.parse(await GET(ssoUrl + "?url=" + window.location.href));
     const url = response.url;
-    console.log(url);
     window.open(url, "_self");
 }
 
@@ -24,6 +18,7 @@ export interface User {
     sig: string,
     time: number,
 }
+
 export function getCachedUser() {
     const cachedValue: string | null = localStorage.getItem(userKey);
     return cachedValue === null ? null : JSON.parse(cachedValue);
@@ -62,9 +57,8 @@ export async function authenticate(user: User | null): Promise<User | null> {
 }
 
 async function validateUser(user: User): Promise<User | null> {
-    const payload = JSON.parse(await GET(ssoLogin + "?sso=" + user.sso +
-        "&sig=" + user.sig + "&ua=" + btoa(window.navigator.userAgent)));
-    return Promise.resolve(payload.user);
+    return JSON.parse(await GET(ssoLogin + "?sso=" + user.sso +
+        "&sig=" + user.sig + "&ua=" + btoa(window.navigator.userAgent))).user;
 }
 
 export async function requestLogout() {

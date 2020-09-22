@@ -20,6 +20,20 @@ This data can be suddenly wiped.<br/>
     my: {
         selected: "Play",
         recently_played: "Others",
+        play: "Play",
+        min: "min.",
+        please_login_for_turbo_mode: "Please login to use turbo mode",
+        no_time_for_turbo_mode: "No time for Turbo mode",
+        settings: "settings",
+    },
+    profile: {
+        turbo: "Turbo",
+        using_now: "Using now: ",
+        yes: "YES",
+        no: "no",
+        day_limit: "Limit per day: ",
+        min: "minutes",
+        rest_time: "Rest time: ",
     },
     guides: {
         gameStudio: `
@@ -164,6 +178,20 @@ const ru = {
     my: {
         selected: "Запустить",
         recently_played: "Другие",
+        play: "Играть",
+        min: "мин.",
+        please_login_for_turbo_mode: "Пожалуйста войдите что бы использовать Turbo режим",
+        no_time_for_turbo_mode: "Доступное время закончилось",
+        settings: "настройки",
+    },
+    profile: {
+        turbo: "Turbo",
+        using_now: "Используется сейчас: ",
+        yes: "ДА",
+        no: "нет",
+        day_limit: "Дневной лими: ",
+        min: "мин.",
+        rest_time: "Оставшееся время: ",
     },
     guides: {
         gameStudio: `

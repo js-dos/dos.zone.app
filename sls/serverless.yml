@@ -10,6 +10,7 @@ provider:
   versionFunctions: false
   environment:
     SESSION_TABLE: "dzsession"
+    TURBO_TABLE: "dzturbo"
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -19,7 +20,9 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.SESSION_TABLE}"
+      Resource:
+        - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.SESSION_TABLE}"
+        - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.TURBO_TABLE}"
 
 
 functions:
@@ -44,6 +47,13 @@ functions:
           path: /sso/logout
           method: get
           cors: true
+  turboLimits:
+    handler: src/turbo-limits.turboLimits
+    events:
+      - http:
+          path: /turbo/limits
+          method: get
+          cors: true
 
 resources:
   Resources:
@@ -53,16 +63,32 @@ resources:
       Properties:
         AttributeDefinitions:
           -
-            AttributeName: id
+            AttributeName: nonce
             AttributeType: S
         KeySchema:
           -
-            AttributeName: id
+            AttributeName: nonce
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: ${self:provider.environment.SESSION_TABLE}
+    dzturbo:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: email
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: email
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.TURBO_TABLE}
 
 plugins:
   - serverless-plugin-typescript

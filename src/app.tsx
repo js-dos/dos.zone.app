@@ -20,6 +20,7 @@ import { NavigatorPlayer } from "./ui/navigator-player";
 import { Landing } from "./pages/landing";
 import { GameStudio } from "./pages/game-studio";
 import { My } from "./pages/my";
+import { Profile } from "./pages/profile";
 import { Player } from "./player/player";
 import { User, authenticate, getCachedUser } from "./core/auth";
 
@@ -60,7 +61,11 @@ function App() {
             </Route>
             <Route path={["/:lang/my/:url", "/:lang/my"]}>
                 <Navigator user={user} />
-                <My />
+                <My user={user} />
+            </Route>
+            <Route path={["/:lang/profile"]}>
+                <Navigator user={user} />
+                <Profile user={user} />
             </Route>
             <Route path="/:lang/play/:url">
                 <div className="play-player-root">

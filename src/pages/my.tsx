@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Redirect, useParams, useHistory } from "react-router-dom";
+import { Link, Redirect, useParams, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Spinner, Intent, Button } from "@blueprintjs/core";
+import {
+    Spinner,
+    Intent,
+    Button,
+    ButtonGroup,
+    ControlGroup,
+    Switch,
+    Popover,
+    Position,
+} from "@blueprintjs/core";
 
 import { myStorage, RecentlyPlayed } from "../core/storage";
 import { GameThumb } from "./components/game-thumb";
@@ -10,12 +19,33 @@ import { IconNames } from "@blueprintjs/icons";
 import { openRepository } from "../core/browser-tab";
 import { getGameData } from "../core/game-query";
 
-export function My() {
+import { User } from "../core/auth";
+import { getTurboLimits } from "../core/turbo";
+
+export function My(props: { user: User | null }) {
     const [recentlyPlayed, setRecentlyPlayed] = useState<RecentlyPlayed | null>(null);
     const [selected, setSelected] = useState<string>("");
     const { t, i18n } = useTranslation("my");
     const { url } = useParams();
     const history = useHistory();
+    const user = props.user;
+    const [ turboMode, setTurboMode ] = useState<boolean>(user !== null);
+    const [ turboTime, setTurboTime ] = useState<number | null>(null);
+
+    useEffect(() => {
+        if (user !== null && turboMode) {
+            getTurboLimits(user).then((limits) => {
+                setTurboTime(limits.restTime);
+                if (turboMode && limits !== null && limits.restTime === 0) {
+                    setTurboMode(false);
+                }
+            });
+        }
+
+        if (turboMode && user === null) {
+            setTurboMode(false);
+        }
+    }, [user?.email, turboMode]);
 
     useEffect(() => {
         setRecentlyPlayed(null); // reset state
@@ -58,11 +88,54 @@ export function My() {
         history.push(runUrl);
     }
 
+    let turboSwitch = null;
+    if (user === null) {
+        turboSwitch = <Popover content={<div className="popover-inner-card">{t("please_login_for_turbo_mode")}</div>} position={Position.TOP} isOpen={true}>
+            <div>
+                <Switch className="my-turbo-switch"
+                        checked={false}
+                        disabled={true}
+                        large={true}
+                        inline={true}
+                        innerLabel={t("Turbo")}></Switch>
+            </div>
+        </Popover>;
+    } else if (turboTime === 0) {
+        const popoeverInner = <div className="popover-inner-card">{t("no_time_for_turbo_mode")}, <Link to={"/" + i18n.language + "/profile"}>{t("settings")}</Link></div>;
+        turboSwitch = <Popover content={popoeverInner} position={Position.TOP} isOpen={true}>
+            <Switch className="my-turbo-switch"
+                    checked={turboMode}
+                    disabled={true}
+                    large={true}
+                    inline={true}
+                    innerLabel={t("Turbo")}
+                    >
+                0 {t("min")}
+            </Switch>
+        </Popover>;
+    } else {
+        turboSwitch =
+            <Switch className="my-turbo-switch" checked={turboMode}
+                large={true}
+                inline={true}
+                innerLabel={t("Turbo")}
+                onChange={() => setTurboMode(!turboMode)}>
+                {turboTime === null ? "" : turboTime + " "+ t("min")}
+             </Switch>;
+    }
+
     return <div className="left-margin">
         <h1>{t("selected")}</h1>
         <div className="recently-played">
             <GameThumb onClick={runBundle} url={active} selected={true} />
-            <div className="thumb-description">{description}</div>
+            <div className="thumb-options">
+                <div>
+                    <Button icon={IconNames.PLAY}>{t("play")}</Button>
+                    {turboSwitch}
+                </div>
+                <br/><br/>
+                <div className="thumb-description">{description}</div>
+            </div>
         </div>
         <div className="one-row">
             <h1>{t("recently_played")}</h1>

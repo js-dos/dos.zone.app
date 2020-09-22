@@ -18,13 +18,13 @@ export function makeUrl(nonce: string, backUrl: string) {
     return "https://talks.dos.zone/session/sso_provider?sso=" + encodeURI(sso) + "&sig=" + signature;
 }
 
-export function validatSso(sso: string, sig: string): boolean {
+export function validateSso(sso: string, sig: string): boolean {
     const signature = calculateSig(sso);
     return signature === sig;
 }
 
 export function decodeUser(sso: string, sig: string): User | null {
-    if (!validatSso(sso, sig)) {
+    if (!validateSso(sso, sig)) {
         return null;
     }
 

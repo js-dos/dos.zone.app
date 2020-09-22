@@ -32,7 +32,7 @@ body {
     overflow: hidden;
 }
 
-.thumb-description {
+.thumb-options {
     width: 270px;
     margin-left: 10px;
     margin-right: 10px;
@@ -156,4 +156,36 @@ body {
     width: 16px;
     height: 16px;
     border-radius: 50%;
+    cursor: pointer;
+}
+
+.profile-head {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    margin-top: 20px;
+}
+
+.profile-short-info {
+    display: flex;
+    flex-direction: column;
+    margin-left: 15px;
+}
+
+.profile-username {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.profile-avatar {
+    width: 72px;
+    border-radius: 50%;
+}
+
+.my-turbo-switch {
+    margin-left: 10px;
+}
+
+.popover-inner-card {
+    padding: 5px;
 }
