@@ -1,8 +1,9 @@
 import { Handler } from 'aws-lambda';
-import { deleteSession, validateUser } from "./session";
+
+import { validateUser } from './session';
 import { noSession, success } from './responses';
 
-export const ssoLogout: Handler = async (event: any) => {
+export const turboConnect: Handler = async (event: any) => {
     const sso = event.queryStringParameters.sso;
     const sig = event.queryStringParameters.sig;
     const user = await validateUser(sso, sig);
@@ -11,7 +12,5 @@ export const ssoLogout: Handler = async (event: any) => {
         return noSession();
     }
 
-    await deleteSession(user);
-
-    return success({});
+    return success({ query: event.queryStringParameters });
 }

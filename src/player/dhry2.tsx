@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CommandInterface } from "emulators";
 
-
-
 export function Dhry2(props: {
     ci: CommandInterface,
 }) {

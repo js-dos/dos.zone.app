@@ -54,6 +54,13 @@ functions:
           path: /turbo/limits
           method: get
           cors: true
+  turboConnect:
+    handler: src/turbo-connect.turboConnect
+    events:
+      - http:
+          path: /turbo/connect
+          method: get
+          cors: true
 
 resources:
   Resources:

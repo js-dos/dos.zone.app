@@ -24,9 +24,16 @@ import { Profile } from "./pages/profile";
 import { Player } from "./player/player";
 import { User, authenticate, getCachedUser } from "./core/auth";
 
-function PlayerWrapper(props: { embedded: boolean }) {
+import { parseQuery } from "./core/query-string";
+
+function PlayerWrapper(props: { user: User | null, embedded: boolean }) {
     const { url } = useParams();
-    return <Player bundleUrl={decodeURIComponent(url)} embedded={props.embedded} ></Player>;
+    const { turbo } = parseQuery(window.location.search);
+    return <Player
+               user={props.user}
+               bundleUrl={decodeURIComponent(url)}
+               embedded={props.embedded}
+               turbo={turbo === "1" }></Player>;
 }
 
 
@@ -71,12 +78,12 @@ function App() {
                 <div className="play-player-root">
                     <NavigatorPlayer />
                     <div className="play-player-container">
-                        <PlayerWrapper embedded={false} />
+                        <PlayerWrapper user={user} embedded={false} />
                     </div>
                 </div>
             </Route>
             <Route path="/:lang/player/:url">
-                <PlayerWrapper embedded={true} />
+                <PlayerWrapper user={user} embedded={true} />
             </Route>
         </Switch>
     </Router>;

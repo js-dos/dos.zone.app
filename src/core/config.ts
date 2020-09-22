@@ -5,3 +5,4 @@ export const ssoLogin = endpointBase + "/sso/login";
 export const ssoLogout = endpointBase + "/sso/logout";
 
 export const turboLimits = endpointBase + "/turbo/limits";
+export const turboConnect = endpointBase + "/turbo/connect";

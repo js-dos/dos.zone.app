@@ -256,7 +256,7 @@ const steps = [
                 height: "40vw",
                 background: "black",
             }}>
-                <Player bundleUrl={bundleUrl as string} embedded={true} />
+                <Player bundleUrl={bundleUrl as string} user={null} embedded={true} turbo={false} />
             </div>
             <br/>
             <Button onClick={back}>{t("back")}</Button>&nbsp;

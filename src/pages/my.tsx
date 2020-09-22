@@ -78,7 +78,7 @@ export function My(props: { user: User | null }) {
     });
 
     const active = selected.length === 0 ? keys[0] : selected;
-    const runUrl = "/" + i18n.language + "/play/" + encodeURIComponent(active);
+    const runUrl = "/" + i18n.language + "/play/" + encodeURIComponent(active) + "?turbo=" + (turboMode ? "1" : "0");
     const description = getGameData(active).description[i18n.language]?.description || "";
 
     async function runBundle() {
@@ -130,7 +130,7 @@ export function My(props: { user: User | null }) {
             <GameThumb onClick={runBundle} url={active} selected={true} />
             <div className="thumb-options">
                 <div>
-                    <Button icon={IconNames.PLAY}>{t("play")}</Button>
+                    <Button icon={IconNames.PLAY} onClick={runBundle}>{t("play")}</Button>
                     {turboSwitch}
                 </div>
                 <br/><br/>

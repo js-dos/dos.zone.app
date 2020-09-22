@@ -1,6 +1,6 @@
 import * as AWS from "aws-sdk";
 import * as crypto from "crypto";
-import { User } from "./sso";
+import { User, decodeUser } from "./sso";
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 const TableName = process.env.SESSION_TABLE as string;
@@ -48,10 +48,10 @@ export async function createSession() {
     return nonce;
 }
 
-export function updateSession(user: User,
+function updateSession(user: User,
                               sso: string,
                               sig: string,
-                              userAgent: string) {
+                              userAgent?: string) {
     const params: AWS.DynamoDB.DocumentClient.UpdateItemInput = {
         TableName,
         Key: {
@@ -64,7 +64,24 @@ export function updateSession(user: User,
             email: { Action: "PUT", Value: user.email },
             avatarUrl: { Action: "PUT", Value: user.avatarUrl },
             username: { Action: "PUT", Value: user.username },
-            userAgent: { Action: "PUT", Value: userAgent },
+        },
+    };
+
+    if (userAgent !== undefined) {
+        (params as any).AttributeUpdates.userAgent = { Action: "PUT", Value: userAgent };
+    }
+
+    return dynamoDb.update(params).promise();
+}
+
+function updateSessionTime(user: User) {
+    const params: AWS.DynamoDB.DocumentClient.UpdateItemInput = {
+        TableName,
+        Key: {
+            nonce: user.nonce,
+        },
+        AttributeUpdates: {
+            updatedAt: { Action: "PUT", Value: new Date().getTime() },
         },
     };
 
@@ -78,4 +95,33 @@ export function deleteSession(user: User) {
             nonce: user.nonce,
         },
     }).promise();
+}
+
+export async function validateUser(sso: string, sig: string) {
+    const user = decodeUser(sso, sig);
+    const valid = await validateSession(user);
+    return valid ? user : null;
+}
+
+export async function validateSession(user: User | null, userAgent?: string) {
+    if (user === null) {
+        return false;
+    }
+
+    const session = await getSession(user.nonce);
+    if (session === undefined) {
+        return false;
+    } else if (session.sso === undefined ||
+        session.sig === undefined ||
+        session.email === undefined) {
+        await updateSession(user, user.sso, user.sig, userAgent);
+        return true;
+    } else if (session.sso === user.sso &&
+        session.sig === user.sig &&
+        session.email === user.email) {
+        await updateSessionTime(user);
+        return true;
+    }
+
+    return false;
 }
