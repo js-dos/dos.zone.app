@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { IPlayerProps } from "./player";
 
-import { connect } from "../core/turbo";
+import { openTurboSession } from "../core/turbo";
 
 export function TurboPlayer(props: IPlayerProps) {
     const { t, i18n } = useTranslation("turbo");
@@ -19,7 +19,7 @@ export function TurboPlayer(props: IPlayerProps) {
             return;
         }
 
-        connect(user, bundle).then((payload) => {
+        openTurboSession(user, bundle).then((payload) => {
             setResponse(JSON.stringify(payload, null, 2));
         })
     }, [user?.email, bundle]);

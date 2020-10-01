@@ -1,16 +1,21 @@
-export function noSession() {
-    return {
-        statusCode: 200,
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Credentials': true,
-        },
-        body: JSON.stringify({ success: false, reason: "Session does not exist" }, null, 2),
-    };
+export function success(body: any) {
+    return response200(body, true);
 }
 
-export function success(body: any) {
-    body.success = true;
+export function error(errorCode: string) {
+    return response200({ errorCode }, false);
+}
+
+export function badRequest() {
+    return error("error_bad_request");
+}
+
+export function noSession() {
+    return error("error_no_session");
+}
+
+function response200(body: any, success: boolean) {
+    body.success = success;
 
     return {
         statusCode: 200,

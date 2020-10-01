@@ -11,6 +11,7 @@ provider:
   environment:
     SESSION_TABLE: "dzsession"
     TURBO_TABLE: "dzturbo"
+    RUN_INSTANCE: "jjs-runInstance"
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -23,7 +24,11 @@ provider:
       Resource:
         - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.SESSION_TABLE}"
         - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.TURBO_TABLE}"
-
+    - Effect: Allow
+      Action:
+        - lambda:InvokeFunction
+      Resource:
+        - "arn:aws:lambda:${opt:region, self:provider.region}:*:function:${self:provider.environment.RUN_INSTANCE}"
 
 functions:
   ssoUrl:
@@ -47,6 +52,9 @@ functions:
           path: /sso/logout
           method: get
           cors: true
+  turboGet:
+    handler: src/turbo-get.turboGet
+    name: doszone-sls-turboGet
   turboLimits:
     handler: src/turbo-limits.turboLimits
     events:
@@ -56,11 +64,13 @@ functions:
           cors: true
   turboConnect:
     handler: src/turbo-connect.turboConnect
+    timeout: 10
     events:
       - http:
           path: /turbo/connect
           method: get
           cors: true
+        
 
 resources:
   Resources:

@@ -20,7 +20,7 @@ import { openRepository } from "../core/browser-tab";
 import { getGameData } from "../core/game-query";
 
 import { User } from "../core/auth";
-import { getTurboLimits } from "../core/turbo";
+import { getTurboSession } from "../core/turbo";
 
 export function My(props: { user: User | null }) {
     const [recentlyPlayed, setRecentlyPlayed] = useState<RecentlyPlayed | null>(null);
@@ -34,9 +34,9 @@ export function My(props: { user: User | null }) {
 
     useEffect(() => {
         if (user !== null && turboMode) {
-            getTurboLimits(user).then((limits) => {
-                setTurboTime(limits.restTime);
-                if (turboMode && limits !== null && limits.restTime === 0) {
+            getTurboSession(user).then((session) => {
+                setTurboTime(session.restTime);
+                if (turboMode && session !== null && session.restTime === 0) {
                     setTurboMode(false);
                 }
             });

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { User } from "../core/auth";
-import { getTurboLimits, TurboLimits } from "../core/turbo";
+import { getTurboSession, TurboSession } from "../core/turbo";
 
 import {
     Icon,
@@ -16,10 +16,10 @@ export function Profile(props: { user: User | null }) {
     const { t, i18n } = useTranslation("profile");
     const user = props.user;
 
-    const [turboLimits, setTurboLimitis ] = useState<TurboLimits | null>(null);
+    const [turboSession, setTurboSession ] = useState<TurboSession | null>(null);
     useEffect(() => {
         if (user !== null) {
-            getTurboLimits(user).then(setTurboLimitis);
+            getTurboSession(user).then(setTurboSession);
         }
     }, [user?.email]);
 
@@ -28,11 +28,11 @@ export function Profile(props: { user: User | null }) {
     }
 
     let limits = <div><Spinner/></div>;
-    if (turboLimits !== null) {
+    if (turboSession !== null) {
         limits = <div>
-            <p>{t("using_now")}<strong><span className={Classes.TEXT_LARGE}>{turboLimits.arn.length > 0 ? t("yes") : t("no") }</span></strong></p>
-            <p>{t("day_limit")}<strong><span className={Classes.TEXT_LARGE}>{turboLimits.timeLimit} {t("min")}</span></strong></p>
-            <p>{t("rest_time")}<strong><span className={Classes.TEXT_LARGE}>{turboLimits.restTime} {t("min")}</span></strong></p>
+            <p>{t("using_now")}<strong><span className={Classes.TEXT_LARGE}>{turboSession.arn !== undefined ? t("yes") : t("no") }</span></strong></p>
+            <p>{t("day_limit")}<strong><span className={Classes.TEXT_LARGE}>{turboSession.timeLimit} {t("min")}</span></strong></p>
+            <p>{t("rest_time")}<strong><span className={Classes.TEXT_LARGE}>{turboSession.restTime} {t("min")}</span></strong></p>
         </div>;
     }
 
