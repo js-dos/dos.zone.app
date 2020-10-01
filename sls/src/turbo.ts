@@ -5,7 +5,7 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient();
 const lambda = new AWS.Lambda();
 const TableName = process.env.TURBO_TABLE as string;
 const RunInstanceLambda = process.env.RUN_INSTANCE as string;
-const defaultTimeLimit = 30;
+const defaultTimeLimitSec = 30 * 60;
 
 export interface TurboSession {
     email: string;
@@ -32,7 +32,7 @@ export async function getTurboSession(email: string): Promise<TurboSession> {
         session = {
             email,
             dayOrigin: getDayOrigin(),
-            timeLimit: defaultTimeLimit,
+            timeLimit: defaultTimeLimitSec,
             usedTime: 0,
             restTime: 0,
         };
@@ -40,7 +40,7 @@ export async function getTurboSession(email: string): Promise<TurboSession> {
 
     session.restTime = Math.max(session.timeLimit - session.usedTime, 0);
     if (session.arn && session.startedAt) {
-        const used = (new Date().getTime() - session.startedAt) / 1000 / 60;
+        const used = (new Date().getTime() - session.startedAt) / 1000;
         session.restTime = Math.max(session.restTime - used, 0);
     }
 
@@ -93,4 +93,53 @@ async function updateSession(session: TurboSession) {
     };
 
     await dynamoDb.update(params).promise();
+}
+
+export async function closeSession(email: string, arn: string, sec: number) {
+    let timeAdded = true;
+    let sessionClosed: any = true;
+    {
+        const params: AWS.DynamoDB.DocumentClient.UpdateItemInput = {
+            TableName,
+            Key: {
+                email: email,
+            },
+            AttributeUpdates: {
+                usedTime: { Action: "ADD", Value: sec },
+            },
+        };
+
+        try {
+            await dynamoDb.update(params).promise();
+        } catch(e) {
+            timeAdded = false;
+        }
+    }
+
+    {
+        const params: AWS.DynamoDB.DocumentClient.UpdateItemInput = {
+            TableName,
+            Key: {
+                email: email,
+            },
+            AttributeUpdates: {
+                arn: { Action: "DELETE" },
+                bundleUrl: { Action: "DELETE" },
+                startedAt: { Action: "DELETE" },
+            },
+            Expected: {
+                arn: {
+                    Value: arn,
+                }
+            }
+        };
+
+        try  {
+            await dynamoDb.update(params).promise();
+        } catch (e) {
+            sessionClosed = false;
+        }
+    }
+
+    return [timeAdded, sessionClosed];
 }

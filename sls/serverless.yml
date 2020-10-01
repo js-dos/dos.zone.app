@@ -33,6 +33,7 @@ provider:
 functions:
   ssoUrl:
     handler: src/sso-url.ssoUrl
+    name: doszone-sls-ssoUrl
     events:
       - http:
           path: /sso/url
@@ -40,6 +41,7 @@ functions:
           cors: true
   ssoLogin:
     handler: src/sso-login.ssoLogin
+    name: doszone-sls-ssoLogin
     events:
       - http:
           path: /sso/login
@@ -47,16 +49,15 @@ functions:
           cors: true
   ssoLogout:
     handler: src/sso-logout.ssoLogout
+    name: doszone-sls-ssoLogout
     events:
       - http:
           path: /sso/logout
           method: get
           cors: true
-  turboGet:
-    handler: src/turbo-get.turboGet
-    name: doszone-sls-turboGet
   turboLimits:
     handler: src/turbo-limits.turboLimits
+    name: doszone-sls-turboLimits
     events:
       - http:
           path: /turbo/limits
@@ -64,13 +65,19 @@ functions:
           cors: true
   turboConnect:
     handler: src/turbo-connect.turboConnect
+    name: doszone-sls-turboConnect
     timeout: 10
     events:
       - http:
           path: /turbo/connect
           method: get
           cors: true
-        
+  turboGet:
+    handler: src/turbo-get.turboGet
+    name: doszone-sls-turboGet
+  turboClose:
+    handler: src/turbo-close.turboClose
+    name: doszone-sls-turboClose
 
 resources:
   Resources:
@@ -98,6 +105,30 @@ resources:
           -
             AttributeName: email
             AttributeType: S
+          -
+            AttributeName: dayOrigin
+            AttributeType: N
+          -
+            AttributeName: timeLimit
+            AttributeType: N
+          -
+            AttributeName: usedTime
+            AttributeType: N
+          -
+            AttributeName: restTime
+            AttributeType: N
+          -
+            AttributeName: arn
+            AttributeType: S
+          -
+            AttributeName: bundleUrl
+            AttributeType: S
+          -
+            AttributeName: startedAt
+            AttributeType: N
+          -
+            AttributeName: createdAt
+            AttributeType: N
         KeySchema:
           -
             AttributeName: email
