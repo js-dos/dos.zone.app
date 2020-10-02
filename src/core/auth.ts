@@ -1,14 +1,9 @@
-import { GET } from "./xhr/GET";
+import { GET_OBJECT } from "./xhr/GET";
 import { ssoLogin, ssoLogout, ssoUrl } from "./config";
 import { parseQuery } from "./query-string";
+import { logError } from "./log";
 
 const userKey = "zone.dos.user";
-
-export async function requestLogin() {
-    const response = JSON.parse(await GET(ssoUrl + "?url=" + window.location.href));
-    const url = response.url;
-    window.open(url, "_self");
-}
 
 export interface User {
     avatarUrl: string,
@@ -18,6 +13,17 @@ export interface User {
     sso: string,
     sig: string,
     time: number,
+}
+
+
+export async function requestLogin() {
+    try {
+        const response = await GET_OBJECT(ssoUrl + "?url=" + window.location.href);
+        const url = response.url;
+        window.open(url, "_self");
+    } catch(e) {
+        logError(e);
+    }
 }
 
 export function getCachedUser() {
@@ -58,18 +64,27 @@ export async function authenticate(user: User | null): Promise<User | null> {
 }
 
 async function validateUser(user: User): Promise<User | null> {
-    return JSON.parse(await GET(ssoLogin + "?sso=" + user.sso +
-        "&sig=" + user.sig + "&ua=" + btoa(window.navigator.userAgent))).user;
+    try {
+        return (await GET_OBJECT(ssoLogin + "?sso=" + user.sso +
+            "&sig=" + user.sig + "&ua=" + btoa(window.navigator.userAgent))).user;
+    } catch (e) {
+        logError(e);
+        return null;
+    }
 }
 
 export async function requestLogout() {
     const user = getCachedUser();
     if (user !== null) {
-        const payload = JSON.parse(await GET(ssoLogout + "?sso=" + user.sso +
-            "&sig=" + user.sig));
-        if (payload.success) {
-            localStorage.removeItem(userKey);
-            window.location.reload();
+        try {
+            const payload = await GET_OBJECT(ssoLogout + "?sso=" + user.sso +
+                "&sig=" + user.sig);
+            if (payload.success) {
+                localStorage.removeItem(userKey);
+                window.location.reload();
+            }
+        } catch (e) {
+            logError(e);
         }
     }
 }

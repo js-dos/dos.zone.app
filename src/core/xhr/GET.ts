@@ -32,9 +32,14 @@ function _GET(url: string,
     });
 }
 
-export function GET(url: string,
-                            onprogress?: (progress: number) => void): Promise<string> {
-    return _GET(url, "text", onprogress) as Promise<string>;
+export async function GET_OBJECT(url: string,
+                    onprogress?: (progress: number) => void): Promise<any> {
+    const response = JSON.parse(await (_GET(url, "text", onprogress) as Promise<string>));
+    if (response.success) {
+        return response;
+    }
+
+    throw new Error("GET Request failed:\n Payload:\n" + JSON.stringify(response.body, null, 2));
 }
 
 export function GET_BUFFER(url: string,

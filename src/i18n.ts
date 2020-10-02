@@ -4,6 +4,9 @@ import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 
 const en = {
+    player: {
+        restoring: "Restoring your progress...",
+    },
     navigator: {
         home: "Home",
         studio: "Game Studio",
@@ -161,6 +164,9 @@ Thank you!
 }
 
 const ru = {
+    player: {
+        restoring: "Востанавливаем ваш прогресс...",
+    },
     navigator: {
         home: "Домой",
         studio: "Творческая студия",

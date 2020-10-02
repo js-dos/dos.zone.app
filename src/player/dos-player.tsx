@@ -3,7 +3,7 @@ import { DosFactoryType, DosInstance } from "emulators-ui/dist/types/js-dos";
 
 import { Dhry2 } from "./dhry2";
 import { CommandInterface } from "emulators";
-import { dhry2Url } from "../core/storage";
+import { dhry2Bundle } from "../core/storage";
 import { ControlSelector } from "emulators-ui/dist/types/dom/layers";
 
 import { IPlayerProps } from "./player";
@@ -55,6 +55,6 @@ export function DosPlayer(props: IPlayerProps) {
     }, [dos, props.bundleUrl, props.embedded]);
 
     return <div ref={rootRef} className="player">
-        { ci === null || props.bundleUrl !== dhry2Url ? null : <Dhry2 ci={ci} /> }
+        { ci === null || props.bundleUrl.indexOf(dhry2Bundle) < 0 ? null : <Dhry2 ci={ci} /> }
     </div>;
 }

@@ -1,6 +1,7 @@
-import { GET } from "./xhr/GET";
+import { GET_OBJECT } from "./xhr/GET";
 import { User } from "./auth"
 import { turboLimits, turboConnect } from "./config";
+import { logError } from "./log";
 
 export interface TurboSession {
     email: string;
@@ -9,11 +10,16 @@ export interface TurboSession {
     arn?: string;
 }
 
-export async function getTurboSession(user: User): Promise<TurboSession> {
-    return JSON.parse(await GET(turboLimits + "?sso=" + user.sso + "&sig=" + user.sig)).session;
+export async function getTurboSession(user: User): Promise<TurboSession | null> {
+    try {
+        return (await GET_OBJECT(turboLimits + "?sso=" + user.sso + "&sig=" + user.sig)).session;
+    } catch (e) {
+        logError(e);
+        return null;
+    }
 }
 
-export async function openTurboSession(user: User, bundleUrl: string) {
-    return JSON.parse(await GET(turboConnect + "?sso=" + user.sso + "&sig=" + user.sig + "&bundleUrl=" + encodeURIComponent(bundleUrl)));
+export async function openTurboSession(user: User, bundleUrl: string): Promise<any | null> {
+    return (await GET_OBJECT(turboConnect + "?sso=" + user.sso + "&sig=" + user.sig + "&bundleUrl=" + encodeURIComponent(bundleUrl)));
 }
 

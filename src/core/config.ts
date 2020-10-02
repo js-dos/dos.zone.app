@@ -6,3 +6,5 @@ export const ssoLogout = endpointBase + "/sso/logout";
 
 export const turboLimits = endpointBase + "/turbo/limits";
 export const turboConnect = endpointBase + "/turbo/connect";
+
+export const personalUrl = endpointBase + "/personal/url";

@@ -35,6 +35,10 @@ export function My(props: { user: User | null }) {
     useEffect(() => {
         if (user !== null && turboMode) {
             getTurboSession(user).then((session) => {
+                if (session === null) {
+                    return;
+                }
+
                 setTurboTime(session.restTime);
                 if (turboMode && session !== null && session.restTime === 0) {
                     setTurboMode(false);
