@@ -4,6 +4,11 @@ import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 
 const en = {
+    turbo: {
+        waiting_arn: "Connection to Turbo cloud...",
+        waiting_ip: "Starting up emulator",
+        sec: "sec",
+    },
     player: {
         restoring: "Restoring your progress...",
     },
@@ -164,6 +169,11 @@ Thank you!
 }
 
 const ru = {
+    turbo: {
+        waiting_arn: "Подключаемся к облаку...",
+        waiting_ip: "Запускаем эмулятор",
+        sec: "сек",
+    },
     player: {
         restoring: "Востанавливаем ваш прогресс...",
     },

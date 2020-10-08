@@ -40,7 +40,7 @@ export function My(props: { user: User | null }) {
                 }
 
                 setTurboTime(session.restTime);
-                if (turboMode && session !== null && session.restTime === 0) {
+                if (turboMode && session !== null && session.restTime < 60) {
                     setTurboMode(false);
                 }
             });
@@ -118,13 +118,21 @@ export function My(props: { user: User | null }) {
             </Switch>
         </Popover>;
     } else {
+        const timeInfo = (time: number) => {
+            if (time < 60) {
+                return "0 " + t("min");
+            }
+
+            return Math.round(time / 60 * 10) / 10 + " "+ t("min");
+        };
+
         turboSwitch =
             <Switch className="my-turbo-switch" checked={turboMode}
                 large={true}
                 inline={true}
                 innerLabel={t("Turbo")}
                 onChange={() => setTurboMode(!turboMode)}>
-                {turboTime === null ? "" : turboTime + " "+ t("min")}
+                {turboTime === null ? "" : timeInfo(turboTime) }
              </Switch>;
     }
 

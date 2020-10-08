@@ -2,6 +2,7 @@ import { GET_OBJECT } from "./xhr/GET";
 import { ssoLogin, ssoLogout, ssoUrl } from "./config";
 import { parseQuery } from "./query-string";
 import { logError } from "./log";
+import { Capacitor } from "@capacitor/core";
 
 const userKey = "zone.dos.user";
 
@@ -18,7 +19,8 @@ export interface User {
 
 export async function requestLogin() {
     try {
-        const response = await GET_OBJECT(ssoUrl + "?url=" + window.location.href);
+        const backUrl = Capacitor.isNative && Capacitor.platform === "android" ? "https://dos.zone/auto/my/" : window.location.href;
+        const response = await GET_OBJECT(ssoUrl + "?url=" + backUrl);
         const url = response.url;
         window.open(url, "_self");
     } catch(e) {

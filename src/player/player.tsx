@@ -11,6 +11,8 @@ import { DosPlayer } from "./dos-player";
 import { TurboPlayer } from "./turbo-player";
 import { getPersonalBundleUrl } from "../core/personal";
 
+import { goBack } from "../ui/navigator";
+
 export interface IPlayerProps {
     user: User | null;
     bundleUrl: string;
@@ -27,11 +29,7 @@ export function Player(props: IPlayerProps) {
         if (user !== null) {
             getPersonalBundleUrl(user, props.bundleUrl).then((url) => {
                 if (url === null) {
-                    if (history.length > 1) {
-                        history.goBack();
-                    } else {
-                        history.push("/" + i18n.language + "/my");
-                    }
+                    goBack(history, i18n.language);
                 } else {
                     setPersonalBundleUrl(url);
                 }
@@ -41,8 +39,10 @@ export function Player(props: IPlayerProps) {
 
     if (user !== null && personalBundleUrl === null) {
         return <div className="intermediate-loader-conatiner">
-            <H1>{t("restoring")}</H1>
-            &nbsp;&nbsp;&nbsp;&nbsp;<Spinner/>
+            <div className="intermediate-loader-container-column">
+                <H1>{t("restoring")}</H1>
+              &nbsp;&nbsp;&nbsp;&nbsp;<Spinner/>
+            </div>
         </div>;
     }
 

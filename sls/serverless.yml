@@ -12,6 +12,7 @@ provider:
     SESSION_TABLE: "dzsession"
     TURBO_TABLE: "dzturbo"
     RUN_INSTANCE: "jjs-runInstance"
+    DESCRIBE_INSTANCE: "jjs-describeInstance"
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -29,6 +30,7 @@ provider:
         - lambda:InvokeFunction
       Resource:
         - "arn:aws:lambda:${opt:region, self:provider.region}:*:function:${self:provider.environment.RUN_INSTANCE}"
+        - "arn:aws:lambda:${opt:region, self:provider.region}:*:function:${self:provider.environment.DESCRIBE_INSTANCE}"
     - Effect: Allow
       Action:
         - s3:ListBucket
@@ -81,6 +83,22 @@ functions:
     events:
       - http:
           path: /turbo/connect
+          method: get
+          cors: true
+  turboDisconnect:
+    handler: src/turbo-disconnect.turboDisconnect
+    name: doszone-sls-turboDisconnect
+    events:
+      - http:
+          path: /turbo/disconnect
+          method: get
+          cors: true
+  turboDescribe:
+    handler: src/turbo-describe.turboDescribe
+    name: doszone-sls-turboDescribe
+    events:
+      - http:
+          path: /turbo/describe
           method: get
           cors: true
   personalUrl:

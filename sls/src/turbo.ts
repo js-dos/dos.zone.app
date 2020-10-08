@@ -5,6 +5,7 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient();
 const lambda = new AWS.Lambda();
 const TableName = process.env.TURBO_TABLE as string;
 const RunInstanceLambda = process.env.RUN_INSTANCE as string;
+const DescribeInstanceLambda = process.env.DESCRIBE_INSTANCE as string;
 const defaultTimeLimitSec = 30 * 60;
 
 export interface TurboSession {
@@ -36,6 +37,8 @@ export async function getTurboSession(email: string): Promise<TurboSession> {
             usedTime: 0,
             restTime: 0,
         };
+    } else {
+        await invalidateSessionIfNeeded(session);
     }
 
     session.restTime = Math.max(session.timeLimit - session.usedTime, 0);
@@ -46,6 +49,41 @@ export async function getTurboSession(email: string): Promise<TurboSession> {
 
     return session;
 }
+
+async function invalidateSessionIfNeeded(session: TurboSession) {
+    const dayOrigin = session.dayOrigin;
+    const newDayOrigin = getDayOrigin();
+
+    if (dayOrigin === newDayOrigin) {
+        return;
+    }
+
+    const params: AWS.DynamoDB.DocumentClient.UpdateItemInput = {
+        TableName,
+        Key: {
+            email: session.email,
+        },
+        AttributeUpdates: {
+            dayOrigin: { Action: "PUT", Value: newDayOrigin },
+            usedTime: { Action: "PUT", Value: 0 },
+            startedAt: { Action: "DELETE" },
+        },
+        Expected: {
+            dayOrigin: {
+                Value: dayOrigin,
+            }
+        }
+    };
+
+    try  {
+        await dynamoDb.update(params).promise();
+        session.dayOrigin = newDayOrigin;
+        session.usedTime = 0;
+        delete session.startedAt;
+    } catch (e) {
+        // ignore
+    }
+};
 
 export async function startTurboSession(session: TurboSession) {
     const result = await lambda.invoke({
@@ -66,6 +104,13 @@ export async function startTurboSession(session: TurboSession) {
     }
 
     return session;
+}
+
+export async function describeSession(arn: string) {
+    return await (lambda.invoke({
+        FunctionName: DescribeInstanceLambda,
+        Payload: JSON.stringify({ arn }),
+    }).promise());
 }
 
 async function createSession(session: TurboSession) {
@@ -93,6 +138,32 @@ async function updateSession(session: TurboSession) {
     };
 
     await dynamoDb.update(params).promise();
+}
+
+export async function disconnectSession(email: string, arn: string) {
+    const params: AWS.DynamoDB.DocumentClient.UpdateItemInput = {
+        TableName,
+        Key: {
+            email: email,
+        },
+        AttributeUpdates: {
+            arn: { Action: "DELETE" },
+            bundleUrl: { Action: "DELETE" },
+            startedAt: { Action: "DELETE" },
+        },
+        Expected: {
+            arn: {
+                Value: arn,
+            }
+        }
+    };
+
+    try  {
+        await dynamoDb.update(params).promise();
+        return true;
+    } catch (e) {
+        return false;
+    }
 }
 
 export async function closeSession(email: string, arn: string, sec: number) {

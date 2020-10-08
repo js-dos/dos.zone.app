@@ -19,7 +19,7 @@ export const turboConnect: Handler = async (event: any) => {
     }
 
     const session = await getTurboSession(user.email);
-    if (session.restTime <= 0) {
+    if (session.restTime < 60) {
         return error("error_no_time");
     }
 

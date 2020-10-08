@@ -14,6 +14,14 @@ import { useTranslation } from "react-i18next";
 import { LoginButton } from "./login-button";
 import { User } from "../core/auth";
 
+export function goBack(history: any, lang: string) {
+    if (history.length > 1) {
+        history.goBack();
+    } else {
+        history.push("/" + lang + "/my");
+    }
+}
+
 export function Navigator(props: { user: User | null }) {
     const { t, i18n } = useTranslation("navigator");
     const lang = i18n.language;

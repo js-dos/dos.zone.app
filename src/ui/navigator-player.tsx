@@ -6,6 +6,7 @@ import { Navbar, Alignment, Button, Intent } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 
 import { useTranslation } from "react-i18next";
+import { goBack } from "./navigator";
 
 
 export function NavigatorPlayer() {
@@ -14,20 +15,12 @@ export function NavigatorPlayer() {
     const history = useHistory();
     const [inputVisible, setInputVisible] = useState<boolean>(false);
 
-    function goBack() {
-        if (history.length > 1) {
-            history.goBack();
-        } else {
-            history.push("/" + lang + "/my");
-        }
-    }
-
     return <div>
         <Navbar fixedToTop={false}>
             <Navbar.Group align={Alignment.LEFT}>
                 <Navbar.Heading>
                     <Button icon={IconNames.ARROW_LEFT} minimal={true}
-                          onClick={goBack}>DOS.Zone</Button>
+                          onClick={() => goBack(history, lang)}>DOS.Zone</Button>
                 </Navbar.Heading>
             </Navbar.Group>
             <Navbar.Group align={Alignment.RIGHT}>

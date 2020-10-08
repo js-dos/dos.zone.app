@@ -31,8 +31,8 @@ export function Profile(props: { user: User | null }) {
     if (turboSession !== null) {
         limits = <div>
             <p>{t("using_now")}<strong><span className={Classes.TEXT_LARGE}>{turboSession.arn !== undefined ? t("yes") : t("no") }</span></strong></p>
-            <p>{t("day_limit")}<strong><span className={Classes.TEXT_LARGE}>{turboSession.timeLimit} {t("min")}</span></strong></p>
-            <p>{t("rest_time")}<strong><span className={Classes.TEXT_LARGE}>{turboSession.restTime} {t("min")}</span></strong></p>
+            <p>{t("day_limit")}<strong><span className={Classes.TEXT_LARGE}>{toMin(turboSession.timeLimit)} {t("min")}</span></strong></p>
+            <p>{t("rest_time")}<strong><span className={Classes.TEXT_LARGE}>{toMin(turboSession.restTime)} {t("min")}</span></strong></p>
         </div>;
     }
 
@@ -51,4 +51,8 @@ export function Profile(props: { user: User | null }) {
         </div>
         {limits}
     </div>
+}
+
+function toMin(time: number) {
+    return Math.round(time / 60 * 10) / 10;
 }

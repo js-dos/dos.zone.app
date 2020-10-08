@@ -16,10 +16,6 @@ export function DosPlayer(props: IPlayerProps) {
     const [ci, setCi] = useState<CommandInterface | null>(null);
 
     useEffect(() => {
-        /* const lockedPromise = window.screen.orientation
-         *                      .lock('landscape')
-         *                      .then(() => true)
-         *                      .catch(() => false); */
         const controlSelector: ControlSelector = {
             send: () => document.querySelector(".control-send") as HTMLElement,
             input: () => document.querySelector(".control-input") as HTMLInputElement,
@@ -29,18 +25,14 @@ export function DosPlayer(props: IPlayerProps) {
 
         const root = rootRef.current as HTMLDivElement;
         const dos = Dos(root, {
-            controlSelector: props.embedded ? undefined : controlSelector
+            controlSelector: props.embedded ? undefined : controlSelector,
+            emulatorFunction: props.turbo ? "janus" : "dosWorker",
         });
         setDos(dos);
         return () => {
-            /* lockedPromise.then((locked) => {
-             *     if (locked) {
-             *         window.screen.orientation.unlock();
-             *     }
-             * }) */
             dos.stop();
         };
-    }, [props.embedded]);
+    }, [props.embedded, props.turbo]);
 
     useEffect(() => {
         if (dos === null) {
