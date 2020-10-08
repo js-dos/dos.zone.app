@@ -1,11 +1,14 @@
 import { CommandInterface } from "emulators";
 import { EmulatorsUi } from "./emulators-ui";
 import { Layers, ControlSelector } from "./dom/layers";
+export declare type EmulatorFunction = "dosWorker" | "dosDirect" | "janus";
 export interface DosOptions {
     controlSelector?: ControlSelector;
+    emulatorFunction?: EmulatorFunction;
 }
 export declare class DosInstance {
     emulatorsUi: EmulatorsUi;
+    emulatorFunction: EmulatorFunction;
     layers: Layers;
     ciPromise?: Promise<CommandInterface>;
     constructor(root: HTMLDivElement, emulatorsUi: EmulatorsUi, options: DosOptions);

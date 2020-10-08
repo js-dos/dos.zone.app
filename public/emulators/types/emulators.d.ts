@@ -7,6 +7,7 @@ export interface Emulators {
     dosBundle: () => Promise<DosBundle>;
     dosDirect: (bundle: Uint8Array) => Promise<CommandInterface>;
     dosWorker: (bundle: Uint8Array) => Promise<CommandInterface>;
+    janus: (restUrl: string) => Promise<CommandInterface>;
 }
 export interface CommandInterface {
     config: () => Promise<DosConfig>;
@@ -15,20 +16,17 @@ export interface CommandInterface {
     soundFrequency: () => number;
     screenshot: () => Promise<ImageData>;
     exit: () => Promise<void>;
-    simulateKeyPress: (keyCode: number) => void;
+    simulateKeyPress: (...keyCodes: number[]) => void;
     sendKeyEvent: (keyCode: number, pressed: boolean) => void;
     persist(): Promise<Uint8Array>;
     events(): CommandInterfaceEvents;
 }
+export declare type MessageType = "log" | "warn" | "error" | string;
 export interface CommandInterfaceEvents {
     onStdout: (consumer: (message: string) => void) => void;
     onFrameSize: (consumer: (width: number, height: number) => void) => void;
     onFrame: (consumer: (frame: Uint8Array) => void) => void;
     onSoundPush: (consumer: (samples: Float32Array) => void) => void;
     onExit: (consumer: () => void) => void;
-}
-export interface Logger {
-    onLog: (...args: any[]) => void;
-    onWarn: (...args: any[]) => void;
-    onErr: (...args: any[]) => void;
+    onMessage: (consumer: (msgType: MessageType, ...args: any[]) => void) => void;
 }
