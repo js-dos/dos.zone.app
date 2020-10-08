@@ -5,7 +5,7 @@ import LanguageDetector from "i18next-browser-languagedetector";
 
 const en = {
     turbo: {
-        waiting_arn: "Connection to Turbo cloud...",
+        waiting_arn: "Connecting to Turbo cloud...",
         waiting_ip: "Starting up emulator",
         sec: "sec",
     },

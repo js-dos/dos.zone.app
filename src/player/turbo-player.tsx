@@ -9,6 +9,9 @@ import { Spinner, H1} from "@blueprintjs/core";
 import { User } from "../core/auth";
 
 import { DosPlayer } from "./dos-player";
+import { Loader } from "./loader";
+
+const initialCountDown = 50;
 
 export function TurboPlayer(props: IPlayerProps) {
     const { t, i18n } = useTranslation("turbo");
@@ -18,7 +21,7 @@ export function TurboPlayer(props: IPlayerProps) {
 
     const [arn, setArn] = useState<string | null>(null);
     const [publicIp, setPublicIp] = useState<string | null>(null);
-    const [countDown, setCountDown] = useState<number>(35);
+    const [countDown, setCountDown] = useState<number>(initialCountDown);
 
     useEffect(() => {
         return () => {
@@ -38,7 +41,7 @@ export function TurboPlayer(props: IPlayerProps) {
                 goBack(history, i18n.language);
             } else {
                 setArn(arn);
-                let countDown = 35;
+                let countDown = initialCountDown;
                 let countDownId = setInterval(() => {
                     countDown--;
                     setCountDown(countDown);
@@ -50,6 +53,7 @@ export function TurboPlayer(props: IPlayerProps) {
                     setPublicIp(await getPublicIp(user, arn));
                     clearInterval(countDownId);
                 } catch(e) {
+                    console.error(e);
                     goBack(history, i18n.language);
                     clearInterval(countDownId);
                 }
@@ -62,21 +66,11 @@ export function TurboPlayer(props: IPlayerProps) {
     }
 
     if (arn === null) {
-        return <div className="intermediate-loader-conatiner">
-            <div className="intermediate-loader-container-column">
-                <H1>{t("waiting_arn")}</H1>
-              &nbsp;&nbsp;&nbsp;&nbsp;<Spinner/>
-            </div>
-        </div>;
+        return <Loader pre2={t("waiting_arn")} />;
     }
 
     if (publicIp === null) {
-        return <div className="intermediate-loader-conatiner">
-            <div className="intermediate-loader-container-column">
-                <H1>{t("waiting_ip")} ({countDown}) {t("sec")}...</H1>
-              &nbsp;&nbsp;&nbsp;&nbsp;<Spinner/>
-            </div>
-        </div>;
+        return <Loader pre2={t("waiting_ip") + " (" + countDown + ") " + t("sec")} />;
     }
 
     const playerProps: IPlayerProps = {...props};
@@ -94,12 +88,15 @@ async function getPublicIp(user: User, arn: string) {
                     return;
                 }
 
-                if (session.live === true && session.ip !== "N/A") {
+                if (session.arn !== arn) {
                     clearInterval(inervalId);
-                    // workaround - need give some time to janus wakeup
-                    setTimeout(() => {
-                        resolve(session.ip);
-                    }, 1000);
+                    reject(new Error("Arn changed!"));
+                    return;
+                }
+
+                if (session.ip !== undefined) {
+                    clearInterval(inervalId);
+                    resolve(session.ip);
                 }
             });
         }, 3000);

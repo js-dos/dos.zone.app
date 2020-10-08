@@ -8,6 +8,7 @@ export interface TurboSession {
     timeLimit: number;
     restTime: number;
     arn?: string;
+    ip?: string;
 }
 
 export async function getTurboSession(user: User): Promise<TurboSession | null> {
@@ -37,7 +38,7 @@ export async function closeTurboSession(user: User, arn: string): Promise<string
     }
 }
 
-export async function describeSession(user: User, arn: string): Promise<{ live: boolean, ip: "N/A" | string } | null> {
+export async function describeSession(user: User, arn: string): Promise<TurboSession | null> {
     try {
         return (await GET_OBJECT(turboDescribe + "?sso=" + user.sso + "&sig=" + user.sig + "&arn=" + encodeURIComponent(arn))).session;
     } catch(e) {

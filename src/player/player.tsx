@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
-
-import {
-    Spinner, H1, Intent
-} from "@blueprintjs/core";
+import { Loader } from "./loader";
 
 import { User } from "../core/auth";
 import { DosPlayer } from "./dos-player";
@@ -38,12 +35,7 @@ export function Player(props: IPlayerProps) {
     }, [user]);
 
     if (user !== null && personalBundleUrl === null) {
-        return <div className="intermediate-loader-conatiner">
-            <div className="intermediate-loader-container-column">
-                <H1>{t("restoring")}</H1>
-              &nbsp;&nbsp;&nbsp;&nbsp;<Spinner/>
-            </div>
-        </div>;
+        return <Loader pre2={t("restoring")} />;
     }
 
     const newProps = {...props};

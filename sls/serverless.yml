@@ -12,7 +12,6 @@ provider:
     SESSION_TABLE: "dzsession"
     TURBO_TABLE: "dzturbo"
     RUN_INSTANCE: "jjs-runInstance"
-    DESCRIBE_INSTANCE: "jjs-describeInstance"
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -30,7 +29,6 @@ provider:
         - lambda:InvokeFunction
       Resource:
         - "arn:aws:lambda:${opt:region, self:provider.region}:*:function:${self:provider.environment.RUN_INSTANCE}"
-        - "arn:aws:lambda:${opt:region, self:provider.region}:*:function:${self:provider.environment.DESCRIBE_INSTANCE}"
     - Effect: Allow
       Action:
         - s3:ListBucket
@@ -113,6 +111,9 @@ functions:
   turboGet:
     handler: src/turbo-get.turboGet
     name: doszone-sls-turboGet
+  turboIp:
+    handler: src/turbo-ip.turboIp
+    name: doszone-sls-turboIp
   turboClose:
     handler: src/turbo-close.turboClose
     name: doszone-sls-turboClose
@@ -167,6 +168,9 @@ resources:
           -
             AttributeName: createdAt
             AttributeType: N
+          -
+            AttributeName: ip
+            AttributeType: S
         KeySchema:
           -
             AttributeName: email
