@@ -10,6 +10,7 @@ import {
     Tooltip,
     Position,
     Spinner,
+    Icon,
 } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 import { useTranslation } from "react-i18next";
@@ -46,13 +47,16 @@ export function LoginButton(props: { user: User | null }) {
         requestLogin();
     }
 
-    const why = <div style={{ padding: "10px" }}>
+    const why = <div style={{ padding: "10px", maxWidth: "300px" }}>
         <ReactMardown
             renderers={renderers}
             source={t("login_popover", {lang})}
             escapeHtml={false}>
         </ReactMardown>
-        Please <Button onClick={loginClick}>login</Button> to store progress <br/> on server.
+        <div>
+        {t("please")} <Button onClick={loginClick}>{t("login")}</Button> {t("to_activate_all_features")}
+            &nbsp;<Link to={"/" + lang + "/guide/features" }><Icon icon={IconNames.DOCUMENT_OPEN} /></Link>
+        </div>
     </div>;
 
     return <Popover content={why} position={Position.BOTTOM}>

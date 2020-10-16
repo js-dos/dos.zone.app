@@ -19,6 +19,7 @@ import { NavigatorPlayer } from "./ui/navigator-player";
 
 import { Landing } from "./pages/landing";
 import { GameStudio } from "./pages/game-studio";
+import { FeaturesGuide } from "./pages/guides/features";
 import { My } from "./pages/my";
 import { Profile } from "./pages/profile";
 import { Player } from "./player/player";
@@ -65,6 +66,10 @@ function App() {
             <Route path="/:lang/guide/studio">
                 <Navigator user={user} />
                 <GameStudioGuide />
+            </Route>
+            <Route path="/:lang/guide/features">
+                <Navigator user={user} />
+                <FeaturesGuide />
             </Route>
             <Route path={["/:lang/my/:url", "/:lang/my"]}>
                 <Navigator user={user} />

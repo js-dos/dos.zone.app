@@ -18,6 +18,9 @@ const en = {
         database: "Database",
     },
     login: {
+        please: "Please",
+        login: "login",
+        to_activate_all_features: "to activate all features",
         login_tooltip: "Login to activate more features",
         login_popover: `
 By default js-dos store<br/>
@@ -45,6 +48,26 @@ This data can be suddenly wiped.<br/>
         region: "Region: ",
     },
     guides: {
+        features: `
+# Dos.Zone
+
+Dos.Zone provides minimal basic functionality for anonymous players. You can use it without registration, but some advanced features that are listed below require login.
+
+## Synchronization
+
+All devices where you logged in are synchronized with each other, it means that all your favorite games, configuration and customization are stored on the backend and shared between all your devices.
+
+## Game progress storage
+
+For non logged users progress is stored in browsers local storage. It works fine while you play in a single browser, but if you change the browser of device progress will be lost. This type of progress storage is non recoverable.
+
+For logged users game progress is also synced with backend, and shared between all your devices. It means you can play on PC and then continue playing on Mobile for example.
+
+## Turbo mode
+
+Turbo mode is only supported for logged users. This mode can help to play games that require a powerful CPU, like C&C or Diablo. For each user Dos.Zone provides a free 30 min session of Turbo mode everyday.
+
+`,
         gameStudio: `
 # Game Studio
 
@@ -184,6 +207,9 @@ const ru = {
         database: "База данных",
     },
     login: {
+        please: "Пожалуйста",
+        login: "войдите",
+        to_activate_all_features: "что бы активировать все функции",
         login_tooltip: "Войдите что бы активировать больше функций",
         login_popover: `
 По умоланию js-dos хранит<br/>
@@ -212,6 +238,25 @@ const ru = {
         region: "Регион: ",
     },
     guides: {
+        features: `
+# Dos.Zone
+
+Dos.Zone предоставляет минимальну функциональность для анонимных пользователей. Вы можете использовать его без регистрации, но некоторые дополнительные функции указанные ниже требуют регистрации.
+
+## Синхронизация
+
+Все устройства на которых выполнен вход синхронизуются друг с дургом, это значит что избранные игры, настройки и кастомизации сохраняются на сервере и распространяются на все устройства.
+
+## Сохранение игрового прогресса
+
+Для не зарегестрированных пользователей игровой прогресс записывается в локальное хранилище браузера. Это рабтает прекрасно пока вы используете один браузер, но если вы поменяете браузер или устройство, то прогресс будет потерян. В данном случае игровой прогесс не возможно востановить.
+
+Для зарегистрированных пользователей игровой прогресс хранится на серверах и может быть востанновлен на любом устройстве. Например, вы можете игарть на ПК, а затем прололжить с того же места уже на мобильном устройстве.
+
+## Turbo режим
+
+Турбо режим поддерживается только для зарегистрированных пользователей. Этот режим преднозначен для игр которые требуют мощных CPU, например C&C или Diablo. Для любого пользователя предусмотрен бесплатный сеанc турбо режима продолжительностью до 30 минут ежедневно.
+`,
         gameStudio: `
 # Творческая студия
 
