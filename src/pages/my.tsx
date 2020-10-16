@@ -21,6 +21,7 @@ import { getGameData } from "../core/game-query";
 
 import { User } from "../core/auth";
 import { getTurboSession } from "../core/turbo";
+import { Capacitor } from "@capacitor/core";
 
 export function My(props: { user: User | null }) {
     const [recentlyPlayed, setRecentlyPlayed] = useState<RecentlyPlayed | null>(null);
@@ -81,8 +82,10 @@ export function My(props: { user: User | null }) {
     });
 
     const active = selected.length === 0 ? keys[0] : selected;
-    const runUrl = "/" + i18n.language + "/play/" + encodeURIComponent(active) + "?turbo=" + (turboMode ? "1" : "0");
-    const description = getGameData(active).description[i18n.language]?.description || "";
+    const gameData = getGameData(active);
+    const description = gameData.description[i18n.language]?.description || gameData.description["en"]?.description || "";
+    const canTurbo = Capacitor.isNative && Capacitor.getPlatform() === "android" && gameData.turbo === true;
+    const runUrl = "/" + i18n.language + "/play/" + encodeURIComponent(active) + "?turbo=" + (canTurbo && turboMode ? "1" : "0");
 
     async function runBundle() {
         if (recentlyPlayed !== null) {
@@ -92,6 +95,14 @@ export function My(props: { user: User | null }) {
 
         history.push(runUrl);
     }
+
+    const timeInfo = (time: number) => {
+        if (time < 60) {
+            return "0 " + t("min");
+        }
+
+        return Math.round(time / 60 * 10) / 10 + " "+ t("min");
+    };
 
     let turboSwitch = null;
     if (user === null) {
@@ -105,6 +116,15 @@ export function My(props: { user: User | null }) {
                         innerLabel={t("Turbo")}></Switch>
             </div>
         </Popover>;
+    } else if (!canTurbo) {
+        /* turboSwitch = <Switch className="my-turbo-switch"
+                    checked={true}
+                    disabled={true}
+                    large={true}
+                    inline={true}
+                    innerLabel={t("Turbo")}>
+        </Switch> */
+        // no controls
     } else if (turboTime === 0) {
         const popoeverInner = <div className="popover-inner-card">{t("no_time_for_turbo_mode")}, <Link to={"/" + i18n.language + "/profile"}>{t("settings")}</Link></div>;
         turboSwitch = <Popover content={popoeverInner} position={Position.TOP} isOpen={true}>
@@ -119,14 +139,6 @@ export function My(props: { user: User | null }) {
             </Switch>
         </Popover>;
     } else {
-        const timeInfo = (time: number) => {
-            if (time < 60) {
-                return "0 " + t("min");
-            }
-
-            return Math.round(time / 60 * 10) / 10 + " "+ t("min");
-        };
-
         turboSwitch =
             <Switch className="my-turbo-switch" checked={turboMode}
                 large={true}

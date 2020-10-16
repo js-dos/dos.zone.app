@@ -3,6 +3,7 @@ import { ssoLogin, ssoLogout, ssoUrl } from "./config";
 import { parseQuery } from "./query-string";
 import { logError } from "./log";
 import { Capacitor } from "@capacitor/core";
+import { storage } from "./storage/storage";
 
 const userKey = "zone.dos.user";
 
@@ -28,7 +29,7 @@ export async function requestLogin() {
     }
 }
 
-export function getCachedUser() {
+export function getCachedUser(): User | null {
     const cachedValue: string | null = localStorage.getItem(userKey);
     return cachedValue === null ? null : JSON.parse(cachedValue);
 }
@@ -53,7 +54,12 @@ export async function authenticate(user: User | null): Promise<User | null> {
     }
 
     if (user !== null) {
+        const cachedUser = getCachedUser();
+        const shouldUpdateDefaults = cachedUser === null || cachedUser.email !== user.email;
         localStorage.setItem(userKey, JSON.stringify(user));
+        if (shouldUpdateDefaults) {
+            initDefaults(user);
+        }
     } else {
         localStorage.removeItem(userKey);
     }
@@ -63,6 +69,14 @@ export async function authenticate(user: User | null): Promise<User | null> {
     }
 
     return user;
+}
+
+async function initDefaults(user: User) {
+    const userStorage = storage(user);
+    const region = await userStorage.get("region");
+    if (region === null) {
+        await userStorage.set("region", navigator.language.toLocaleLowerCase() === "en-us" ? "us-east-1" : "eu-central-1");
+    }
 }
 
 async function validateUser(user: User): Promise<User | null> {
@@ -89,4 +103,12 @@ export async function requestLogout() {
             logError(e);
         }
     }
+}
+
+export function isSuperUser(user?: User | null) {
+    if (user === null || user === undefined) {
+        return false;
+    }
+
+    return user.email === "caiiiycuk@gmail.com";
 }

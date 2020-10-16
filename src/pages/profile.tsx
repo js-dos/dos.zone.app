@@ -8,18 +8,25 @@ import {
     Icon,
     Classes,
     Spinner,
+    HTMLSelect,
 } from "@blueprintjs/core";
 
 import { IconNames } from "@blueprintjs/icons";
+import { storage } from "../core/storage/storage";
 
 export function Profile(props: { user: User | null }) {
     const { t, i18n } = useTranslation("profile");
     const user = props.user;
+    const userStorage = storage(user);
 
     const [turboSession, setTurboSession ] = useState<TurboSession | null>(null);
+    const [region, setRegion] = useState<string|null>(null);
+    const [updating, setUpdating] = useState<boolean>(false);
+
     useEffect(() => {
         if (user !== null) {
             getTurboSession(user).then(setTurboSession);
+            userStorage.get("region").then(setRegion);
         }
     }, [user?.email]);
 
@@ -29,10 +36,29 @@ export function Profile(props: { user: User | null }) {
 
     let limits = <div><Spinner/></div>;
     if (turboSession !== null) {
+        const onChangeRegion = (event: any) => {
+            setUpdating(true);
+            const newRegion = event.currentTarget.value;
+            userStorage.set("region", newRegion).then((success) => {
+                if (success) {
+                    setRegion(newRegion);
+                }
+                setUpdating(false);
+            });
+        };
+
         limits = <div>
             <p>{t("using_now")}<strong><span className={Classes.TEXT_LARGE}>{turboSession.arn !== undefined ? t("yes") : t("no") }</span></strong></p>
             <p>{t("day_limit")}<strong><span className={Classes.TEXT_LARGE}>{toMin(turboSession.timeLimit)} {t("min")}</span></strong></p>
             <p>{t("rest_time")}<strong><span className={Classes.TEXT_LARGE}>{toMin(turboSession.restTime)} {t("min")}</span></strong></p>
+            <div>{t("region")}&nbsp;
+                <HTMLSelect minimal={false}
+                            options={["eu-central-1", "us-east-1"]}
+                            onChange={onChangeRegion}
+                            disabled={updating}
+                            value={ region === null ? undefined : region } />
+                &nbsp;{ updating ? <Spinner  className="spinner-inline" size={12} /> : null }
+            </div>
         </div>;
     }
 

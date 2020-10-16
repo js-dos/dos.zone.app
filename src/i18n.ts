@@ -42,6 +42,7 @@ This data can be suddenly wiped.<br/>
         day_limit: "Limit per day: ",
         min: "minutes",
         rest_time: "Rest time: ",
+        region: "Region: ",
     },
     guides: {
         gameStudio: `
@@ -208,6 +209,7 @@ const ru = {
         day_limit: "Дневной лими: ",
         min: "мин.",
         rest_time: "Оставшееся время: ",
+        region: "Регион: ",
     },
     guides: {
         gameStudio: `

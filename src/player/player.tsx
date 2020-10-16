@@ -3,12 +3,13 @@ import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import { Loader } from "./loader";
 
-import { User } from "../core/auth";
+import { User, isSuperUser } from "../core/auth";
 import { DosPlayer } from "./dos-player";
 import { TurboPlayer } from "./turbo-player";
 import { getPersonalBundleUrl } from "../core/personal";
 
 import { goBack } from "../ui/navigator";
+import { getGameData } from "../core/game-query";
 
 export interface IPlayerProps {
     user: User | null;
@@ -42,6 +43,14 @@ export function Player(props: IPlayerProps) {
     const newProps = {...props};
     if (personalBundleUrl !== null) {
         newProps.bundleUrl = personalBundleUrl;
+    }
+
+    if (newProps.turbo && user === null) {
+        newProps.turbo = false;
+    }
+
+    if (!isSuperUser(user) && newProps.turbo && getGameData(props.bundleUrl).turbo !== true) {
+        newProps.turbo = false;
     }
 
     if (newProps.turbo) {

@@ -8,6 +8,7 @@ export interface GameData {
     description: {[locale: string]: {
         description: string,
     }},
+    turbo?: boolean,
 }
 
 const gameData: {[bundleUrl: string]: GameData} = JSON.parse(gamesDb);
@@ -19,5 +20,6 @@ export function getGameData(bundleUrl: string) {
         screenshot: "",
         author: "",
         description: {},
+        turbo: false,
     };
 }

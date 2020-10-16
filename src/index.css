@@ -223,3 +223,7 @@ body {
     width: 50px;
     height: 50px;
 }
+
+.spinner-inline {
+    display: inline-block !important;
+}

@@ -4,6 +4,8 @@ import { validateUser } from './session';
 import { badRequest, noSession, success, error } from './responses';
 import { getTurboSession, startTurboSession } from './turbo';
 
+import { getKey } from "./storage";
+
 export const turboConnect: Handler = async (event: any) => {
     const sso = event.queryStringParameters.sso;
     const sig = event.queryStringParameters.sig;
@@ -31,6 +33,8 @@ export const turboConnect: Handler = async (event: any) => {
         return error("error_starting_to_often");
     }
 
+    const region = await getKey(user.email, "region");
+
     session.bundleUrl = bundleUrl;
-    return success( { session: await startTurboSession(session) });
+    return success( { session: await startTurboSession(session, region || "eu-central-1") });
 }

@@ -89,10 +89,13 @@ async function invalidateSessionIfNeeded(session: TurboSession) {
     }
 };
 
-export async function startTurboSession(session: TurboSession) {
+export async function startTurboSession(session: TurboSession, region: string) {
     const result = await lambda.invoke({
         FunctionName: RunInstanceLambda,
-        Payload: JSON.stringify(session),
+        Payload: JSON.stringify({
+            ...session,
+            region,
+        }),
     }).promise();
 
     if (result.Payload) {
