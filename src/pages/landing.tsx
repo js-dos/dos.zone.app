@@ -9,7 +9,7 @@ import { IconNames } from "@blueprintjs/icons";
 
 import ReactMardown from "react-markdown/with-html";
 import { renderers } from "../core/renderers";
-import { myStorage } from "../core/storage";
+import { getRecentlyPlayed } from "../core/storage/recently-played";
 
 import { openRepository } from "../core/browser-tab";
 import { useHistory } from "react-router-dom";
@@ -19,17 +19,8 @@ export function Landing() {
     const { t, i18n } = useTranslation("landing");
     const dbGuide = useTranslation("guides").t("database", {lang: i18n.language});
     const [dbGuideOpened, setDbGuideOpened] = useState<boolean>(false);
-    const [showRecentlyPlayed, setShowRecentlyPlayed] = useState<boolean>(false);
+    const showRecentlyPlayed = true;
     const history = useHistory();
-
-    useEffect(() => {
-        myStorage().then((storage) => {
-            if (Object.keys(storage.recentlyPlayed).length > 0) {
-                setShowRecentlyPlayed(true);
-            }
-        });
-    }, []);
-
 
     return <div className={[Classes.RUNNING_TEXT, Classes.TEXT_LARGE].join(" ")}
                 style={{padding: "0 40px"}}>

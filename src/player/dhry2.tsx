@@ -8,38 +8,32 @@ export function Dhry2(props: {
     const [tokens, setTokens] = useState<string[]>([]);
 
     useEffect(() => {
-        const time = [0, 0];
-        let timeIndex = 0;
-        let runs = 10000;
         // listen program outpus for `~>dtime` marker
         ci.events().onStdout((message) => {
-            if (message.indexOf("~>dtime") === -1) {
+            if (!message.startsWith("dhry2:")) {
                 return;
             }
 
-            time[timeIndex++] = performance.now();
-            if (timeIndex === 2) {
-                const delta = Math.round((time[1] - time[0]) * 10) / 10;
-                const vaxRating = runs * 1000  / delta / 1757;
+            const [_, runs, deltaStr, vaxRatingStr] = message.split(" ");
+            const delta = Number.parseFloat(deltaStr);
+            const vaxRating = Number.parseFloat(vaxRatingStr);
+
+            setTokens([
+                "Runs: ", runs + "",
+                "Time: ", Math.round(delta * 10) / 10 + "", " ms",
+                "VAX : ", Math.round(vaxRating * 100) / 100 + "",
+            ]);
+
+            if (delta >= 5000) {
                 setTokens([
                     "Runs: ", runs + "",
-                    "Time: ", delta + "", " ms",
-                    "VAX : ", Math.round(vaxRating * 10) / 10 + "",
+                    "Time: ", Math.round(delta * 10) / 10 + "", " ms",
+                    "VAX : ", Math.round(vaxRating * 100) / 100 + "",
+                    "PC: ", getComparablePc(vaxRating),
                 ]);
-                runs *= 2;
-                timeIndex = 0;
 
-                if (delta > 3000) {
-                    setTokens([
-                        "Runs: ", runs + "",
-                        "Time: ", delta + "", " ms",
-                        "VAX : ", Math.round(vaxRating * 10) / 10 + "",
-                        "PC: ", getComparablePc(vaxRating),
-                    ]);
-
-                    // properly exit
-                    ci.exit();
-                }
+                // properly exit
+                ci.exit();
             }
         });
     }, [ci]);

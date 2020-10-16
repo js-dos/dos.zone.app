@@ -15,6 +15,7 @@ export interface IPlayerProps {
     bundleUrl: string;
     embedded: boolean;
     turbo: boolean;
+    sourceBundleUrl?: string;
 }
 
 export function Player(props: IPlayerProps) {

@@ -10,6 +10,7 @@ provider:
   versionFunctions: false
   environment:
     SESSION_TABLE: "dzsession"
+    STORAGE_TABLE: "dzstorage"
     TURBO_TABLE: "dzturbo"
     RUN_INSTANCE: "jjs-runInstance"
   iamRoleStatements:
@@ -23,6 +24,7 @@ provider:
         - dynamodb:DeleteItem
       Resource:
         - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.SESSION_TABLE}"
+        - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.STORAGE_TABLE}"
         - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.TURBO_TABLE}"
     - Effect: Allow
       Action:
@@ -65,6 +67,22 @@ functions:
       - http:
           path: /sso/logout
           method: get
+          cors: true
+  storageGet:
+    handler: src/storage-get.storageGet
+    name: doszone-sls-storageGet
+    events:
+      - http:
+          path: /storage/get
+          method: get
+          cors: true
+  storagePut:
+    handler: src/storage-put.storagePut
+    name: doszone-sls-storagePut
+    events:
+      - http:
+          path: /storage/put
+          method: post
           cors: true
   turboLimits:
     handler: src/turbo-limits.turboLimits
@@ -132,11 +150,9 @@ resources:
           -
             AttributeName: nonce
             KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
         TableName: ${self:provider.environment.SESSION_TABLE}
-    dzturbo:
+        BillingMode: PAY_PER_REQUEST
+    dzstorage:
       Type: 'AWS::DynamoDB::Table'
       DeletionPolicy: Retain
       Properties:
@@ -145,40 +161,31 @@ resources:
             AttributeName: email
             AttributeType: S
           -
-            AttributeName: dayOrigin
-            AttributeType: N
-          -
-            AttributeName: timeLimit
-            AttributeType: N
-          -
-            AttributeName: usedTime
-            AttributeType: N
-          -
-            AttributeName: restTime
-            AttributeType: N
-          -
-            AttributeName: arn
-            AttributeType: S
-          -
-            AttributeName: bundleUrl
-            AttributeType: S
-          -
-            AttributeName: startedAt
-            AttributeType: N
-          -
-            AttributeName: createdAt
-            AttributeType: N
-          -
-            AttributeName: ip
+            AttributeName: key
             AttributeType: S
         KeySchema:
           -
             AttributeName: email
             KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+          -
+            AttributeName: key
+            KeyType: RANGE
+        TableName: ${self:provider.environment.STORAGE_TABLE}
+        BillingMode: PAY_PER_REQUEST
+    dzturbo:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: email
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: email
+            KeyType: HASH
         TableName: ${self:provider.environment.TURBO_TABLE}
+        BillingMode: PAY_PER_REQUEST
 
 plugins:
   - serverless-plugin-typescript

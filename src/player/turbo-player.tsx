@@ -42,7 +42,7 @@ export function TurboPlayer(props: IPlayerProps) {
             } else {
                 setArn(arn);
                 let countDown = initialCountDown;
-                let countDownId = setInterval(() => {
+                const countDownId = setInterval(() => {
                     countDown--;
                     setCountDown(countDown);
                     if (countDown === 0) {
@@ -74,6 +74,7 @@ export function TurboPlayer(props: IPlayerProps) {
     }
 
     const playerProps: IPlayerProps = {...props};
+    playerProps.sourceBundleUrl = props.bundleUrl;
     playerProps.bundleUrl = "http://" + publicIp + ":8088/janus";
     return <DosPlayer {...playerProps} />;
 }

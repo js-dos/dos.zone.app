@@ -5,6 +5,8 @@
 ## Assembling Frontend
 
 ```
+dz db eject
+
 yarn build
 ./node_modules/.bin/cap copy android
 cd build

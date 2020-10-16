@@ -10,3 +10,6 @@ export const turboDisconnect = endpointBase + "/turbo/disconnect";
 export const turboDescribe = endpointBase + "/turbo/describe";
 
 export const personalUrl = endpointBase + "/personal/url";
+
+export const storageGet = endpointBase + "/storage/get";
+export const storagePut = endpointBase + "/storage/put";

@@ -12,7 +12,7 @@ import {
     Position,
 } from "@blueprintjs/core";
 
-import { myStorage, RecentlyPlayed } from "../core/storage";
+import { getRecentlyPlayed, RecentlyPlayed, setRecentlyPlayed as updateRecentlyPlayed  } from "../core/storage/recently-played";
 import { GameThumb } from "./components/game-thumb";
 import { IconNames } from "@blueprintjs/icons";
 
@@ -54,19 +54,18 @@ export function My(props: { user: User | null }) {
     useEffect(() => {
         setRecentlyPlayed(null); // reset state
 
-        myStorage().then(async (my) => {
+        getRecentlyPlayed(user).then((recentlyPlayed) => {
             if (url !== undefined && url !== null && url.length > 0) {
                 const decodedUrl = decodeURIComponent(url);
-                my.recentlyPlayed[decodedUrl] = {
+                recentlyPlayed[decodedUrl] = {
                     visitedAtMs: Date.now(),
                 }
-                await my.flush();
-                setRecentlyPlayed(my.recentlyPlayed);
-            } else {
-                setRecentlyPlayed(my.recentlyPlayed);
+                updateRecentlyPlayed(user, recentlyPlayed);
             }
+
+            setRecentlyPlayed(recentlyPlayed);
         });
-    }, [url]);
+    }, [user, url]);
 
     if (recentlyPlayed === null) {
         return <Spinner></Spinner>;
@@ -86,9 +85,11 @@ export function My(props: { user: User | null }) {
     const description = getGameData(active).description[i18n.language]?.description || "";
 
     async function runBundle() {
-        const storage = await myStorage();
-        storage.recentlyPlayed[active].visitedAtMs = Date.now();
-        await storage.flush();
+        if (recentlyPlayed !== null) {
+            recentlyPlayed[active].visitedAtMs = Date.now();
+            updateRecentlyPlayed(user, recentlyPlayed);
+        }
+
         history.push(runUrl);
     }
 

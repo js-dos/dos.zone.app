@@ -1228,10 +1228,10 @@ function updateGlobalBufferAndViews(buf) {
   Module['HEAPF64'] = HEAPF64 = new Float64Array(buf);
 }
 
-var STACK_BASE = 27694288,
+var STACK_BASE = 27694624,
     STACKTOP = STACK_BASE,
-    STACK_MAX = 26645712,
-    DYNAMIC_BASE = 27694288;
+    STACK_MAX = 26646048,
+    DYNAMIC_BASE = 27694624;
 
 
 
@@ -1636,7 +1636,7 @@ var tempI64;
 // === Body ===
 
 var ASM_CONSTS = {
-  84483: function() {Module['screenIsReadOnly'] = true;}
+  84499: function() {Module['screenIsReadOnly'] = true;}
 };
 function destroySyncSleep(){ if (worker) { self.removeEventListener("message", Module.receive); } else { window.removeEventListener("message", Module.receive); } Module.alive = false; delete Module.sync_sleep; }
 function emsc_add_frame_line(start,ptr,len){ Module.frame_update_lines.push( {start : start, heapu8 : Module.HEAPU8.slice(ptr, ptr + len)}); }

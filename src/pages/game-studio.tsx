@@ -57,7 +57,7 @@ const steps = [
             setError("");
 
             const file = files[0];
-            let reader = new FileReader();
+            const reader = new FileReader();
             reader.addEventListener("load", async (e) => {
                 const zip = new Uint8Array(reader.result as ArrayBuffer);
                 const blob = new Blob([zip]);
