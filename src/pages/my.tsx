@@ -105,7 +105,16 @@ export function My(props: { user: User | null }) {
     };
 
     let turboSwitch = null;
-    if (user === null) {
+    if (!canTurbo) {
+        /* turboSwitch = <Switch className="my-turbo-switch"
+           checked={true}
+           disabled={true}
+           large={true}
+           inline={true}
+           innerLabel={t("Turbo")}>
+           </Switch> */
+        // no controls
+    } else if (user === null) {
         turboSwitch = <Popover content={<div className="popover-inner-card">{t("please_login_for_turbo_mode")}</div>} position={Position.TOP} isOpen={true}>
             <div>
                 <Switch className="my-turbo-switch"
@@ -116,15 +125,6 @@ export function My(props: { user: User | null }) {
                         innerLabel={t("Turbo")}></Switch>
             </div>
         </Popover>;
-    } else if (!canTurbo) {
-        /* turboSwitch = <Switch className="my-turbo-switch"
-                    checked={true}
-                    disabled={true}
-                    large={true}
-                    inline={true}
-                    innerLabel={t("Turbo")}>
-        </Switch> */
-        // no controls
     } else if (turboTime === 0) {
         const popoeverInner = <div className="popover-inner-card">{t("no_time_for_turbo_mode")}, <Link to={"/" + i18n.language + "/profile"}>{t("settings")}</Link></div>;
         turboSwitch = <Popover content={popoeverInner} position={Position.TOP} isOpen={true}>
