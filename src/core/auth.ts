@@ -20,7 +20,7 @@ export interface User {
 
 export async function requestLogin() {
     try {
-        const backUrl = Capacitor.isNative && Capacitor.platform === "android" ? "https://dos.zone/auto/my/" : window.location.href;
+        const backUrl = Capacitor.isNative && Capacitor.platform === "android" ? "https://dos.zone" + window.location.pathname : window.location.href;
         const response = await GET_OBJECT(ssoUrl + "?url=" + backUrl);
         const url = response.url;
         window.open(url, "_self");
@@ -34,21 +34,7 @@ export function getCachedUser(): User | null {
     return cachedValue === null ? null : JSON.parse(cachedValue);
 }
 
-export async function authenticate(user: User | null): Promise<User | null> {
-    const { sso, sig } = parseQuery(window.location.search);
-    if (sso) {
-        const payload = parseQuery(atob(sso));
-        user = {
-            avatarUrl: payload.avatar_url,
-            email: payload.email,
-            username: payload.username,
-            nonce: payload.nonce,
-            sso,
-            sig,
-            time: Date.now(),
-        };
-    }
-
+export async function refresh(user: User | null): Promise<User | null> {
     if (user !== null) {
         user = await validateUser(user);
     }
@@ -64,11 +50,20 @@ export async function authenticate(user: User | null): Promise<User | null> {
         localStorage.removeItem(userKey);
     }
 
-    if (sso) {
-        window.history.replaceState({}, "", window.location.pathname);
-    }
-
     return user;
+}
+
+export function authenticate(sso: string, sig:  string): Promise<User | null> {
+    const payload = parseQuery(atob(sso));
+    return refresh({
+        avatarUrl: payload.avatar_url,
+        email: payload.email,
+        username: payload.username,
+        nonce: payload.nonce,
+        sso,
+        sig,
+        time: Date.now(),
+    });
 }
 
 async function initDefaults(user: User) {

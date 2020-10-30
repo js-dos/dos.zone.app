@@ -28,7 +28,7 @@ export function Profile(props: { user: User | null }) {
             getTurboSession(user).then(setTurboSession);
             userStorage.get("region").then(setRegion);
         }
-    }, [user?.email]);
+    }, [userStorage, user]);
 
     if (user === null) {
         return <Redirect to={"/" + i18n.language} />;

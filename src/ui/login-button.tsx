@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { Link } from "react-router-dom";
 
@@ -25,14 +25,20 @@ export function LoginButton(props: { user: User | null }) {
     const lang = i18n.language;
     const [busy, setBusy] = useState<boolean>(false);
 
+    useEffect(() => {
+        setBusy(false);
+    }, [props.user]);
+
     if (busy) {
         return <Spinner size={16} />;
     }
 
     if (props.user !== null) {
         const controls = <div>
-            <Link className={[Classes.BUTTON, Classes.MINIMAL, Classes.ICON + "-" + IconNames.COG].join(" ")}
-                  to={"/" + lang + "/profile"}></Link>
+            <Link className={[Classes.BUTTON, Classes.MINIMAL].join(" ")}
+                  to={"/" + lang + "/profile"}>
+                <Icon icon={IconNames.COG} iconSize={16} />
+            </Link>
             <Button icon={IconNames.LOG_OUT} minimal={true} onClick={requestLogout}></Button>
         </div>;
         return <Popover content={controls} position={Position.BOTTOM}>
@@ -62,7 +68,7 @@ export function LoginButton(props: { user: User | null }) {
     return <Popover content={why} position={Position.BOTTOM}>
         <Tooltip content={t("login_tooltip")} position={Position.BOTTOM}>
             <div>
-                <Button intent={Intent.DANGER}
+                <Button intent={Intent.SUCCESS}
                         minimal={true}
                         icon={IconNames.LOG_IN}>
                 </Button>

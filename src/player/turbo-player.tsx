@@ -1,11 +1,10 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Redirect, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { IPlayerProps } from "./player";
 import { openTurboSession, describeSession, closeTurboSession } from "../core/turbo";
 import { goBack } from "../ui/navigator";
 
-import { Spinner, H1} from "@blueprintjs/core";
 import { User } from "../core/auth";
 
 import { DosPlayer } from "./dos-player";
@@ -59,7 +58,7 @@ export function TurboPlayer(props: IPlayerProps) {
                 }
             }
         })
-    }, [user?.email, bundle]);
+    }, [user, bundle]);
 
     if (user === null) {
         return <Redirect to={"/" + i18n.language + "/my" } />

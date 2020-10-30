@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
     Classes,
@@ -9,7 +9,6 @@ import { IconNames } from "@blueprintjs/icons";
 
 import ReactMardown from "react-markdown/with-html";
 import { renderers } from "../core/renderers";
-import { getRecentlyPlayed } from "../core/storage/recently-played";
 
 import { openRepository } from "../core/browser-tab";
 import { useHistory } from "react-router-dom";

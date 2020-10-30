@@ -12,6 +12,7 @@ import {
     useParams,
 } from "react-router-dom";
 
+import { Deeplink } from "./core/deeplink";
 import { CapConfig } from "./cap-config";
 
 import { Navigator } from "./ui/navigator";
@@ -23,34 +24,24 @@ import { FeaturesGuide } from "./pages/guides/features";
 import { My } from "./pages/my";
 import { Profile } from "./pages/profile";
 import { Player } from "./player/player";
-import { User, authenticate, getCachedUser } from "./core/auth";
+import { User, refresh, getCachedUser } from "./core/auth";
 
-import { parseQuery } from "./core/query-string";
-
-function PlayerWrapper(props: { user: User | null, embedded: boolean }) {
-    const { url } = useParams();
-    const { turbo } = parseQuery(window.location.search);
-    return <Player
-               user={props.user}
-               bundleUrl={decodeURIComponent(url)}
-               embedded={props.embedded}
-               turbo={turbo === "1" }></Player>;
-}
-
+import { parseQuery, QueryParams } from "./core/query-string";
 
 function App() {
     const { i18n } = useTranslation();
-    const lang = i18n.language;
-
     const [user, setUser] = useState<User|null>(getCachedUser());
 
+    const lang = i18n.language;
+    const queryParams = parseQuery(window.location.search);
+
     useEffect(() => {
-        authenticate(user).then(setUser);
+        refresh(user).then(setUser);
         //  eslint-disable-next-line
     }, []);
 
     return <Router>
-        <CapConfig lang={lang}></CapConfig>
+        <CapConfig lang={lang} queryParams={queryParams}></CapConfig>
         <Switch>
             <Route exact path="/">
                 <Redirect to={"/" + lang} />
@@ -83,15 +74,32 @@ function App() {
                 <div className="play-player-root">
                     <NavigatorPlayer />
                     <div className="play-player-container">
-                        <PlayerWrapper user={user} embedded={false} />
+                        <PlayerWrapper user={user} embedded={false} queryParams={queryParams} />
                     </div>
                 </div>
             </Route>
             <Route path="/:lang/player/:url">
-                <PlayerWrapper user={user} embedded={true} />
+                <PlayerWrapper user={user} embedded={true} queryParams={queryParams} />
+            </Route>
+            <Route path="/:lang/dl/:url">
+                <Deeplink user={user} />
             </Route>
         </Switch>
     </Router>;
+}
+
+function PlayerWrapper(props: {
+    user: User | null,
+    embedded: boolean,
+    queryParams: QueryParams,
+}) {
+    const { url } = useParams<{url: string}>();
+    const turbo = props.queryParams.turbo || "0";
+    return <Player
+               user={props.user}
+               bundleUrl={decodeURIComponent(url)}
+               embedded={props.embedded}
+               turbo={turbo === "1" }></Player>;
 }
 
 export default App;

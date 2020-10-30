@@ -5,8 +5,6 @@ import {
     Spinner,
     Intent,
     Button,
-    ButtonGroup,
-    ControlGroup,
     Switch,
     Popover,
     Position,
@@ -27,7 +25,7 @@ export function My(props: { user: User | null }) {
     const [recentlyPlayed, setRecentlyPlayed] = useState<RecentlyPlayed | null>(null);
     const [selected, setSelected] = useState<string>("");
     const { t, i18n } = useTranslation("my");
-    const { url } = useParams();
+    const { url } = useParams<{ url: string }>();
     const history = useHistory();
     const user = props.user;
     const [ turboMode, setTurboMode ] = useState<boolean>(user !== null);
@@ -50,7 +48,7 @@ export function My(props: { user: User | null }) {
         if (turboMode && user === null) {
             setTurboMode(false);
         }
-    }, [user?.email, turboMode]);
+    }, [user, turboMode]);
 
     useEffect(() => {
         setRecentlyPlayed(null); // reset state
@@ -83,7 +81,7 @@ export function My(props: { user: User | null }) {
 
     const active = selected.length === 0 ? keys[0] : selected;
     const gameData = getGameData(active);
-    const description = gameData.description[i18n.language]?.description || gameData.description["en"]?.description || "";
+    const description = gameData.description[i18n.language]?.description || gameData.description.en?.description || "";
     const canTurbo = Capacitor.isNative && Capacitor.getPlatform() === "android" && gameData.turbo === true;
     const runUrl = "/" + i18n.language + "/play/" + encodeURIComponent(active) + "?turbo=" + (canTurbo && turboMode ? "1" : "0");
 

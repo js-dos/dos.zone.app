@@ -7,8 +7,9 @@ import * as serviceWorker from "./serviceWorker";
 import "./i18n";
 
 import "normalize.css";
+// only needed for icon fonts (we not used them)
+// import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 import "@blueprintjs/core/lib/css/blueprint.css"
-import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 
 ReactDOM.render(
     <App />,
