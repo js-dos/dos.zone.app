@@ -83,15 +83,24 @@ export function My(props: { user: User | null }) {
     const gameData = getGameData(active);
     const description = gameData.description[i18n.language]?.description || gameData.description.en?.description || "";
     const canTurbo = Capacitor.isNative && Capacitor.getPlatform() === "android" && gameData.turbo === true;
-    const runUrl = "/" + i18n.language + "/play/" + encodeURIComponent(active) + "?turbo=" + (canTurbo && turboMode ? "1" : "0");
+    const runUrl = "/" + i18n.language + "/play/" + encodeURIComponent(gameData.canonicalUrl) + "?turbo=" + (canTurbo && turboMode ? "1" : "0");
 
-    async function runBundle() {
+    function runBundle() {
         if (recentlyPlayed !== null) {
             recentlyPlayed[active].visitedAtMs = Date.now();
             updateRecentlyPlayed(user, recentlyPlayed);
         }
 
         history.push(runUrl);
+    }
+
+    async function remove() {
+        if (recentlyPlayed !== null) {
+            const newRecentlyPlayed = {...recentlyPlayed};
+            delete newRecentlyPlayed[active];
+            await updateRecentlyPlayed(user, newRecentlyPlayed);
+            setRecentlyPlayed(newRecentlyPlayed);
+        }
     }
 
     const timeInfo = (time: number) => {
@@ -155,6 +164,7 @@ export function My(props: { user: User | null }) {
                 <div>
                     <Button icon={IconNames.PLAY} onClick={runBundle}>{t("play")}</Button>
                     {turboSwitch}
+                    &nbsp;&nbsp;<Button minimal={true} onClick={remove} icon={IconNames.TRASH}></Button>
                 </div>
                 <br/><br/>
                 <div className="thumb-description">{description}</div>

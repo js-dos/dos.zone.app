@@ -16,6 +16,7 @@
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "@types/react-router-dom": "^5.1.5",
+    "bignumber.js": "^9.0.1",
     "cordova-plugin-screen-orientation": "^3.0.2",
     "emulators": "^0.0.35",
     "emulators-ui": "^0.0.31",
