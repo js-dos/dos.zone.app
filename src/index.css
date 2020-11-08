@@ -131,6 +131,7 @@ body {
 
 .touch-options {
     margin-top: 5px;
+    margin-left: 15px;
     display: flex;
     align-items: baseline;
 }
@@ -226,4 +227,14 @@ body {
 
 .spinner-inline {
     display: inline-block !important;
+}
+
+.layout-thumb {
+    max-width: 100%;
+}
+
+.fake-input {
+    padding: 5px !important;
+    display: inline-block !important;
+    text-align: center !important;
 }

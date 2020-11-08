@@ -22,12 +22,17 @@ export declare class Layers {
     private onResize;
     private onKeyDown;
     private onKeyUp;
+    private onKeyPress;
     private onSave;
     private controlsOpened;
     constructor(root: HTMLDivElement, controlSelector?: ControlSelector);
     setOnResize(handler: (width: number, height: number) => void): void;
     setOnKeyDown(handler: (keyCode: number) => void): void;
+    fireKeyDown(keyCode: number): void;
     setOnKeyUp(handler: (keyCode: number) => void): void;
+    fireKeyUp(keyCode: number): void;
+    setOnKeyPress(handler: (keyCode: number) => void): void;
+    fireKeyPress(keyCode: number): void;
     setOnSave(handler: () => Promise<void>): void;
     hideLoadingLayer(): void;
     showLoadingLayer(): void;

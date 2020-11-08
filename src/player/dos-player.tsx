@@ -16,6 +16,13 @@ export function DosPlayer(props: IPlayerProps) {
     const [ci, setCi] = useState<CommandInterface | null>(null);
 
     useEffect(() => {
+        const root = rootRef.current as HTMLDivElement;
+        const preventListener = (e: any) => {
+            e.preventDefault();
+        };
+        window.addEventListener("keydown", preventListener);
+
+
         const controlSelector: ControlSelector = {
             send: () => document.querySelector(".control-send") as HTMLElement,
             input: () => document.querySelector(".control-input") as HTMLInputElement,
@@ -23,13 +30,13 @@ export function DosPlayer(props: IPlayerProps) {
             fullscreen: () => document.querySelector(".control-fullscreen") as HTMLElement,
         };
 
-        const root = rootRef.current as HTMLDivElement;
         const dos = Dos(root, {
             controlSelector: props.embedded ? undefined : controlSelector,
             emulatorFunction: props.turbo ? "janus" : "dosWorker",
         });
         setDos(dos);
         return () => {
+            window.removeEventListener("keydown", preventListener);
             dos.stop();
         };
     }, [props.embedded, props.turbo]);
@@ -47,6 +54,6 @@ export function DosPlayer(props: IPlayerProps) {
     }, [dos, props.bundleUrl, props.embedded]);
 
     return <div ref={rootRef} className="player">
-        { ci === null || (props.sourceBundleUrl || props.bundleUrl).indexOf(dhry2Bundle) < 0 ? null : <Dhry2 ci={ci} /> }
+        { ci === null || (props.sourceBundleUrl || props.bundleUrl || "").indexOf(dhry2Bundle) < 0 ? null : <Dhry2 ci={ci} /> }
     </div>;
 }

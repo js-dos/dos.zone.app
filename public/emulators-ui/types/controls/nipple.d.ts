@@ -6,5 +6,4 @@ export interface EventMapping {
     event: Event;
     mapTo: number;
 }
-export declare const defaultMapping: EventMapping[];
-export declare function nippleArrows(layers: Layers, ci: CommandInterface, optionalMapping?: EventMapping[]): void;
+export declare function nipple(layers: Layers, ci: CommandInterface, mapping: EventMapping[]): void;
