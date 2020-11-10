@@ -30,16 +30,22 @@ const namedKeyCodes = emulatorsUi.controls.namedKeyCodes;
 const keyOptions = Object.keys(emulatorsUi.controls.namedKeyCodes);
 
 interface LayerType {
-    image: string,
     name: string,
     buttons: ButtonType[],
     gestures: EventMapping[],
     mapper: Mapper,
+    image?: string,
 };
 
 type LayersType = {[index: string]: LayerType};
 
 const layersDef: LayersType = {
+    "keyboard": {
+        name: "keyboard",
+        buttons: [],
+        gestures: [],
+        mapper: {},
+    },
     "joystick+button": {
         name: "joystick+button",
         image: "layers-joystick-button.jpg",
@@ -64,7 +70,8 @@ const layersDef: LayersType = {
 };
 
 
-const defaultLayer = "joystick+button";
+const layersDefNames = Object.keys(layersDef);
+const defaultLayer = "keyboard";
 
 export function Layers(props: {
     config: DosConfig,
@@ -73,7 +80,7 @@ export function Layers(props: {
     const t = props.t;
     const config = props.config;
     const [layers, setLayers] = useState<LayersType>({
-        default: layersDef[defaultLayer],
+        default: {...layersDef[defaultLayer]},
     });
 
     const [showDescription, setShowDescription] = useState<boolean>(false);
@@ -161,46 +168,62 @@ function Layer(props: {
         setVersion(version + 1);
     }
 
+    let thumbComponent = null;
+    if (layer.image !== undefined) {
+        thumbComponent = (<div>
+            {t("thumb_description")}&nbsp;&nbsp;
+            <div>
+                <img className="layout-thumb" src={ "/layers/" + layer.image } />
+            </div>
+        </div>);
+    }
+    let buttonComponent = null;
+    if (layer.buttons.length > 0) {
+        buttonComponent = (<div>
+            {t("buttons_description")}&nbsp;&nbsp;
+            {buttons.map((button, index) => {
+                return <React.Fragment key={index}>
+                    <div className="touch-options">
+                        <p>{t("button_symbol")}&nbsp;&nbsp;</p>
+                        <input
+                            className="bp3-input"
+                            style={{width: "6ch"}}
+                            value={symbolOfButton(button)}
+                            onChange={(e) => onButtonSymbolChanged(e, button)}
+                        />
+                        <p>&nbsp;&nbsp;{t("key")}&nbsp;&nbsp;</p>
+                        <HTMLSelect minimal={false}
+                                    options={keyOptions}
+                                    onChange={(e) => onButtonMapToChanged(e, button)}
+                                    value={getKeyCodeName(button.mapTo)} />&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                </React.Fragment>
+            })}
+        </div>);
+    }
 
-    return <div>
-        {t("thumb_description")}&nbsp;&nbsp;
-        <div>
-            <img className="layout-thumb" src={ "/layers/" + layer.image } />
-        </div>
-        {t("buttons_description")}&nbsp;&nbsp;
-        {buttons.map((button, index) => {
-            return <React.Fragment key={index}>
-                <div className="touch-options">
-                    <p>{t("button_symbol")}&nbsp;&nbsp;</p>
-                    <input
-                        className="bp3-input"
-                        style={{width: "6ch"}}
-                        value={symbolOfButton(button)}
-                        onChange={(e) => onButtonSymbolChanged(e, button)}
-                    />
-                    <p>&nbsp;&nbsp;{t("key")}&nbsp;&nbsp;</p>
-                    <HTMLSelect minimal={false}
-                                options={keyOptions}
-                                onChange={(e) => onButtonMapToChanged(e, button)}
-                                value={getKeyCodeName(button.mapTo)} />&nbsp;&nbsp;&nbsp;&nbsp;
-                </div>
-            </React.Fragment>
-        })}
-        {t("touch_description")}&nbsp;&nbsp;
-        {gestures.map((gesture, index) => {
-            return <React.Fragment key={index}>
-            <div className="touch-options">
-                <p>{t("finger")}&nbsp;&nbsp;<code className="bp3-code fake-input"style={{width: "3ch"}}>{gesture.joystickId}</code>&nbsp;&nbsp;</p>
-                <p>{t("gesture")}&nbsp;&nbsp;<code className="bp3-code fake-input" style={{width: "11ch"}}>{gesture.event}</code>&nbsp;&nbsp;</p>
-                <p>{t("key")}</p>&nbsp;&nbsp;
+    let gesturesComponent = null;
+    if (layer.gestures.length > 0) {
+        gesturesComponent = (<div>
+            {t("touch_description")}&nbsp;&nbsp;
+            {gestures.map((gesture, index) => {
+                return <React.Fragment key={index}>
+                    <div className="touch-options">
+                        <p>{t("finger")}&nbsp;&nbsp;<code className="bp3-code fake-input"style={{width: "3ch"}}>{gesture.joystickId}</code>&nbsp;&nbsp;</p>
+                        <p>{t("gesture")}&nbsp;&nbsp;<code className="bp3-code fake-input" style={{width: "11ch"}}>{gesture.event}</code>&nbsp;&nbsp;</p>
+                        <p>{t("key")}</p>&nbsp;&nbsp;
                 <HTMLSelect minimal={false}
                             options={keyOptions}
                             onChange={(e) => onGestureMapToChanged(e, gesture)}
                             disabled={gesture.event === "end:release"}
                             value={getKeyCodeName(gesture.mapTo)} />&nbsp;&nbsp;&nbsp;&nbsp;
-            </div>
-            </React.Fragment>
-        })}
+                    </div>
+                </React.Fragment>
+            })}
+        </div>);
+    }
+
+    const mapperComponent = (<div>
         {t("mapper_description")}&nbsp;&nbsp;
         {Object.keys(mapper).sort().map((key, index) => {
             const keyCode = Number.parseInt(key, 10);
@@ -224,6 +247,33 @@ function Layer(props: {
         <div className="touch-options">
             <Button onClick={onAddMapping}>{t("add")}</Button>
         </div>
+    </div>);
+
+    function onChangeLayerDef(event: any) {
+        const name = event.currentTarget.value;
+        const other = layersDef[name];
+        layer.name = other.name;
+        layer.image = other.image;
+        layer.buttons = [...other.buttons];
+        layer.gestures = [...other.gestures];
+        layer.mapper = {...other.mapper};
+        setVersion(version + 1);
+    }
+
+    return <div>
+        <div style={{display: "flex", alignItems: "baseline", marginBottom: "5px"}}>
+            <p>
+                {t("control_type")}&nbsp;&nbsp;&nbsp;&nbsp;
+            </p>
+            <HTMLSelect minimal={false}
+                        options={layersDefNames}
+                        onChange={onChangeLayerDef}
+                        value={layer.name} />
+        </div>
+        {thumbComponent}
+        {buttonComponent}
+        {gesturesComponent}
+        {mapperComponent}
     </div>;
 }
 
