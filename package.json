@@ -19,7 +19,7 @@
     "bignumber.js": "^9.0.1",
     "cordova-plugin-screen-orientation": "^3.0.2",
     "emulators": "^0.0.36",
-    "emulators-ui": "^0.0.36",
+    "emulators-ui": "^0.0.37",
     "es6-promise-plugin": "^4.2.2",
     "i18next": "^19.4.5",
     "i18next-browser-languagedetector": "^4.2.0",
