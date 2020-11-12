@@ -46,13 +46,13 @@ const layersDef: LayersType = {
         gestures: [],
         mapper: {},
     },
-    "joystick+button": {
-        name: "joystick+button",
-        image: "layers-joystick-button.jpg",
+    "stick-button": {
+        name: "stick-button",
+        image: "stick-button.jpg",
         buttons: [
             {
                 action: "click",
-                mapTo: namedKeyCodes["KBD_x"],
+                mapTo: namedKeyCodes["KBD_1"],
                 style: ({
                     left: "16px",
                     bottom: "32px",
@@ -66,7 +66,39 @@ const layersDef: LayersType = {
             { joystickId: 0, event: "dir:left", mapTo: namedKeyCodes["KBD_left"] },
             { joystickId: 0, event: "dir:right", mapTo: namedKeyCodes["KBD_right"] },
         ],
-    }
+    },
+    "3-buttons": {
+        name: "3-buttons",
+        image: "3-buttons.jpg",
+        buttons: [
+            {
+                action: "click",
+                mapTo: namedKeyCodes["KBD_1"],
+                style: ({
+                    right: "16px",
+                    bottom: "32px",
+                } as unknown) as ElementCSSInlineStyle,
+            },
+            {
+                action: "click",
+                mapTo: namedKeyCodes["KBD_2"],
+                style: ({
+                    right: "96px",
+                    bottom: "32px",
+                } as unknown) as ElementCSSInlineStyle,
+            },
+            {
+                action: "click",
+                mapTo: namedKeyCodes["KBD_3"],
+                style: ({
+                    left: "16px",
+                    bottom: "32px",
+                } as unknown) as ElementCSSInlineStyle,
+            },
+        ],
+        mapper: {},
+        gestures: [],
+    },
 };
 
 
@@ -131,11 +163,17 @@ function Layer(props: {
             return button.symbol;
         }
 
-        return getKeyCodeName(button.mapTo).substr(4, 7).toUpperCase();
+        return getKeyCodeName(button.mapTo).substr(4, 2).toUpperCase();
     }
 
     function onButtonMapToChanged(event: any, button: ButtonType) {
         button.mapTo = eventToKeyCode(event);
+        setVersion(version + 1);
+    }
+
+    function onButtonActionChanged(event: any, button: ButtonType) {
+        const action = event.currentTarget.value;
+        button.action = action;
         setVersion(version + 1);
     }
 
@@ -196,6 +234,11 @@ function Layer(props: {
                                     options={keyOptions}
                                     onChange={(e) => onButtonMapToChanged(e, button)}
                                     value={getKeyCodeName(button.mapTo)} />&nbsp;&nbsp;&nbsp;&nbsp;
+                        <p>&nbsp;&nbsp;{t("action")}&nbsp;&nbsp;</p>
+                        <HTMLSelect minimal={false}
+                                    options={["click", "hold"]}
+                                    onChange={(e) => onButtonActionChanged(e, button)}
+                                    value={button.action} />&nbsp;&nbsp;&nbsp;&nbsp;
                     </div>
                 </React.Fragment>
             })}
