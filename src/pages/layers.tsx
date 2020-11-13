@@ -20,6 +20,7 @@ import {
     NumericInput,
     HTMLSelect,
     TextArea,
+    Checkbox,
 } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 import { layers } from "emulators-ui/dist/types/dom/layers";
@@ -65,6 +66,47 @@ const layersDef: LayersType = {
             { joystickId: 0, event: "dir:down", mapTo: namedKeyCodes["KBD_down"], },
             { joystickId: 0, event: "dir:left", mapTo: namedKeyCodes["KBD_left"] },
             { joystickId: 0, event: "dir:right", mapTo: namedKeyCodes["KBD_right"] },
+            { joystickId: 0, event: "tap", mapTo: 0 },
+            { joystickId: 0, event: "end:release", mapTo: 0 },
+        ],
+    },
+    "stick-3-buttons": {
+        name: "stick-3-buttons",
+        image: "stick-3-buttons.jpg",
+        buttons: [
+            {
+                action: "click",
+                mapTo: namedKeyCodes["KBD_1"],
+                style: ({
+                    left: "16px",
+                    bottom: "112px",
+                } as unknown) as ElementCSSInlineStyle,
+            },
+            {
+                action: "click",
+                mapTo: namedKeyCodes["KBD_2"],
+                style: ({
+                    left: "16px",
+                    bottom: "32px",
+                } as unknown) as ElementCSSInlineStyle,
+            },
+            {
+                action: "click",
+                mapTo: namedKeyCodes["KBD_3"],
+                style: ({
+                    left: "96px",
+                    bottom: "32px",
+                } as unknown) as ElementCSSInlineStyle,
+            },
+        ],
+        mapper: {},
+        gestures: [
+            { joystickId: 0, event: "dir:up", mapTo: namedKeyCodes["KBD_up"], },
+            { joystickId: 0, event: "dir:down", mapTo: namedKeyCodes["KBD_down"], },
+            { joystickId: 0, event: "dir:left", mapTo: namedKeyCodes["KBD_left"] },
+            { joystickId: 0, event: "dir:right", mapTo: namedKeyCodes["KBD_right"] },
+            { joystickId: 0, event: "tap", mapTo: 0 },
+            { joystickId: 0, event: "end:release", mapTo: 0 },
         ],
     },
     "3-buttons": {
@@ -99,6 +141,46 @@ const layersDef: LayersType = {
         mapper: {},
         gestures: [],
     },
+    "4-buttons": {
+        name: "4-buttons",
+        image: "4-buttons.jpg",
+        buttons: [
+            {
+                action: "click",
+                mapTo: namedKeyCodes["KBD_1"],
+                style: ({
+                    right: "16px",
+                    bottom: "112px",
+                } as unknown) as ElementCSSInlineStyle,
+            },
+            {
+                action: "click",
+                mapTo: namedKeyCodes["KBD_2"],
+                style: ({
+                    right: "16px",
+                    bottom: "32px",
+                } as unknown) as ElementCSSInlineStyle,
+            },
+            {
+                action: "click",
+                mapTo: namedKeyCodes["KBD_3"],
+                style: ({
+                    left: "16px",
+                    bottom: "32px",
+                } as unknown) as ElementCSSInlineStyle,
+            },
+            {
+                action: "click",
+                mapTo: namedKeyCodes["KBD_4"],
+                style: ({
+                    left: "96px",
+                    bottom: "32px",
+                } as unknown) as ElementCSSInlineStyle,
+            },
+        ],
+        mapper: {},
+        gestures: [],
+    },
 };
 
 
@@ -115,28 +197,58 @@ export function Layers(props: {
         default: {...layersDef[defaultLayer]},
     });
 
-    const [showDescription, setShowDescription] = useState<boolean>(false);
     const [selectedLayer, setSelectedLayer] = useState<string>("default");
+    const [version, setVersion] = useState<number>(0);
     const names = Object.keys(layers);
 
     useEffect(() => {
         (config as any).layers = layers;
     }, []);
 
+    function addLayer() {
+        layers["newLayer." + version] = {...layersDef[defaultLayer]};
+        setVersion(version + 1);
+    }
+
+    function renameLayer(e: any, name: string) {
+        const newName = e.currentTarget.value;
+        if (newName.length === 0) {
+            return;
+        }
+        layers[newName] = layers[name];
+        delete layers[name];
+        if (selectedLayer === name) {
+            setSelectedLayer(newName);
+        } else {
+            setVersion(version + 1);
+        }
+    }
+
+    function removeLayer(name: string) {
+        delete layers[name];
+        setVersion(version + 1);
+    }
+
     return (<Callout style={ { position: "relative" } }>
         <H3>{t("touch_controls")}</H3>
-        <Button intent={showDescription ? Intent.PRIMARY : Intent.NONE}
+        <Button 
                 minimal={true}
-                onClick={() => setShowDescription(!showDescription) }
-                icon={showDescription ? IconNames.EYE_OPEN : IconNames.EYE_OFF }
+                onClick={addLayer}
+                icon={IconNames.ADD}
                 style={ { position: "absolute", top: "10px", right: "12px" } }>
         </Button>
         <br/>
         {names.map((name, index) => {
-            return <React.Fragment key={name}>
-                <Collapse isOpen={ name === selectedLayer }>
-                    <Layer t={t} layer={layers[name]} />
-                </Collapse>
+            const selected = name === selectedLayer;
+            return <React.Fragment key={index}>
+                <div className="layer-container">
+                    <Button minimal={true} icon={selected ? IconNames.CHEVRON_DOWN : IconNames.CHEVRON_RIGHT} onClick={() => setSelectedLayer(selected ? "" : name) } />{t("layer")}: &nbsp;&nbsp;
+                    { selected ? <input className="bp3-input" value={name} onChange={(e) => renameLayer(e, name)} /> : name }
+                    <Button minimal={true} icon={IconNames.TRASH} onClick={() => removeLayer(name)} />
+                    <Collapse className="layer-collapse" isOpen={ name === selectedLayer }>
+                        <Layer t={t} layer={layers[name]} />
+                    </Collapse>
+                </div>
             </React.Fragment>
         })}
     </Callout>);
@@ -149,9 +261,9 @@ function Layer(props: {
     const [version, setVersion] = useState<number>(0);
     const t = props.t;
     const layer = props.layer;
-    const buttons = layer.buttons;
-    const gestures = layer.gestures;
-    const mapper = layer.mapper;
+    const buttons = layer.buttons || [];
+    const gestures = layer.gestures || [];
+    const mapper = layer.mapper || {};
 
     function eventToKeyCode(event: any) {
         const key = event.currentTarget.value;
@@ -179,12 +291,29 @@ function Layer(props: {
 
     function onButtonSymbolChanged(event: any, button: ButtonType) {
         const symbol = event.currentTarget.value;
-        button.symbol = symbol.substr(symbol.length - 1, symbol.length).toUpperCase();
+        button.symbol = symbol;
         setVersion(version + 1);
     }
 
     function onGestureMapToChanged(event: any, gesture: EventMapping) {
         gesture.mapTo = eventToKeyCode(event);
+        setVersion(version + 1);
+    }
+
+    function onGestureChangeReleaseOnEnd(event: any, finger: 0 | 1) {
+        const enabled = event.currentTarget.checked;
+        if (enabled) {
+            gestures.push({
+                joystickId: finger,
+                mapTo: 0,
+                event: "end:release",
+            });
+        } else {
+            const index = gestures.findIndex((g) => g.joystickId === finger && g.event === "end:release");
+            if (index >= 0) {
+                gestures.splice(index, 1);
+            }
+        }
         setVersion(version + 1);
     }
 
@@ -216,7 +345,7 @@ function Layer(props: {
         </div>);
     }
     let buttonComponent = null;
-    if (layer.buttons.length > 0) {
+    if (buttons.length > 0) {
         buttonComponent = (<div>
             {t("buttons_description")}&nbsp;&nbsp;
             {buttons.map((button, index) => {
@@ -246,20 +375,35 @@ function Layer(props: {
     }
 
     let gesturesComponent = null;
-    if (layer.gestures.length > 0) {
+    if (gestures.length > 0) {
+        const releaseOnEnd: {[finger: number]: boolean} = {};
+        for (const next of gestures) {
+            releaseOnEnd[next.joystickId] = releaseOnEnd[next.joystickId] || next.event === "end:release";
+        }
         gesturesComponent = (<div>
             {t("touch_description")}&nbsp;&nbsp;
-            {gestures.map((gesture, index) => {
+            {gestures.filter((g) => g.event !== "end:release").map((gesture, index) => {
                 return <React.Fragment key={index}>
                     <div className="touch-options">
                         <p>{t("finger")}&nbsp;&nbsp;<code className="bp3-code fake-input"style={{width: "3ch"}}>{gesture.joystickId}</code>&nbsp;&nbsp;</p>
                         <p>{t("gesture")}&nbsp;&nbsp;<code className="bp3-code fake-input" style={{width: "11ch"}}>{gesture.event}</code>&nbsp;&nbsp;</p>
                         <p>{t("key")}</p>&nbsp;&nbsp;
-                <HTMLSelect minimal={false}
+                        <HTMLSelect minimal={false}
                             options={keyOptions}
                             onChange={(e) => onGestureMapToChanged(e, gesture)}
                             disabled={gesture.event === "end:release"}
                             value={getKeyCodeName(gesture.mapTo)} />&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                </React.Fragment>
+            })}
+            {Object.keys(releaseOnEnd).sort().map((finger, index) => {
+                const id  = Number.parseInt(finger, 10);
+                return <React.Fragment key={"finger-" + id}>
+                    <div className="touch-options">
+                        <Checkbox checked={releaseOnEnd[id]} onChange={(e) => onGestureChangeReleaseOnEnd(e, id as any)}>
+                            {t("finger")}&nbsp;&nbsp;<code className="bp3-code fake-input"style={{width: "3ch"}}>{finger}</code>&nbsp;&nbsp;
+                            {t("release_on_end")}
+                        </Checkbox>
                     </div>
                 </React.Fragment>
             })}

@@ -33,6 +33,8 @@ export function NavigatorPlayer() {
                 </a>
             </Navbar.Group>
             <Navbar.Group align={Alignment.RIGHT}>
+                <div><select className="control-select bp3-select"></select></div>
+                <Navbar.Divider />
                 <Button minimal={true}
                         intent={ inputVisible ? Intent.PRIMARY : Intent.NONE }
                         icon={IconNames.MANUALLY_ENTERED_DATA}

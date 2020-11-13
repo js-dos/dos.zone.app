@@ -23,7 +23,9 @@ export function DosPlayer(props: IPlayerProps) {
         window.addEventListener("keydown", preventListener);
 
 
-        const controlSelector: ControlSelector = {
+        //TODO: any
+        const controlSelector: any = {
+            select: () => document.querySelector(".control-select") as HTMLSelectElement,
             send: () => document.querySelector(".control-send") as HTMLElement,
             input: () => document.querySelector(".control-input") as HTMLInputElement,
             save: () => document.querySelector(".control-save") as HTMLElement,

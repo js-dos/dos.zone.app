@@ -238,3 +238,14 @@ body {
     display: inline-block !important;
     text-align: center !important;
 }
+
+.layer-container {
+    background: #30404D;
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.layer-collapse {
+    margin-top: 10px;
+    margin-left: 32px;
+}
