@@ -15,7 +15,7 @@ export async function getRecentlyPlayed(user: User | null): Promise<RecentlyPlay
 
     if (Object.keys(played).length === 0) {
         played[dhry2Url] = {
-            visitedAtMs: Date.now(),
+            visitedAtMs: Date.now() - 30 * 1000,
         };
     }
 

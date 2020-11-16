@@ -13,6 +13,8 @@ import { renderers } from "../core/renderers";
 import { openRepository } from "../core/browser-tab";
 import { useHistory } from "react-router-dom";
 
+import { AndroidPromo } from "./components/android-promo";
+
 
 export function Landing() {
     const { t, i18n } = useTranslation("landing");
@@ -23,6 +25,7 @@ export function Landing() {
 
     return <div className={[Classes.RUNNING_TEXT, Classes.TEXT_LARGE].join(" ")}
                 style={{padding: "0 40px"}}>
+        <AndroidPromo />
 
         <ReactMardown renderers={{
             ...renderers,

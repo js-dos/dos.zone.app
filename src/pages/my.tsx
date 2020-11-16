@@ -20,6 +20,7 @@ import { getGameData } from "../core/game-query";
 import { User } from "../core/auth";
 import { getTurboSession } from "../core/turbo";
 import { Capacitor } from "@capacitor/core";
+import { AndroidPromo } from "./components/android-promo";
 
 export function My(props: { user: User | null }) {
     const [recentlyPlayed, setRecentlyPlayed] = useState<RecentlyPlayed | null>(null);
@@ -157,6 +158,7 @@ export function My(props: { user: User | null }) {
     }
 
     return <div className="left-margin">
+        <AndroidPromo />
         <h1>{t("selected")}</h1>
         <div className="recently-played">
             <GameThumb onClick={runBundle} url={active} selected={true} />

@@ -4,6 +4,13 @@ import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 
 const en = {
+    promo: {
+        title: "Dos.Zone Android App",
+        second_line: "Install to have better experience",
+        price: "FREE",
+        store: "In Google Play",
+        view: "VIEW",
+    },
     turbo: {
         waiting_arn: "Connecting to Turbo cloud...",
         waiting_ip: "Starting up emulator",
@@ -201,6 +208,13 @@ Thank you!
 }
 
 const ru = {
+    promo: {
+        title: "Dos.Zone приложение",
+        second_line: "Установите что бы использовать все возможности",
+        price: "БЕСПЛАТНО",
+        store: "В Google Play",
+        view: "ОТКРЫТЬ",
+    },
     turbo: {
         waiting_arn: "Подключаемся к облаку...",
         waiting_ip: "Запускаем эмулятор",
