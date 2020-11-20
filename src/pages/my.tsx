@@ -24,13 +24,18 @@ import { AndroidPromo } from "./components/android-promo";
 
 export function My(props: { user: User | null }) {
     const [recentlyPlayed, setRecentlyPlayed] = useState<RecentlyPlayed | null>(null);
-    const [selected, setSelected] = useState<string>("");
+    const [selected, _setSelected] = useState<string>("");
     const { t, i18n } = useTranslation("my");
     const { url } = useParams<{ url: string }>();
     const history = useHistory();
     const user = props.user;
     const [ turboMode, setTurboMode ] = useState<boolean>(user !== null);
     const [ turboTime, setTurboTime ] = useState<number | null>(null);
+
+    function setSelected(bundleUrl: string) {
+        _setSelected(bundleUrl);
+        window.scrollTo(0,0);
+    }
 
     useEffect(() => {
         if (user !== null && turboMode) {
