@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 
 import com.getcapacitor.BridgeActivity;
 import com.getcapacitor.Plugin;
@@ -23,8 +24,9 @@ public class MainActivity extends BridgeActivity {
                     // Hide the nav bar and status bar
                     | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                     | View.SYSTEM_UI_FLAG_FULLSCREEN;
-        
+
         getWindow().getDecorView().setSystemUiVisibility(windowFlags);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         // Initializes the Bridge
         this.init(savedInstanceState, new ArrayList<Class<? extends Plugin>>() {{
