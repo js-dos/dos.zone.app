@@ -30,7 +30,7 @@ export function AndroidPromo() {
             price: {
                 android: t("price"),
             },
-            theme: 'android',
+            theme: "android",
         });
 
         return () => {

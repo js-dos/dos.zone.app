@@ -14,8 +14,7 @@ import {
     RadioGroup,
     Radio,
     EditableText,
-    NumericInput,
-    HTMLSelect
+    NumericInput
 } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 import { TFunction } from "i18next";
