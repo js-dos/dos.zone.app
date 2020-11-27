@@ -13,7 +13,6 @@ export function NavigatorPlayer() {
     const { i18n } = useTranslation("navigator");
     const lang = i18n.language;
     const history = useHistory();
-    const [inputVisible, setInputVisible] = useState<boolean>(false);
 
     return <div>
         <Navbar fixedToTop={false}>
@@ -32,29 +31,6 @@ export function NavigatorPlayer() {
                     <img src="/discord.svg" alt="discord" width="24px" />
                 </a>
             </Navbar.Group>
-            <Navbar.Group align={Alignment.RIGHT}>
-                <div><select className="control-select bp3-select"></select></div>
-                <Navbar.Divider />
-                <Button minimal={true}
-                        intent={ inputVisible ? Intent.PRIMARY : Intent.NONE }
-                        icon={IconNames.MANUALLY_ENTERED_DATA}
-                        onClick={() => setInputVisible(!inputVisible) }>
-                </Button>
-                <Button className="control-save" minimal={true}
-                        icon={IconNames.FLOPPY_DISK}>
-                </Button>
-                <Button className="control-fullscreen" minimal={true}
-                        icon={IconNames.MAXIMIZE}>
-                </Button>
-            </Navbar.Group>
         </Navbar>
-
-        <div className="input-control-container" style={{ display: inputVisible ? "flex" : "none"}}>
-            <input className="control-input"></input>
-            <Button className="control-send" minimal={true}
-                    icon={IconNames.SEND_MESSAGE}
-                    onClick={() => setInputVisible(false) }>
-            </Button>
-        </div>
     </div>;
 }

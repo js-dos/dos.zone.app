@@ -1,11 +1,13 @@
 {
     "defaultSeverity": "error",
     "extends": [
+        "tslint-etc",
         "tslint:recommended"
     ],
     "jsRules": {},
     "rules": {
-        "quotemark": [true, "double"]
+        "quotemark": [true, "double"],
+        "no-unused-declaration": true
     },
     "rulesDirectory": []
 }
