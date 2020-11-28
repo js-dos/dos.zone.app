@@ -21,13 +21,13 @@ export function DosPlayer(props: IPlayerProps) {
         };
         window.addEventListener("keydown", preventListener);
 
-        const dos = Dos(root, {
+        const instance = Dos(root, {
             emulatorFunction: props.turbo ? "janus" : "dosWorker",
         });
-        setDos(dos);
+        setDos(instance);
         return () => {
             window.removeEventListener("keydown", preventListener);
-            dos.stop();
+            instance.stop();
         };
     }, [props.embedded, props.turbo]);
 

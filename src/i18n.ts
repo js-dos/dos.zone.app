@@ -4,6 +4,9 @@ import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 
 const en = {
+    common: {
+        loading: "Loading...",
+    },
     promo: {
         title: "Dos.Zone Android App",
         second_line: "Install to have better experience",
@@ -211,6 +214,9 @@ Thank you!
 }
 
 const ru = {
+    common: {
+        loading: "Загрузка...",
+    },
     promo: {
         title: "Dos.Zone приложение",
         second_line: "Установите что бы использовать все возможности",

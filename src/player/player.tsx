@@ -9,7 +9,7 @@ import { TurboPlayer } from "./turbo-player";
 import { getPersonalBundleUrl } from "../core/personal";
 
 import { goBack } from "../ui/navigator";
-import { getGameData } from "../core/game-query";
+import { getCachedGameData } from "../core/game-query";
 
 export interface IPlayerProps {
     user: User | null;
@@ -49,7 +49,10 @@ export function Player(props: IPlayerProps) {
         newProps.turbo = false;
     }
 
-    if (!isSuperUser(user) && newProps.turbo && getGameData(props.bundleUrl).turbo !== true) {
+    const gameData = getCachedGameData(props.bundleUrl);
+    const turbo = gameData !== null && gameData.turbo === true;
+
+    if (!isSuperUser(user) && newProps.turbo && !turbo) {
         newProps.turbo = false;
     }
 

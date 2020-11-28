@@ -12,6 +12,7 @@ provider:
     SESSION_TABLE: "dzsession"
     STORAGE_TABLE: "dzstorage"
     TURBO_TABLE: "dzturbo"
+    GAME_DATA_TABLE: "dzgamedata"
     RUN_INSTANCE: "jjs-runInstance"
   iamRoleStatements:
     - Effect: Allow
@@ -26,6 +27,7 @@ provider:
         - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.SESSION_TABLE}"
         - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.STORAGE_TABLE}"
         - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.TURBO_TABLE}"
+        - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.GAME_DATA_TABLE}"
     - Effect: Allow
       Action:
         - lambda:InvokeFunction
@@ -83,6 +85,14 @@ functions:
       - http:
           path: /storage/put
           method: post
+          cors: true
+  gameGet:
+    handler: src/game-get.gameGet
+    name: doszone-sls-gameGet
+    events:
+      - http:
+          path: /game/get
+          method: get
           cors: true
   turboLimits:
     handler: src/turbo-limits.turboLimits
@@ -186,6 +196,21 @@ resources:
             KeyType: HASH
         TableName: ${self:provider.environment.TURBO_TABLE}
         BillingMode: PAY_PER_REQUEST
+    gamedata:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: url
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: url
+            KeyType: HASH
+        TableName: ${self:provider.environment.GAME_DATA_TABLE}
+        BillingMode: PAY_PER_REQUEST
+
 
 plugins:
   - serverless-plugin-typescript

@@ -13,3 +13,5 @@ export const personalUrl = endpointBase + "/personal/url";
 
 export const storageGet = endpointBase + "/storage/get";
 export const storagePut = endpointBase + "/storage/put";
+
+export const gameGet = endpointBase + "/game/get";

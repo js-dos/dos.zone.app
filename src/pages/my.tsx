@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, Redirect, useParams, useHistory } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
     Spinner,
@@ -15,6 +15,7 @@ import { GameThumb } from "./components/game-thumb";
 import { IconNames } from "@blueprintjs/icons";
 
 import { openRepository } from "../core/browser-tab";
+import { GameData } from "../core/game";
 import { getGameData } from "../core/game-query";
 
 import { User } from "../core/auth";
@@ -23,8 +24,10 @@ import { Capacitor } from "@capacitor/core";
 import { AndroidPromo } from "./components/android-promo";
 
 export function My(props: { user: User | null }) {
-    const [recentlyPlayed, setRecentlyPlayed] = useState<RecentlyPlayed | null>(null);
-    const [selected, _setSelected] = useState<string>("");
+    const [recentlyPlayed, _setRecentlyPlayed] = useState<RecentlyPlayed | null>(null);
+    const [gamesData, setGamesData] = useState<{[url: string]: Promise<GameData>}>({});
+    const [selected, _setSelected] = useState<string | null>(null);
+    const [selectedData, setSelectedData] = useState<GameData | null>(null);
     const { t, i18n } = useTranslation("my");
     const { url } = useParams<{ url: string }>();
     const history = useHistory();
@@ -32,9 +35,63 @@ export function My(props: { user: User | null }) {
     const [ turboMode, setTurboMode ] = useState<boolean>(user !== null);
     const [ turboTime, setTurboTime ] = useState<number | null>(null);
 
-    function setSelected(bundleUrl: string) {
+    function setRecentlyPlayed(newRecentlyPlayed: RecentlyPlayed | null) {
+        const keys = Object.keys(newRecentlyPlayed || {});
+        if (newRecentlyPlayed === null || keys.length === 0) {
+            setGamesData({});
+            _setSelected(null);
+            _setRecentlyPlayed(null);
+            setSelectedData(null);
+        } else {
+            keys.sort(recentlyPlayedSorterFn(newRecentlyPlayed));
+
+            const newGamesData: {[url: string]: Promise<GameData>} = {};
+            for (const next of keys) {
+                newGamesData[next] = getGameData(next);
+            }
+
+            setGamesData(newGamesData);
+            _setSelected(keys[0]);
+            _setRecentlyPlayed(newRecentlyPlayed);
+            updateSelectedData(keys[0], newGamesData);
+        }
+    }
+
+    function setSelected(bundleUrl: string | null) {
         _setSelected(bundleUrl);
+        if (bundleUrl === null) {
+            setSelectedData(null);
+        } else {
+            updateSelectedData(bundleUrl, gamesData);
+        }
         window.scrollTo(0,0);
+    }
+
+    function updateSelectedData(selected: string, gamesData: {[url: string]: Promise<GameData>}) {
+        if (selected === null || gamesData[selected] === undefined) {
+            setSelectedData(null);
+            return;
+        }
+
+        const data = peekPromise(gamesData[selected]);
+        if (data != null) {
+            setSelectedData(data);
+            return;
+        }
+
+        let cancel = false;
+        if (selected != null && gamesData[selected] !== undefined) {
+            gamesData[selected].then((data) => {
+                if (cancel) {
+                    return;
+                }
+                setSelectedData(data);
+            });
+        }
+
+        return () => {
+            cancel = true;
+        }
     }
 
     useEffect(() => {
@@ -72,28 +129,20 @@ export function My(props: { user: User | null }) {
         });
     }, [user, url]);
 
-    if (recentlyPlayed === null) {
-        return <Spinner></Spinner>;
+    if (recentlyPlayed === null || selected === null || selectedData === null) {
+        return <div>
+            <br/>
+            <Spinner></Spinner>
+        </div>;
     }
 
-    const keys = Object.keys(recentlyPlayed);
-    if (keys.length === 0) {
-        return <Redirect to={"/" + i18n.language}></Redirect>
-    }
-
-    keys.sort((a, b) => {
-        return recentlyPlayed[b].visitedAtMs - recentlyPlayed[a].visitedAtMs;
-    });
-
-    const active = selected.length === 0 ? keys[0] : selected;
-    const gameData = getGameData(active);
-    const description = gameData.description[i18n.language]?.description || gameData.description.en?.description || "";
-    const canTurbo = Capacitor.isNative && Capacitor.getPlatform() === "android" && gameData.turbo === true;
-    const runUrl = "/" + i18n.language + "/play/" + encodeURIComponent(gameData.canonicalUrl) + "?turbo=" + (canTurbo && turboMode ? "1" : "0");
+    const description = selectedData.description[i18n.language]?.description || selectedData.description.en?.description || "";
+    const canTurbo = Capacitor.isNative && Capacitor.getPlatform() === "android" && selectedData.turbo === true;
+    const runUrl = "/" + i18n.language + "/play/" + encodeURIComponent(selectedData.canonicalUrl) + "?turbo=" + (canTurbo && turboMode ? "1" : "0");
 
     function runBundle() {
-        if (recentlyPlayed !== null) {
-            recentlyPlayed[active].visitedAtMs = Date.now();
+        if (recentlyPlayed !== null && selected !== null) {
+            recentlyPlayed[selected].visitedAtMs = Date.now();
             updateRecentlyPlayed(user, recentlyPlayed);
         }
 
@@ -101,9 +150,9 @@ export function My(props: { user: User | null }) {
     }
 
     async function remove() {
-        if (recentlyPlayed !== null) {
+        if (recentlyPlayed !== null && selected !== null) {
             const newRecentlyPlayed = {...recentlyPlayed};
-            delete newRecentlyPlayed[active];
+            delete newRecentlyPlayed[selected];
             await updateRecentlyPlayed(user, newRecentlyPlayed);
             setRecentlyPlayed(newRecentlyPlayed);
         }
@@ -162,11 +211,14 @@ export function My(props: { user: User | null }) {
              </Switch>;
     }
 
+    const keys = Object.keys(recentlyPlayed);
+    keys.sort(recentlyPlayedSorterFn(recentlyPlayed));
+
     return <div className="left-margin">
         <AndroidPromo />
         <h1>{t("selected")}</h1>
         <div className="recently-played">
-            <GameThumb onClick={runBundle} url={active} selected={true} />
+            <GameThumb key={"selected-" + selectedData.canonicalUrl} onClick={runBundle} game={selectedData} selected={true} />
             <div className="thumb-options">
                 <div>
                     <Button icon={IconNames.PLAY} onClick={runBundle}>{t("play")}</Button>
@@ -182,7 +234,19 @@ export function My(props: { user: User | null }) {
             <Button onClick={() => openRepository()} icon={IconNames.SEARCH} intent={Intent.PRIMARY}></Button>
         </div>
         <div className="recently-played">{
-            keys.map((a) => active === a ? null : <GameThumb onClick={() => setSelected(a)} url={a} key={a} selected={false} />)
+            keys.map((a) => <GameThumb onClick={() => setSelected(a)} gamePromise={gamesData[a]} key={"all-" + a} selected={false} />)
         }</div>
     </div>
 }
+
+function recentlyPlayedSorterFn(recentlyPlayed: RecentlyPlayed) {
+    return (a: string, b: string) => {
+        return recentlyPlayed[b].visitedAtMs - recentlyPlayed[a].visitedAtMs;
+    };
+};
+
+function peekPromise<T>(promise: Promise<T>) {
+    let value: T | null = null;
+    promise.then((v) => value = v);
+    return value;
+};

@@ -9,6 +9,7 @@ import { User } from "../core/auth";
 
 import { DosPlayer } from "./dos-player";
 import { Loader } from "./loader";
+import { logError } from "../core/log";
 
 const initialCountDown = 50;
 
@@ -35,11 +36,11 @@ export function TurboPlayer(props: IPlayerProps) {
             return;
         }
 
-        openTurboSession(user, bundle).then(async (arn) => {
-            if (arn === null) {
+        openTurboSession(user, bundle).then(async (newArn) => {
+            if (newArn === null) {
                 goBack(history, i18n.language);
             } else {
-                setArn(arn);
+                setArn(newArn);
                 let countDown = initialCountDown;
                 const countDownId = setInterval(() => {
                     countDown--;
@@ -49,10 +50,10 @@ export function TurboPlayer(props: IPlayerProps) {
                     }
                 }, 1000);
                 try {
-                    setPublicIp(await getPublicIp(user, arn));
+                    setPublicIp(await getPublicIp(user, newArn));
                     clearInterval(countDownId);
                 } catch(e) {
-                    console.error(e);
+                    logError(e);
                     goBack(history, i18n.language);
                     clearInterval(countDownId);
                 }

@@ -1,36 +1,33 @@
-import { gamesDb } from "./games";
 import BigNumber from "bignumber.js";
+import { GameData, getGame } from "./game";
 
-export interface GameData {
-    title: string,
-    game: string,
-    author: string,
-    screenshot: string,
-    description: {[locale: string]: {
-        description: string,
-    }},
-    turbo?: boolean,
-    canonicalUrl: string,
-}
+const cachedGameData: {[bundleUrl: string]: GameData} = {};
 
-const gameData: {[bundleUrl: string]: GameData} = JSON.parse(gamesDb);
-
-function getGameDataByUrl(bundleUrl: string) {
-    if (gameData[bundleUrl] !== undefined) {
-        const data = {...gameData[bundleUrl]};
-        data.canonicalUrl = bundleUrl;
+export function getCachedGameData(bundleUrl: string) {
+    if (cachedGameData[bundleUrl] !== undefined) {
+        const data = {...cachedGameData[bundleUrl]};
         return data;
     }
 
-    return undefined;
+    return null;
 }
 
-export function getGameData(bundleUrl: string): GameData {
-    const byUrl = getGameDataByUrl(bundleUrl);
-    if (byUrl !== undefined) {
-        return byUrl;
+async function getGameDataByUrl(bundleUrl: string) {
+    const cachedData = getCachedGameData(bundleUrl);
+    if (cachedData !== null) {
+        return cachedData;
     }
 
+    const gameData = await getGame(bundleUrl);
+
+    if (gameData !== null) {
+        cachedGameData[bundleUrl] = gameData;
+    }
+
+    return gameData;
+}
+
+export async function getGameData(bundleUrl: string): Promise<GameData> {
     if (!bundleUrl.startsWith("http://") &&
         !bundleUrl.startsWith("https://") &&
         bundleUrl.indexOf("@") > 0 &&
@@ -39,7 +36,7 @@ export function getGameData(bundleUrl: string): GameData {
         const [name, hash] = rest.split(":");
         const canonicalUrl = decodeHashToUrl(hash);
         const description = "Source: https://talks.dos.zone/t/" + slug;
-        return getGameDataByUrl(canonicalUrl) || {
+        return (await getGameDataByUrl(canonicalUrl)) || {
             title: "from uploads",
             game: name,
             author: hash,
@@ -48,6 +45,11 @@ export function getGameData(bundleUrl: string): GameData {
             turbo: false,
             canonicalUrl,
         }
+    }
+
+    const byUrl = await getGameDataByUrl(bundleUrl);
+    if (byUrl !== null) {
+        return byUrl;
     }
 
     return {
