@@ -64,12 +64,13 @@ const steps = [
                 setLoadProgress(100);
 
                 try {
-                    const executables = await ZipExecutables(blob);
+                    const jsdosZipData = await ZipExecutables(blob);
                     const name = file.name.substr(0, file.name.lastIndexOf("."));
                     nextStep({
                         name,
                         zip,
-                        executables,
+                        executables: jsdosZipData.executables,
+                        config: jsdosZipData.config,
                     });
                 } catch (e) {
                     setError(t("zip_error") + e);
@@ -83,7 +84,9 @@ const steps = [
         }
 
         return <div>
-            <p>{t("upload")} <span style={{color: "#D9822B", fontWeight: "bold", borderBottom: "2px solid #DB3737"}}>ZIP</span> {t("archive")} ({t("try")} <a href="https://caiiiycuk.github.io/dosify/digger.zip">digger.zip</a>)</p>
+            <p>{t("upload")}&nbsp;
+                <span style={{color: "#D9822B", fontWeight: "bold", borderBottom: "2px solid #DB3737"}}>ZIP</span>&nbsp;or&nbsp;
+                <span style={{color: "#D9822B", fontWeight: "bold", borderBottom: "2px solid #DB3737"}}>JsDos</span>&nbsp;{t("archive")} ({t("try")} <a href="https://caiiiycuk.github.io/dosify/digger.zip">digger.zip</a>)</p>
             <div style={{display: "flex"}}><FileInput disabled={reader !== null} text={t("choose_file")} onInputChange={onInputChange} />&nbsp;&nbsp;<Spinner size={16} intent={Intent.PRIMARY} value={loadProgress} /></div>
             <p><span style={{color: "#DB3737", display: (error.length === 0 ? "none" : "block") }}>*&nbsp;{error}</span></p>
         </div>;
@@ -195,7 +198,7 @@ const steps = [
             dosBundle
                 .extract(url);
 
-            const archive = await dosBundle.toUint8Array();
+            const archive = await dosBundle.toUint8Array(true);
             URL.revokeObjectURL(url);
 
             nextStep({

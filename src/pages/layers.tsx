@@ -67,14 +67,24 @@ function emptyLayer(): LayerType {
     }
 }
 
+export interface DosConfigWithLayers extends DosConfig {
+    layers?: LayersType,
+};
+
 export function Layers(props: {
-    config: DosConfig,
+    config: DosConfigWithLayers,
     t: TFunction
 }) {
     const t = props.t;
     const config = props.config;
-    const [layers, setLayers] = useState<LayersType>({
-        default: emptyLayer(),
+    const [layers, setLayers] = useState<LayersType>(() => {
+        if (config.layers !== undefined) {
+            return config.layers;
+        }
+
+        return {
+            default: emptyLayer(),
+        }
     });
 
     const [selectedLayer, setSelectedLayer] = useState<string>("default");
