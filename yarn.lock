@@ -4730,10 +4730,10 @@ emojis-list@^3.0.0:
   resolved "https://registry.yarnpkg.com/emojis-list/-/emojis-list-3.0.0.tgz#5570662046ad29e2e916e71aae260abdff4f6a78"
   integrity sha512-/kyM18EfinwXZbno9FyUGeFh87KC8HRQBQGildHZbEuRyWFOmv1U10o9BBp8XVZDVNNuQKyIGIu5ZYAAXJ0V2Q==
 
-emulators-ui@^0.0.43:
-  version "0.0.43"
-  resolved "https://registry.yarnpkg.com/emulators-ui/-/emulators-ui-0.0.43.tgz#82b25a755d39208b6a5b8836ea1ef5b8ba22e804"
-  integrity sha512-jCtT7e+JVWFCbLUDgVCkHSOCM29jHspSBB9LcdvIzSuClyruTUeVYRLizc7zbrOiFsFGRgPKyOsUl7tW9aFR8g==
+emulators-ui@^0.0.44:
+  version "0.0.44"
+  resolved "https://registry.yarnpkg.com/emulators-ui/-/emulators-ui-0.0.44.tgz#b7d37e70ced45996c1dfd02c0efe2dcf15f367ad"
+  integrity sha512-Y9blLv9REB5nnT6KvU8g/AVx8saRsxPIoHvelhu4xLjG3DTJxtuklGxQvhanZoBwOsEP8ctSyOgfa6ho1VvhbQ==
 
 emulators@^0.0.38:
   version "0.0.38"

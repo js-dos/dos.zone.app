@@ -12,6 +12,8 @@ export declare class DosInstance {
     emulatorFunction: EmulatorFunction;
     layers: Layers;
     ciPromise?: Promise<CommandInterface>;
+    enableMobileControls: () => void;
+    disableMobileControls: () => void;
     private clickToStart;
     constructor(root: HTMLDivElement, emulatorsUi: EmulatorsUi, options: DosOptions);
     run(bundleUrl: string): Promise<CommandInterface>;

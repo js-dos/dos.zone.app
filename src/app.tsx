@@ -27,10 +27,12 @@ import { Player } from "./player/player";
 import { User, refresh, getCachedUser } from "./core/auth";
 
 import { parseQuery, QueryParams } from "./core/query-string";
+import { DosInstance } from "emulators-ui/dist/types/js-dos";
 
 function App() {
     const { i18n } = useTranslation();
     const [user, setUser] = useState<User|null>(getCachedUser());
+    const [dos, setDosInsatnce] = useState<DosInstance | null>(null);
 
     const lang = i18n.language;
     const queryParams = parseQuery(window.location.search);
@@ -72,14 +74,14 @@ function App() {
             </Route>
             <Route path="/:lang/play/:url">
                 <div className="play-player-root">
-                    <NavigatorPlayer />
+                    <NavigatorPlayer dos={dos} />
                     <div className="play-player-container">
-                        <PlayerWrapper user={user} embedded={false} queryParams={queryParams} />
+                        <PlayerWrapper user={user} embedded={false} queryParams={queryParams} onDosInstance={setDosInsatnce} />
                     </div>
                 </div>
             </Route>
             <Route path="/:lang/player/:url">
-                <PlayerWrapper user={user} embedded={true} queryParams={queryParams} />
+                <PlayerWrapper user={user} embedded={true} queryParams={queryParams} onDosInstance={setDosInsatnce} />
             </Route>
             <Route path="/:lang/dl/:url">
                 <Deeplink user={user} />
@@ -92,6 +94,7 @@ function PlayerWrapper(props: {
     user: User | null,
     embedded: boolean,
     queryParams: QueryParams,
+    onDosInstance: (dos: DosInstance | null) => void;
 }) {
     const { url } = useParams<{url: string}>();
     const turbo = props.queryParams.turbo || "0";
@@ -99,7 +102,9 @@ function PlayerWrapper(props: {
                user={props.user}
                bundleUrl={decodeURIComponent(url)}
                embedded={props.embedded}
-               turbo={turbo === "1" }></Player>;
+               turbo={turbo === "1"}
+               onDosInstance={props.onDosInstance}
+           ></Player>;
 }
 
 export default App;

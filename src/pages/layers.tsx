@@ -16,7 +16,6 @@ import {
     Checkbox,
 } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
-import { layers } from "emulators-ui/dist/types/dom/layers";
 
 declare const emulatorsUi: EmulatorsUi;
 
@@ -51,13 +50,13 @@ const buttonsLayout = (() => {
     return buttons;
 })();
 
-interface LayerType {
+export interface LayerType {
     buttons: ButtonType[],
     gestures: EventMapping[],
     mapper: Mapper,
 };
 
-type LayersType = {[index: string]: LayerType};
+export type LayersType = {[index: string]: LayerType};
 
 function emptyLayer(): LayerType {
     return {

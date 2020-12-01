@@ -26,6 +26,9 @@ const en = {
         home: "Home",
         studio: "Game Studio",
         database: "Database",
+        buttons: "Buttons",
+        joysticks: "Joysticks",
+        mapper: "Mapper",
     },
     login: {
         please: "Please",
@@ -236,6 +239,9 @@ const ru = {
         home: "Домой",
         studio: "Творческая студия",
         database: "База данных",
+        buttons: "Кнопки",
+        joysticks: "Джойстики",
+        mapper: "Маппер",
     },
     login: {
         please: "Пожалуйста",

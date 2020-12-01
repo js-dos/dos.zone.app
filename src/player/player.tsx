@@ -11,12 +11,16 @@ import { getPersonalBundleUrl } from "../core/personal";
 import { goBack } from "../ui/navigator";
 import { getCachedGameData } from "../core/game-query";
 
+import { DosInstance } from "emulators-ui/dist/types/js-dos";
+
 export interface IPlayerProps {
     user: User | null;
     bundleUrl: string;
     embedded: boolean;
     turbo: boolean;
     sourceBundleUrl?: string;
+
+    onDosInstance?: (dos: DosInstance | null) => void;
 }
 
 export function Player(props: IPlayerProps) {

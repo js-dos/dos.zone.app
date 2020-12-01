@@ -12,7 +12,14 @@ declare const Dos: DosFactoryType;
 export function DosPlayer(props: IPlayerProps) {
     const rootRef = useRef<HTMLDivElement>(null);
     const [dos, setDos] = useState<DosInstance | null>(null);
-    const [ci, setCi] = useState<CommandInterface | null>(null);
+    const [ci, _setCi] = useState<CommandInterface | null>(null);
+
+    function setCi(ci: CommandInterface | null) {
+        _setCi(ci);
+        if (props.onDosInstance) {
+            props.onDosInstance(ci === null ? null : dos);
+        }
+    }
 
     useEffect(() => {
         const root = rootRef.current as HTMLDivElement;
@@ -25,6 +32,7 @@ export function DosPlayer(props: IPlayerProps) {
             emulatorFunction: props.turbo ? "janus" : "dosWorker",
         });
         setDos(instance);
+
         return () => {
             window.removeEventListener("keydown", preventListener);
             instance.stop();
@@ -38,6 +46,7 @@ export function DosPlayer(props: IPlayerProps) {
 
         if (props.bundleUrl === undefined) {
             dos.stop();
+            setCi(null);
         } else {
             dos.run(props.bundleUrl).then(setCi);
         }
