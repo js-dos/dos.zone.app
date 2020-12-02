@@ -120,6 +120,7 @@ Our database is community drived. Database sources is [here](https://github.com/
 `,
     },
     landing: {
+        quick_tour: "Quick tour",
         my_favorite: "Favorites",
         header_1: `
 # Welcome!
@@ -334,6 +335,7 @@ Dos.Zone предоставляет минимальну функциональ�
 `,
     },
     landing: {
+        quick_tour: "Краткий обзор",
         my_favorite: "Избранное",
         header_1: `
 # Добро пожаловать!

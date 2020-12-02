@@ -3,7 +3,8 @@ import { useTranslation } from "react-i18next";
 import {
     Classes,
     Intent, Overlay,
-    Card, Button, Icon
+    Card, Button, Icon,
+    H2
 } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 
@@ -50,6 +51,17 @@ export function Landing() {
                 onClick={() => openRepository()}
                 intent={showRecentlyPlayed ? Intent.NONE : Intent.PRIMARY}
                 icon={IconNames.SEARCH}>{t("browse_database")}</Button>
+
+        <H2>{t("quick_tour")}</H2>
+        <iframe
+            width="560"
+            height="315"
+            style={{maxWidth: "100%"}}
+            src="https://www.youtube.com/embed/1kxrrFQDxzQ"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen>
+        </iframe>
 
         <ReactMardown renderers={renderers}
                       source={t("header_2", {lang: i18n.language})}
