@@ -43,6 +43,12 @@ function App() {
     }, []);
 
     return <Router>
+        <Route path="/" render={({location}) => {
+            if (typeof (window as any).gtag === "function") {
+                (window as any).gtag("config", "G-5L33M3K6MQ", {"page_path": location.pathname + location.search});
+            }
+            return null;
+        }} />
         <CapConfig lang={lang} queryParams={queryParams}></CapConfig>
         <Switch>
             <Route exact path="/">
