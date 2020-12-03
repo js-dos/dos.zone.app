@@ -28,6 +28,7 @@ import { User, refresh, getCachedUser } from "./core/auth";
 
 import { parseQuery, QueryParams } from "./core/query-string";
 import { DosInstance } from "emulators-ui/dist/types/js-dos";
+import { getGameData } from "./core/game-query";
 
 function App() {
     const { i18n } = useTranslation();
@@ -43,11 +44,8 @@ function App() {
     }, []);
 
     return <Router>
-        <Route path="/" render={({location}) => {
-            if (typeof (window as any).gtag === "function") {
-                (window as any).gtag("config", "G-5L33M3K6MQ", {"page_path": location.pathname + location.search});
-            }
-            return null;
+        <Route path={["/:lang/play/:url", "/:lang/player/:url", "/"]} render={({location}) => {
+            return <GoogleAnalytics location={location} />;
         }} />
         <CapConfig lang={lang} queryParams={queryParams}></CapConfig>
         <Switch>
@@ -94,6 +92,33 @@ function App() {
             </Route>
         </Switch>
     </Router>;
+}
+
+function GoogleAnalytics(props: { location: any }) {
+    const { url } = useParams<{url: string}>();
+    const location = props.location;
+    const pagePath = location.pathname + location.search;
+
+    function reportPageEvent(pagePath: string, pageTitle: string) {
+        if (typeof (window as any).gtag === "function") {
+            (window as any).gtag("config", "G-5L33M3K6MQ", {
+                "page_path": pagePath,
+                "page_title": pageTitle,
+            });
+        }
+    }
+
+    if (url === undefined) {
+        reportPageEvent(pagePath, location.pathname);
+    } else {
+        getGameData(decodeURIComponent(url)).then((gameData) => {
+            reportPageEvent(pagePath, gameData.game + "." + gameData.title + " @" + gameData.author);
+        }).catch(() => {
+            reportPageEvent(pagePath, location.pathname);
+        });
+    }
+
+    return null;
 }
 
 function PlayerWrapper(props: {
