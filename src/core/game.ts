@@ -17,9 +17,10 @@ export interface GameData {
 export async function getGame(bundleUrl: string): Promise<GameData | null> {
     try {
         const data = (await GET_OBJECT(gameGet + "?bundleUrl=" + encodeURI(bundleUrl))).value;
-        if (data !== undefined) {
-            data.canonicalUrl = bundleUrl;
+        if (data === undefined) {
+            return null;
         }
+        data.canonicalUrl = bundleUrl;
         return data;
     } catch (e) {
         logError(e);

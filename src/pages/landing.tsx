@@ -57,7 +57,7 @@ export function Landing() {
             width="560"
             height="315"
             style={{maxWidth: "100%"}}
-            src="https://www.youtube.com/embed/1kxrrFQDxzQ"
+            src="https://www.youtube.com/embed/kLXZ1t84BdE"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen>
