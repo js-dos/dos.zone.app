@@ -132,7 +132,13 @@ async function localSet(key: string, payload: string): Promise<void> {
     await Promise.all(promises);
 };
 
-export function storage(user?: User | null) {
+export interface Storage {
+    getDefault: (key: string, defaultValue: string) => Promise<string>;
+    get: (key: string, defaultValue?: string) => Promise<string | null>;
+    set: (key: string, value: string) => Promise<boolean>;
+}
+
+export function storage(user?: User | null): Storage {
     return {
         getDefault: async (key: string, defaultValue: string) => {
             return (await get(key, defaultValue, user)) as string;

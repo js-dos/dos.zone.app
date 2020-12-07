@@ -12,19 +12,25 @@ import {
 } from "@blueprintjs/core";
 
 import { IconNames } from "@blueprintjs/icons";
-import { storage } from "../core/storage/storage";
+import { Storage, storage } from "../core/storage/storage";
+
+import { Subscriptions } from "../inapp/inapp";
 
 export function Profile(props: { user: User | null }) {
     const { t, i18n } = useTranslation("profile");
     const user = props.user;
-    const userStorage = storage(user);
 
+    const [userStorage, setUserStorage] = useState<Storage | null>(null);
     const [turboSession, setTurboSession ] = useState<TurboSession | null>(null);
     const [region, setRegion] = useState<string|null>(null);
     const [updating, setUpdating] = useState<boolean>(false);
 
     useEffect(() => {
-        if (user !== null) {
+        setUserStorage(storage(user));
+    }, [user])
+
+    useEffect(() => {
+        if (user !== null && userStorage !== null) {
             getTurboSession(user).then(setTurboSession);
             userStorage.get("region").then(setRegion);
         }
@@ -39,12 +45,14 @@ export function Profile(props: { user: User | null }) {
         const onChangeRegion = (event: any) => {
             setUpdating(true);
             const newRegion = event.currentTarget.value;
-            userStorage.set("region", newRegion).then((success) => {
-                if (success) {
-                    setRegion(newRegion);
-                }
-                setUpdating(false);
-            });
+            if (userStorage !== null) {
+                userStorage.set("region", newRegion).then((success) => {
+                    if (success) {
+                        setRegion(newRegion);
+                    }
+                    setUpdating(false);
+                });
+            }
         };
 
         limits = <div>
@@ -76,6 +84,7 @@ export function Profile(props: { user: User | null }) {
             <Icon icon={IconNames.DASHBOARD} />
         </div>
         {limits}
+        <Subscriptions />
     </div>
 }
 

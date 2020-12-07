@@ -254,3 +254,8 @@ body {
     display: inline-block;
     width: 15ch;
 }
+
+.purchases {
+    width: max-content;
+    max-width: 90%;
+}

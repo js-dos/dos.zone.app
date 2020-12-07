@@ -4,6 +4,18 @@ import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 
 const en = {
+    subscriptions: {
+        subscriptions: "Subscriptions",
+        donate_title: "Developers donation",
+        donate_desc: "Subscribe to per-month donation for developer team of js-dos and DOS Zone",
+        turbo_2h_title: "Turbo 2 hours / day",
+        turbo_2h_desc: "Subscribe and increase turbo time up to 2 hours per day",
+        subscribe: "Subscribe",
+        subscribed: "Subscribed",
+        unsubscribe: "Unsubscribe",
+        only_android: "You can change subscriptions (subscribe/unsubscribe) only using",
+        android_application: "android application",
+    },
     common: {
         loading: "Loading...",
     },
@@ -218,6 +230,18 @@ Thank you!
 }
 
 const ru = {
+    subscriptions: {
+        subscriptions: "Подписки",
+        donate_title: "Пожертвования разработчикам",
+        donate_desc: "Подпишитесь на ежемесечные пожертвования разрабочтикам js-dos и DOS Zone",
+        turbo_2h_title: "Turbo 2 часа / день",
+        turbo_2h_desc: "Подпишитесь и увеличте время turbo до двух часов в день",
+        subscribe: "Подписаться",
+        subscribed: "Вы подписаны",
+        unsubscribe: "Отказаться",
+        only_android: "Вы можете управлять подписками только используя",
+        android_application: "мобильное приложение",
+    },
     common: {
         loading: "Загрузка...",
     },
