@@ -12,9 +12,11 @@ const en = {
         turbo_2h_desc: "Subscribe and increase turbo time up to 2 hours per day",
         subscribe: "Subscribe",
         subscribed: "Subscribed",
+        approved: "Processing...",
         unsubscribe: "Unsubscribe",
         only_android: "You can change subscriptions (subscribe/unsubscribe) only using",
         android_application: "android application",
+        subscriptions_for_logged: "Subscriptions only available for logged users",
     },
     common: {
         loading: "Loading...",
@@ -238,9 +240,11 @@ const ru = {
         turbo_2h_desc: "Подпишитесь и увеличте время turbo до двух часов в день",
         subscribe: "Подписаться",
         subscribed: "Вы подписаны",
+        approved: "Обработка...",
         unsubscribe: "Отказаться",
         only_android: "Вы можете управлять подписками только используя",
         android_application: "мобильное приложение",
+        subscriptions_for_logged: "Подписки доступны только зарегестрированным пользователям",
     },
     common: {
         loading: "Загрузка...",

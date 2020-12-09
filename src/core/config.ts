@@ -15,3 +15,4 @@ export const storageGet = endpointBase + "/storage/get";
 export const storagePut = endpointBase + "/storage/put";
 
 export const gameGet = endpointBase + "/game/get";
+export const inappGet = endpointBase + "/inapp/get";

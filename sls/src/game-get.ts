@@ -39,7 +39,7 @@ async function getGameData(url: string) {
         }
         const [x, locale] = next.split("-");
         response.Item.description[locale] = {
-            description: response.Item[next];
+            description: response.Item[next],
         }
         delete response.Item[next];
     }

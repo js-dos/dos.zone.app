@@ -9,6 +9,11 @@ import {
     Spinner,
 } from "@blueprintjs/core";
 import { useTranslation } from "react-i18next";
+import { User } from "../core/auth";
+
+import { GET_OBJECT } from "../core/xhr/GET";
+import { inappGet } from "../core/config";
+import { logError } from "../core/log";
 
 const store: IapStore.IStore | undefined = initStorePlugin(window);
 
@@ -30,22 +35,30 @@ interface SubscriptionsState {
 }
 
 async function subscribeToUpdates(store: IapStore.IStore | null,
+                                  user: User,
                                   onUpdate: (state: SubscriptionsState) => void,
                                   onError: (error: string) => void) {
+    const state: SubscriptionsState = {
+        donate: {
+            state: "valid",
+            canPurchase: false,
+        },
+        turbo_2h: {
+            state: "valid",
+            canPurchase: false,
+        },
+    };
+
     if (store === null) {
-        onUpdate({
-            donate: {
-                state: "valid",
-                canPurchase: false,
-            },
-            turbo_2h: {
-                state: "valid",
-                canPurchase: false,
-            }
-        });
+        const active = await getInapp(user);
+        for (const next of active) {
+            state[next].state = "owned";
+        }
+        onUpdate(state);
         return;
     }
 
+    store.applicationUsername = user.email;
     store.register([{
         id:    'donate',
         type:   store.PAID_SUBSCRIPTION,
@@ -57,10 +70,9 @@ async function subscribeToUpdates(store: IapStore.IStore | null,
     store.error((error) => onError(error.code + ":" + error.message));
 
     store.when("subscription").updated(() => {
-        onUpdate({
-            donate: store.get("donate"),
-            turbo_2h: store.get("turbo_2h"),
-        });
+        state.donate = store.get("donate") || state.donate;
+        state.turbo_2h = store.get("turbo_2h") || state.turbo_2h;
+        onUpdate(state);
     });
 
     store.when("product")
@@ -70,16 +82,22 @@ async function subscribeToUpdates(store: IapStore.IStore | null,
     store.refresh();
 }
 
-export function Subscriptions() {
+export function Subscriptions(props: { user: User | null }) {
+    const user = props.user;
     const { t, i18n } = useTranslation("subscriptions");
     const inappSupported = store !== undefined;
     const [subscriptionsState, setSubscriptionsState] = useState<SubscriptionsState | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
+        if (user === null) {
+            return;
+        }
+
         let cancel = false;
         subscribeToUpdates(
             store || null,
+            user,
             (state) => {
                 if (cancel) {
                     return;
@@ -97,7 +115,17 @@ export function Subscriptions() {
         return () => {
             cancel = true;
         };
-    }, []);
+    }, [user]);
+
+    if (user === null) {
+        return <div className="purchases">
+            <h1>{t("subscriptions")}</h1>
+
+            <Callout intent={Intent.DANGER}>
+                {t("subscriptions_for_logged")}
+            </Callout>
+        </div>;
+    }
 
     if (error !== null) {
         return <div className="purchases">
@@ -123,6 +151,10 @@ export function Subscriptions() {
     return <div className="purchases">
         <h1>{t("subscriptions")}</h1>
         {!inappSupported ? androidNote : null}
+        <br/>
+        <pre>
+            {JSON.stringify(subscriptionsState, null, 2)}
+        </pre>
         <br/>
         <Card interactive={true} elevation={Elevation.TWO}>
             <h3>{t("turbo_2h_title")}</h3>
@@ -155,16 +187,27 @@ function Actions(props: { state: State, store: IapStore.IStore | null, id: strin
     }
 
     if (state.state !== "owned" &&
-        state.state !== "valid") {
+        state.state !== "valid" &&
+        state.state !== "approved") {
         return <Spinner size={16} />;
     }
 
-    const owned = state.state === "owned";
+    const approved = state.state === "approved";
+    const owned = state.state === "owned" || approved;
 
     return <ButtonGroup>
     { owned ?
-      <Button disabled={true} intent={Intent.SUCCESS}>{t("subscribed")}</Button> :
+      <Button disabled={true} intent={approved ? Intent.WARNING : Intent.SUCCESS}>{state.state === "approved" ? t("approved") : t("subscribed")}</Button> :
       <Button disabled={!havePurchases} intent={Intent.PRIMARY} onClick={subscribe}>{t("subscribe")}</Button> }
     </ButtonGroup>
 }
 
+
+async function getInapp(user: User): Promise<Array<"donate" | "turbo_2h">> {
+    try {
+        return (await GET_OBJECT(inappGet + "?sso=" + user.sso + "&sig=" + user.sig)).active;
+    } catch (e) {
+        logError(e);
+        return [];
+    }
+}

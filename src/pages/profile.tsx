@@ -84,7 +84,7 @@ export function Profile(props: { user: User | null }) {
             <Icon icon={IconNames.DASHBOARD} />
         </div>
         {limits}
-        <Subscriptions />
+        <Subscriptions user={props.user} />
     </div>
 }
 

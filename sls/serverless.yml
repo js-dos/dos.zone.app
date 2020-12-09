@@ -12,6 +12,7 @@ provider:
     SESSION_TABLE: "dzsession"
     STORAGE_TABLE: "dzstorage"
     TURBO_TABLE: "dzturbo"
+    SUBSCRIPTIONS_TABLE: "dzsubscriptions"
     GAME_DATA_TABLE: "dzgamedata"
     RUN_INSTANCE: "jjs-runInstance"
   iamRoleStatements:
@@ -27,6 +28,7 @@ provider:
         - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.SESSION_TABLE}"
         - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.STORAGE_TABLE}"
         - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.TURBO_TABLE}"
+        - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.SUBSCRIPTIONS_TABLE}"
         - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.GAME_DATA_TABLE}"
     - Effect: Allow
       Action:
@@ -92,6 +94,22 @@ functions:
     events:
       - http:
           path: /game/get
+          method: get
+          cors: true
+  inappWebhook:
+    handler: src/inapp-webhook.inappWebhook
+    name: doszone-sls-inappWebhook
+    events:
+      - http:
+          path: /inapp/webhook
+          method: post
+          cors: true
+  inappGet:
+    handler: src/inapp-get.inappGet
+    name: doszone-sls-inappGet
+    events:
+      - http:
+          path: /inapp/get
           method: get
           cors: true
   turboLimits:
@@ -195,6 +213,26 @@ resources:
             AttributeName: email
             KeyType: HASH
         TableName: ${self:provider.environment.TURBO_TABLE}
+        BillingMode: PAY_PER_REQUEST
+    dzsubsriptions:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: email
+            AttributeType: S
+          -
+            AttributeName: subscription
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: email
+            KeyType: HASH
+          -
+            AttributeName: subscription
+            KeyType: RANGE
+        TableName: ${self:provider.environment.SUBSCRIPTIONS_TABLE}
         BillingMode: PAY_PER_REQUEST
     gamedata:
       Type: 'AWS::DynamoDB::Table'
