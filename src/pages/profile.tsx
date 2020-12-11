@@ -9,6 +9,7 @@ import {
     Classes,
     Spinner,
     HTMLSelect,
+    Button,
 } from "@blueprintjs/core";
 
 import { IconNames } from "@blueprintjs/icons";
@@ -24,17 +25,23 @@ export function Profile(props: { user: User | null }) {
     const [turboSession, setTurboSession ] = useState<TurboSession | null>(null);
     const [region, setRegion] = useState<string|null>(null);
     const [updating, setUpdating] = useState<boolean>(false);
+    const [version, setVersion] = useState<number>(0);
+
+    const onRefresh = () => {
+        setTurboSession(null);
+        setVersion(version + 1);
+    };
 
     useEffect(() => {
         setUserStorage(storage(user));
-    }, [user])
+    }, [user]);
 
     useEffect(() => {
         if (user !== null && userStorage !== null) {
             getTurboSession(user).then(setTurboSession);
             userStorage.get("region").then(setRegion);
         }
-    }, [userStorage, user]);
+    }, [version, userStorage, user]);
 
     if (user === null) {
         return <Redirect to={"/" + i18n.language} />;
@@ -82,6 +89,7 @@ export function Profile(props: { user: User | null }) {
         <div className="one-row">
             <h1>{t("turbo")}</h1>&nbsp;&nbsp;&nbsp;&nbsp;
             <Icon icon={IconNames.DASHBOARD} />
+            <Button icon={IconNames.REFRESH} minimal={true} onClick={onRefresh} />
         </div>
         {limits}
         <Subscriptions user={props.user} />

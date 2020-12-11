@@ -1,11 +1,11 @@
 import * as AWS from "aws-sdk";
 import { getDayOrigin } from "./day";
+import { getActiveSubscriptions } from "./inapp";
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 const lambda = new AWS.Lambda();
 const TableName = process.env.TURBO_TABLE as string;
 const RunInstanceLambda = process.env.RUN_INSTANCE as string;
-const defaultTimeLimitSec = 30 * 60;
 
 export interface TurboSession {
     email: string;
@@ -21,6 +21,13 @@ export interface TurboSession {
 }
 
 export async function getTurboSession(email: string, arn?: string, uptimeSec?: number): Promise<TurboSession> {
+    const activeSubscriptions = await getActiveSubscriptions(email);
+
+    let timeLimitSec = 30 * 60;
+    if (activeSubscriptions.indexOf("turbo_2h") >= 0) {
+        timeLimitSec = 2 * 60 * 60;
+    }
+
     const response = await dynamoDb.get({
         TableName,
         Key: {
@@ -33,11 +40,12 @@ export async function getTurboSession(email: string, arn?: string, uptimeSec?: n
         session = {
             email,
             dayOrigin: getDayOrigin(),
-            timeLimit: defaultTimeLimitSec,
+            timeLimit: timeLimitSec,
             usedTime: 0,
             restTime: 0,
         };
     } else {
+        session.timeLimit = timeLimitSec;
         await invalidateSessionIfNeeded(session);
     }
 

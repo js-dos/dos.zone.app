@@ -54,7 +54,7 @@ async function subscribeToUpdates(store: IapStore.IStore | null,
         for (const next of active) {
             state[next].state = "owned";
         }
-        onUpdate(state);
+        onUpdate({...state});
         return;
     }
 
@@ -72,7 +72,7 @@ async function subscribeToUpdates(store: IapStore.IStore | null,
     store.when("subscription").updated(() => {
         state.donate = store.get("donate") || state.donate;
         state.turbo_2h = store.get("turbo_2h") || state.turbo_2h;
-        onUpdate(state);
+        onUpdate({...state});
     });
 
     store.when("product")
@@ -152,10 +152,6 @@ export function Subscriptions(props: { user: User | null }) {
         <h1>{t("subscriptions")}</h1>
         {!inappSupported ? androidNote : null}
         <br/>
-        <pre>
-            {JSON.stringify(subscriptionsState, null, 2)}
-        </pre>
-        <br/>
         <Card interactive={true} elevation={Elevation.TWO}>
             <h3>{t("turbo_2h_title")}</h3>
             <p>{t("turbo_2h_desc")}</p>
@@ -187,17 +183,15 @@ function Actions(props: { state: State, store: IapStore.IStore | null, id: strin
     }
 
     if (state.state !== "owned" &&
-        state.state !== "valid" &&
-        state.state !== "approved") {
+        state.state !== "valid") {
         return <Spinner size={16} />;
     }
 
-    const approved = state.state === "approved";
-    const owned = state.state === "owned" || approved;
+    const owned = state.state === "owned";
 
     return <ButtonGroup>
     { owned ?
-      <Button disabled={true} intent={approved ? Intent.WARNING : Intent.SUCCESS}>{state.state === "approved" ? t("approved") : t("subscribed")}</Button> :
+      <Button disabled={true} intent={Intent.SUCCESS}>{t("subscribed")}</Button> :
       <Button disabled={!havePurchases} intent={Intent.PRIMARY} onClick={subscribe}>{t("subscribe")}</Button> }
     </ButtonGroup>
 }
