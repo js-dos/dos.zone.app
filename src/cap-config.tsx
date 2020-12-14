@@ -16,7 +16,7 @@ function renderDeepLink(lang: string, url: string) {
 
 export function CapConfig(props: {
     lang: string,
-    queryParams: QueryParams,
+    queryParams: () => QueryParams,
 }) {
     const history = useHistory();
     useEffect(() => {
@@ -42,7 +42,7 @@ export function CapConfig(props: {
         // eslint-disable-next-line
     }, [props.lang]);
 
-    if (props.queryParams.sso !== undefined) {
+    if (props.queryParams().sso !== undefined) {
         return <Redirect to={renderDeepLink(props.lang, window.location.href)} />;
     }
 

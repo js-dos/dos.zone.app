@@ -8,6 +8,8 @@ import {
     Switch,
     Popover,
     Position,
+    Classes,
+    Icon,
 } from "@blueprintjs/core";
 
 import { getRecentlyPlayed, RecentlyPlayed, setRecentlyPlayed as updateRecentlyPlayed  } from "../core/storage/recently-played";
@@ -22,6 +24,12 @@ import { User } from "../core/auth";
 import { getTurboSession } from "../core/turbo";
 import { Capacitor } from "@capacitor/core";
 import { AndroidPromo } from "./components/android-promo";
+import { TurboOptions } from "./components/turbo-options";
+
+const isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
+                 navigator.userAgent &&
+                 navigator.userAgent.indexOf('CriOS') == -1 &&
+                 navigator.userAgent.indexOf('FxiOS') == -1;
 
 export function My(props: { user: User | null }) {
     const [recentlyPlayed, _setRecentlyPlayed] = useState<RecentlyPlayed | null>(null);
@@ -32,8 +40,6 @@ export function My(props: { user: User | null }) {
     const { url } = useParams<{ url: string }>();
     const history = useHistory();
     const user = props.user;
-    const [ turboMode, setTurboMode ] = useState<boolean>(user !== null);
-    const [ turboTime, setTurboTime ] = useState<number | null>(null);
 
     function setRecentlyPlayed(newRecentlyPlayed: RecentlyPlayed | null) {
         const keys = Object.keys(newRecentlyPlayed || {});
@@ -95,25 +101,6 @@ export function My(props: { user: User | null }) {
     }
 
     useEffect(() => {
-        if (user !== null && turboMode) {
-            getTurboSession(user).then((session) => {
-                if (session === null) {
-                    return;
-                }
-
-                setTurboTime(session.restTime);
-                if (turboMode && session !== null && session.restTime < 60) {
-                    setTurboMode(false);
-                }
-            });
-        }
-
-        if (turboMode && user === null) {
-            setTurboMode(false);
-        }
-    }, [user, turboMode]);
-
-    useEffect(() => {
         setRecentlyPlayed(null); // reset state
 
         getRecentlyPlayed(user).then((recentlyPlayed) => {
@@ -137,16 +124,17 @@ export function My(props: { user: User | null }) {
     }
 
     const description = selectedData.description[i18n.language]?.description || selectedData.description.en?.description || "";
-    const canTurbo = Capacitor.isNative && Capacitor.getPlatform() === "android" && selectedData.turbo === true;
-    const runUrl = "/" + i18n.language + "/play/" + encodeURIComponent(selectedData.canonicalUrl) + "?turbo=" + (canTurbo && turboMode ? "1" : "0");
+    const canTurbo = selectedData.turbo !== "no" && !isSafari;
+    const runUrl = "/" + i18n.language + "/play/" + encodeURIComponent(selectedData.canonicalUrl);
 
-    function runBundle() {
+    function runBundle(turboMode: boolean) {
         if (recentlyPlayed !== null && selected !== null) {
             recentlyPlayed[selected].visitedAtMs = Date.now();
             updateRecentlyPlayed(user, recentlyPlayed);
         }
 
-        history.push(runUrl);
+        const url = runUrl + "?turbo=" + (canTurbo && turboMode ? "1" : "0")
+        history.push(url);
     }
 
     async function remove() {
@@ -158,59 +146,6 @@ export function My(props: { user: User | null }) {
         }
     }
 
-    const timeInfo = (time: number) => {
-        if (time < 60) {
-            return "0 " + t("min");
-        }
-
-        return Math.round(time / 60 * 10) / 10 + " "+ t("min");
-    };
-
-    let turboSwitch = null;
-    if (!canTurbo) {
-        /* turboSwitch = <Switch className="my-turbo-switch"
-           checked={true}
-           disabled={true}
-           large={true}
-           inline={true}
-           innerLabel={t("Turbo")}>
-           </Switch> */
-        // no controls
-    } else if (user === null) {
-        turboSwitch = <Popover content={<div className="popover-inner-card">{t("please_login_for_turbo_mode")}</div>} position={Position.TOP} isOpen={true}>
-            <div>
-                <Switch className="my-turbo-switch"
-                        checked={false}
-                        disabled={true}
-                        large={true}
-                        inline={true}
-                        innerLabel={t("Turbo")}></Switch>
-            </div>
-        </Popover>;
-    } else if (turboTime === 0) {
-        const popoeverInner = <div className="popover-inner-card">{t("no_time_for_turbo_mode")}, <Link to={"/" + i18n.language + "/profile"}>{t("settings")}</Link></div>;
-        turboSwitch = <Popover content={popoeverInner} position={Position.TOP} isOpen={true}>
-            <Switch className="my-turbo-switch"
-                    checked={turboMode}
-                    disabled={true}
-                    large={true}
-                    inline={true}
-                    innerLabel={t("Turbo")}
-                    >
-                0 {t("min")}
-            </Switch>
-        </Popover>;
-    } else {
-        turboSwitch =
-            <Switch className="my-turbo-switch" checked={turboMode}
-                large={true}
-                inline={true}
-                innerLabel={t("Turbo")}
-                onChange={() => setTurboMode(!turboMode)}>
-                {turboTime === null ? "" : timeInfo(turboTime) }
-             </Switch>;
-    }
-
     const keys = Object.keys(recentlyPlayed);
     keys.sort(recentlyPlayedSorterFn(recentlyPlayed));
 
@@ -218,12 +153,12 @@ export function My(props: { user: User | null }) {
         <AndroidPromo />
         <h1>{t("selected")}</h1>
         <div className="recently-played">
-            <GameThumb key={"selected-" + selectedData.canonicalUrl} onClick={runBundle} game={selectedData} selected={true} />
+            <GameThumb key={"selected-" + selectedData.canonicalUrl} onClick={() => runBundle(false)} game={selectedData} selected={true} />
             <div className="thumb-options">
                 <div>
-                    <Button icon={IconNames.PLAY} onClick={runBundle}>{t("play")}</Button>
-                    {turboSwitch}
+                    <Button icon={IconNames.PLAY} onClick={() => runBundle(false)}>{t("play")}</Button>
                     &nbsp;&nbsp;<Button minimal={true} onClick={remove} icon={IconNames.TRASH}></Button>
+                    { canTurbo ? <TurboOptions user={user} /> : null }
                 </div>
                 <br/><br/>
                 <div className="thumb-description">{description}</div>

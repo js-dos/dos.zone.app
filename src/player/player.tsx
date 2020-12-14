@@ -54,7 +54,7 @@ export function Player(props: IPlayerProps) {
     }
 
     const gameData = getCachedGameData(props.bundleUrl);
-    const turbo = gameData !== null && gameData.turbo === true;
+    const turbo = gameData !== null && (gameData.turbo === "optional" || gameData.turbo === "required");
 
     if (!isSuperUser(user) && newProps.turbo && !turbo) {
         newProps.turbo = false;

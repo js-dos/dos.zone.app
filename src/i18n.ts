@@ -7,7 +7,7 @@ const en = {
     subscriptions: {
         subscriptions: "Subscriptions",
         donate_title: "Developers donation",
-        donate_desc: "Subscribe to per-month donation for developer team of js-dos and DOS Zone",
+        donate_desc: "Subscribe to per-month donation for developer team of js-dos and DOS Zone. As a gift you will have +30 min on turbo time each day",
         turbo_2h_title: "Turbo 2 hours / day",
         turbo_2h_desc: "Subscribe and increase turbo time up to 2 hours per day",
         subscribe: "Subscribe",
@@ -59,10 +59,12 @@ This data can be suddenly wiped.<br/>
         selected: "Play",
         recently_played: "Others",
         play: "Play",
+        play_turbo: "Turbo",
         min: "min.",
         please_login_for_turbo_mode: "Please login to use turbo mode",
         no_time_for_turbo_mode: "No time for Turbo mode",
         settings: "settings",
+        region: "Region: ",
     },
     profile: {
         turbo: "Turbo",
@@ -235,7 +237,7 @@ const ru = {
     subscriptions: {
         subscriptions: "Подписки",
         donate_title: "Пожертвования разработчикам",
-        donate_desc: "Подпишитесь на ежемесечные пожертвования разрабочтикам js-dos и DOS Zone",
+        donate_desc: "Подпишитесь на ежемесечные пожертвования разрабочтикам js-dos и DOS Zone. Получи +30 минут к времени turbo в подарок",
         turbo_2h_title: "Turbo 2 часа / день",
         turbo_2h_desc: "Подпишитесь и увеличте время turbo до двух часов в день",
         subscribe: "Подписаться",
@@ -288,10 +290,12 @@ const ru = {
         selected: "Запустить",
         recently_played: "Другие",
         play: "Играть",
+        play_turbo: "Turbo",
         min: "мин.",
         please_login_for_turbo_mode: "Пожалуйста войдите что бы использовать Turbo режим",
         no_time_for_turbo_mode: "Доступное время закончилось",
         settings: "настройки",
+        region: "Регион: ",
     },
     profile: {
         turbo: "Turbo",

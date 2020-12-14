@@ -24,8 +24,13 @@ export async function getTurboSession(email: string, arn?: string, uptimeSec?: n
     const activeSubscriptions = await getActiveSubscriptions(email);
 
     let timeLimitSec = 30 * 60;
-    if (activeSubscriptions.indexOf("turbo_2h") >= 0) {
-        timeLimitSec = 2 * 60 * 60;
+
+    for (const next of activeSubscriptions) {
+        switch (next) {
+            case "turbo_2h": timeLimitSec += 2 * 60 * 60; break;
+            case "donate": timeLimitSec += 30 * 60; break;
+            default:
+        }
     }
 
     const response = await dynamoDb.get({

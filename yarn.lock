@@ -4740,10 +4740,10 @@ emulators-ui@^0.0.44:
   resolved "https://registry.yarnpkg.com/emulators-ui/-/emulators-ui-0.0.44.tgz#b7d37e70ced45996c1dfd02c0efe2dcf15f367ad"
   integrity sha512-Y9blLv9REB5nnT6KvU8g/AVx8saRsxPIoHvelhu4xLjG3DTJxtuklGxQvhanZoBwOsEP8ctSyOgfa6ho1VvhbQ==
 
-emulators@^0.0.38:
-  version "0.0.38"
-  resolved "https://registry.yarnpkg.com/emulators/-/emulators-0.0.38.tgz#6f52629e1ae03a43f534aa5869f9cbe62c54b567"
-  integrity sha512-04IItaMOok4TLqrEKKswh3Wb1zx398nchbp/1JSoTSmIMp+kY2TP9QY1KooRhOeOdAa78g3rTwzMYu+bTnNYeQ==
+emulators@^0.0.39:
+  version "0.0.39"
+  resolved "https://registry.yarnpkg.com/emulators/-/emulators-0.0.39.tgz#1eb51d0490d6ba09eab8192a3a2abdda3b2cb742"
+  integrity sha512-1fc75Vt3lDXC4RjtcafjU/iZp2JYzsSZY1PLXOr8fnefXwTk10OFCDDI+lKAfvRxAOvJGj4aKVV8LDl1v+lI2Q==
 
 encodeurl@~1.0.2:
   version "1.0.2"

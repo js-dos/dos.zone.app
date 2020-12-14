@@ -36,7 +36,7 @@ function App() {
     const [dos, setDosInsatnce] = useState<DosInstance | null>(null);
 
     const lang = i18n.language;
-    const queryParams = parseQuery(window.location.search);
+    const queryParams = () => parseQuery(window.location.search);
 
     useEffect(() => {
         refresh(user).then(setUser);
@@ -124,11 +124,11 @@ function GoogleAnalytics(props: { location: any }) {
 function PlayerWrapper(props: {
     user: User | null,
     embedded: boolean,
-    queryParams: QueryParams,
+    queryParams: () => QueryParams,
     onDosInstance: (dos: DosInstance | null) => void;
 }) {
     const { url } = useParams<{url: string}>();
-    const turbo = props.queryParams.turbo || "0";
+    const turbo = props.queryParams().turbo || "0";
     return <Player
                user={props.user}
                bundleUrl={decodeURIComponent(url)}

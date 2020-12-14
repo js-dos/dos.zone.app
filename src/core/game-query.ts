@@ -42,8 +42,8 @@ export async function getGameData(bundleUrl: string): Promise<GameData> {
             author: hash,
             screenshot: "",
             description: { en: { description }, },
-            turbo: false,
             canonicalUrl,
+            turbo: "no",
         }
     }
 
@@ -58,8 +58,8 @@ export async function getGameData(bundleUrl: string): Promise<GameData> {
         screenshot: "",
         author: "",
         description: {},
-        turbo: false,
         canonicalUrl: bundleUrl,
+        turbo: "no",
     };
 }
 
