@@ -65,6 +65,7 @@ This data can be suddenly wiped.<br/>
         no_time_for_turbo_mode: "No time for Turbo mode",
         settings: "settings",
         region: "Region: ",
+        more: "more",
     },
     profile: {
         turbo: "Turbo",
@@ -296,6 +297,7 @@ const ru = {
         no_time_for_turbo_mode: "Доступное время закончилось",
         settings: "настройки",
         region: "Регион: ",
+        more: "подробнее",
     },
     profile: {
         turbo: "Turbo",

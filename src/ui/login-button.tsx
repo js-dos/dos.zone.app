@@ -42,8 +42,10 @@ export function LoginButton(props: { user: User | null }) {
             <Button icon={IconNames.LOG_OUT} minimal={true} onClick={requestLogout}></Button>
         </div>;
         return <Popover content={controls} position={Position.BOTTOM}>
-            <div>
-                <img className="avatar" src={props.user.avatarUrl} alt="" />
+            <div className="pointer">
+                { props.user.avatarUrl !== undefined ?
+                  <img className="avatar" src={props.user.avatarUrl} alt="" /> :
+                  <Icon iconSize={16} icon={IconNames.USER} /> }
             </div>
         </Popover>;
     }

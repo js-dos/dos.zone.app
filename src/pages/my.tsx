@@ -10,6 +10,7 @@ import {
     Position,
     Classes,
     Icon,
+    AnchorButton,
 } from "@blueprintjs/core";
 
 import { getRecentlyPlayed, RecentlyPlayed, setRecentlyPlayed as updateRecentlyPlayed  } from "../core/storage/recently-played";
@@ -36,6 +37,7 @@ export function My(props: { user: User | null }) {
     const [gamesData, setGamesData] = useState<{[url: string]: Promise<GameData>}>({});
     const [selected, _setSelected] = useState<string | null>(null);
     const [selectedData, setSelectedData] = useState<GameData | null>(null);
+    const [fullDescription, setFullDescription] = useState<boolean>(false);
     const { t, i18n } = useTranslation("my");
     const { url } = useParams<{ url: string }>();
     const history = useHistory();
@@ -74,6 +76,7 @@ export function My(props: { user: User | null }) {
     }
 
     function updateSelectedData(selected: string, gamesData: {[url: string]: Promise<GameData>}) {
+        setFullDescription(false);
         if (selected === null || gamesData[selected] === undefined) {
             setSelectedData(null);
             return;
@@ -158,10 +161,16 @@ export function My(props: { user: User | null }) {
                 <div>
                     <Button icon={IconNames.PLAY} onClick={() => runBundle(false)}>{t("play")}</Button>
                     &nbsp;&nbsp;<Button minimal={true} onClick={remove} icon={IconNames.TRASH}></Button>
-                    { canTurbo ? <TurboOptions user={user} /> : null }
+                    { canTurbo ? <TurboOptions user={user} onClick={() => runBundle(true) } /> : null }
                 </div>
                 <br/><br/>
-                <div className="thumb-description">{description}</div>
+                <div className="thumb-description">
+    {
+        fullDescription || description.length < 300 ?
+                                                description :
+                                                <div>{description.substr(0, 300)}...&nbsp;&nbsp;<a onClick={() => setFullDescription(true) }>{t("more")}</a></div>
+    }
+                </div>
             </div>
         </div>
         <div className="one-row">

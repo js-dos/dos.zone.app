@@ -54,7 +54,7 @@ function App() {
             </Route>
             <Route exact path="/:lang/">
                 <Navigator user={user} />
-                <Landing />
+                <Landing user={user} />
             </Route>
             <Route path="/:lang/studio">
                 <Navigator user={user} />

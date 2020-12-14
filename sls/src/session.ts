@@ -49,9 +49,9 @@ export async function createSession() {
 }
 
 function updateSession(user: User,
-                              sso: string,
-                              sig: string,
-                              userAgent?: string) {
+                       sso: string,
+                       sig: string,
+                       userAgent?: string) {
     const params: AWS.DynamoDB.DocumentClient.UpdateItemInput = {
         TableName,
         Key: {
@@ -62,13 +62,16 @@ function updateSession(user: User,
             sso: { Action: "PUT", Value: sso },
             sig: { Action: "PUT", Value: sig },
             email: { Action: "PUT", Value: user.email },
-            avatarUrl: { Action: "PUT", Value: user.avatarUrl },
             username: { Action: "PUT", Value: user.username },
         },
     };
 
     if (userAgent !== undefined) {
         (params as any).AttributeUpdates.userAgent = { Action: "PUT", Value: userAgent };
+    }
+
+    if (user.avatarUrl !== undefined) {
+        (params as any).AttributeUpdates.avatarUrl = { Action: "PUT", Value: user.avatarUrl };
     }
 
     return dynamoDb.update(params).promise();

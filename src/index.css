@@ -147,6 +147,10 @@ body {
     cursor: pointer;
 }
 
+.pointer {
+    cursor: pointer;
+}
+
 .profile-head {
     display: flex;
     align-items: center;

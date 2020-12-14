@@ -20,7 +20,7 @@ import { Storage, storage } from "../../core/storage/storage";
 
 
 
-export function TurboOptions(props: { user: User | null }) {
+export function TurboOptions(props: { user: User | null, onClick: () => void }) {
     const { t, i18n } = useTranslation("my");
     const [turboTime, setTurboTime] = useState<number | null>(null);
     const [userStorage, setUserStorage] = useState<Storage | null>(null);
@@ -28,6 +28,7 @@ export function TurboOptions(props: { user: User | null }) {
     const [updating, setUpdating] = useState<boolean>(false);
 
     const user = props.user;
+    const onClick = props.onClick;
     const lang = i18n.language;
 
     useEffect(() => {
@@ -50,7 +51,7 @@ export function TurboOptions(props: { user: User | null }) {
 
     if (user === null) {
         return <div className="turbo-options turbo-border">
-            <Popover content={<div className="popover-inner-card">{t("please_login_for_turbo_mode")}</div>} position={Position.RIGHT} isOpen={true}>
+            <Popover content={<div className="popover-inner-card">{t("please_login_for_turbo_mode")}, <Link to={"/" + i18n.language + "/guide/features"}>{t("more")}</Link></div>} position={Position.BOTTOM} isOpen={true}>
                 <Button disabled={true}  icon={IconNames.FAST_FORWARD}>{t("play_turbo")}</Button>
             </Popover>
         </div>;
@@ -66,7 +67,7 @@ export function TurboOptions(props: { user: User | null }) {
     if (turboTime < 60) {
         const popoeverInner = <div className="popover-inner-card">{t("no_time_for_turbo_mode")}, <Link to={"/" + i18n.language + "/profile"}>{t("settings")}</Link></div>;
         return <div className="turbo-options turbo-border">
-            <Popover content={<div className="popover-inner-card">{popoeverInner}</div>} position={Position.RIGHT} isOpen={true}>
+            <Popover content={<div className="popover-inner-card">{popoeverInner}</div>} position={Position.BOTTOM} isOpen={true}>
                 <div>
                     <Button disabled={true}  icon={IconNames.FAST_FORWARD}>{t("play_turbo")}</Button>
                     &nbsp;&nbsp;{timeInfo(turboTime, t)}
@@ -91,7 +92,7 @@ export function TurboOptions(props: { user: User | null }) {
 
     return <div className="turbo-border">
         <div className="turbo-options">
-          <Button  icon={IconNames.FAST_FORWARD}>{t("play_turbo")}</Button>
+          <Button  icon={IconNames.FAST_FORWARD} onClick={onClick}>{t("play_turbo")}</Button>
           &nbsp;&nbsp;{timeInfo(turboTime, t)}&nbsp;&nbsp;
           <Link className={[Classes.BUTTON, Classes.MINIMAL].join(" ")}
               to={"/" + lang + "/profile"}>

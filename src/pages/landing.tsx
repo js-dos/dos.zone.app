@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
     Classes,
@@ -15,14 +15,27 @@ import { openRepository } from "../core/browser-tab";
 import { useHistory } from "react-router-dom";
 
 import { AndroidPromo } from "./components/android-promo";
+import { getRecentlyPlayed } from "../core/storage/recently-played";
+import { User } from "../core/auth";
 
 
-export function Landing() {
+export function Landing(props: { user: User | null }) {
     const { t, i18n } = useTranslation("landing");
     const dbGuide = useTranslation("guides").t("database", {lang: i18n.language});
     const [dbGuideOpened, setDbGuideOpened] = useState<boolean>(false);
     const showRecentlyPlayed = true;
     const history = useHistory();
+    const user = props.user;
+    const lang = i18n.language;
+
+
+    useEffect(() => {
+        getRecentlyPlayed(user).then((recentlyPlayed) => {
+            if (Object.keys(recentlyPlayed).length > 1) {
+                history.push("/" + lang + "/my");
+            }
+        });
+    }, [user]);
 
     return <div className={[Classes.RUNNING_TEXT, Classes.TEXT_LARGE].join(" ")}
                 style={{padding: "0 40px"}}>
