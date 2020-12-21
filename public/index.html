@@ -34,7 +34,7 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root" class="bp3-dark"></div>
     <script type="text/javascript" >
-     Janus.init({ debug: "all" });
+     Janus.init({ debug: ["warn", "error"] });
      emulators.pathPrefix = "%PUBLIC_URL%/emulators/";
      zip.workerScriptsPath = "%PUBLIC_URL%/3rdparty/zipjs/";
     </script>

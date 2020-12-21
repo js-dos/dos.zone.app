@@ -135,9 +135,13 @@ export function My(props: { user: User | null }) {
             recentlyPlayed[selected].visitedAtMs = Date.now();
             updateRecentlyPlayed(user, recentlyPlayed);
         }
-
-        const url = runUrl + "?turbo=" + (canTurbo && turboMode ? "1" : "0")
-        history.push(url);
+        const startTurbo = canTurbo && turboMode;
+        const url = runUrl + "?turbo=" + (startTurbo ? "1" : "0")
+        if (startTurbo && window.location.protocol === "https:") {
+            window.location.href = "http://dos.zone" + url;
+        } else {
+            history.push(url);
+        }
     }
 
     async function remove() {

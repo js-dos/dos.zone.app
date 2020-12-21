@@ -6,6 +6,7 @@ import { Capacitor } from "@capacitor/core";
 import { storage } from "./storage/storage";
 
 const userKey = "zone.dos.user";
+const userCookie = userKey.replaceAll(".", "_");
 
 export interface User {
     avatarUrl: string,
@@ -30,8 +31,21 @@ export async function requestLogin() {
 }
 
 export function getCachedUser(): User | null {
-    const cachedValue: string | null = localStorage.getItem(userKey);
-    return cachedValue === null ? null : JSON.parse(cachedValue);
+    // read cookie first
+    for (const next of document.cookie.split("; ")) {
+        if (next.startsWith(userCookie + "=")) {
+            const cookieValue = next.substr((userCookie + "=").length);
+            if (cookieValue.length === 0) {
+                return null;
+            } else {
+                return JSON.parse(atob(cookieValue));
+            }
+        }
+    }
+
+    // give chance to ls
+    const cachedValue = localStorage.getItem(userKey);
+    return cachedValue === null || cachedValue === undefined ? null : JSON.parse(cachedValue);
 }
 
 export async function refresh(user: User | null): Promise<User | null> {
@@ -42,12 +56,15 @@ export async function refresh(user: User | null): Promise<User | null> {
     if (user !== null) {
         const cachedUser = getCachedUser();
         const shouldUpdateDefaults = cachedUser === null || cachedUser.email !== user.email;
-        localStorage.setItem(userKey, JSON.stringify(user));
+        const stringified = JSON.stringify(user);
+        localStorage.setItem(userKey, stringified);
+        document.cookie = userCookie + "=" + btoa(stringified) + ";path=/;max-age=2592000";
         if (shouldUpdateDefaults) {
             initDefaults(user);
         }
     } else {
         localStorage.removeItem(userKey);
+        document.cookie = userCookie + "=;path=/";
     }
 
     return user;
@@ -92,6 +109,7 @@ export async function requestLogout() {
                 "&sig=" + user.sig);
             if (payload.success) {
                 localStorage.removeItem(userKey);
+                document.cookie = userCookie + "=;path=/";
                 window.location.reload();
             }
         } catch (e) {

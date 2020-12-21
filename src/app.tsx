@@ -39,7 +39,31 @@ function App() {
     const queryParams = () => parseQuery(window.location.search);
 
     useEffect(() => {
-        refresh(user).then(setUser);
+        let cancel = false;
+        refresh(user).then((newUser) => {
+            if (cancel) {
+                return;
+            }
+
+            if (user === null || newUser === null) {
+                if (user !== newUser) {
+                    setUser(newUser);
+                }
+            } else if (user.sso !== newUser.sso ||
+                       user.sig !== newUser.sig ||
+                       user.email !== newUser.email ||
+                       user.nonce !== newUser.nonce ||
+                       user.avatarUrl !== newUser.avatarUrl ||
+                       user.username !== newUser.username) {
+                setUser(newUser);
+            } else {
+                // do nothing
+            }
+        });
+
+        return () => {
+            cancel = true;
+        };
         //  eslint-disable-next-line
     }, []);
 

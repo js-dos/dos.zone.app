@@ -13,7 +13,7 @@ import "@blueprintjs/core/lib/css/blueprint.css"
 
 
 const fullUrl = window.location.href;
-if (fullUrl.startsWith("https://")) {
+if (fullUrl.startsWith("https://") && fullUrl.indexOf("?turbo=1") > 0) {
     const newUrl = "http://" + fullUrl.substr("https://".length);
     window.location.href = newUrl;
 } else {
