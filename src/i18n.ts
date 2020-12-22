@@ -56,6 +56,7 @@ This data can be suddenly wiped.<br/>
 `
     },
     my: {
+        browse_database: "Browse database",
         selected: "Play",
         recently_played: "Others",
         play: "Play",
@@ -127,7 +128,7 @@ The process of bundle creation is simple:
 
 Our database is structured like forum, every game have own page, where game can be discussed. All js-dos bundles attached to game page.
 
-To play game in browser just [find game](https://talks.dos.zone/c/rep/11) page and press on js-dos bundle. Feel free to [add](/{{lang}}/studio) new version of game in our database.
+To play game in browser just [find game](https://talks.dos.zone/t/collections/44653) page and press on js-dos bundle. Feel free to [add](/{{lang}}/studio) new version of game in our database.
 
 You can [query](https://talks.dos.zone/c/rep/11) list of all games that have js-dos bundles.
 
@@ -137,6 +138,7 @@ Our database is community drived. Database sources is [here](https://github.com/
 `,
     },
     landing: {
+        about_db: "Read more about database",
         quick_tour: "Quick tour",
         my_favorite: "Favorites",
         header_1: `
@@ -146,7 +148,7 @@ DOS.Zone - is an <span style="color: #DB3737; font-size: larger;">**interactive*
 
 ## Do you want to play your favorite game?
 
-Just use search tools on our [database](#) to find page of game. Then run game directly in browser or discuss it with other people.
+Just use search tools on our database to find page of game. Then run game directly in browser or discuss it with other people.
 `,
         header_2: `
 
@@ -288,6 +290,7 @@ const ru = {
 `
     },
     my: {
+        browse_database: "Поиск в базе",
         selected: "Запустить",
         recently_played: "Другие",
         play: "Играть",
@@ -359,7 +362,7 @@ Dos.Zone предоставляет минимальну функциональ�
 
 Наша база данных построена на основе форума, каждая игра имеет свою страницу для обсуждения. js-dos архивы так же прикреплены к странице игры.
 
-Что бы запустить игру в браузере [найдите](https://talks.dos.zone/c/rep/11) её страницу и запуститье js-dos архив. Вы можете [добавить](/{{lang}}/studio) новую версию игры и помочь сообществу.
+Что бы запустить игру в браузере [найдите](https://talks.dos.zone/t/collections/44653) её страницу и запуститье js-dos архив. Вы можете [добавить](/{{lang}}/studio) новую версию игры и помочь сообществу.
 
 [Список](https://talks.dos.zone/c/rep/11) всех игр для которых есть js-dos архив.
 
@@ -369,6 +372,7 @@ Dos.Zone предоставляет минимальну функциональ�
 `,
     },
     landing: {
+        about_db: "Подробнее о базе данных",
         quick_tour: "Краткий обзор",
         my_favorite: "Избранное",
         header_1: `
@@ -378,7 +382,7 @@ DOS.Zone - это управляемая сообществом <span style="col
 
 ## Хотите поиграть в свою любимую игру?
 
-Воспользуйтесь инструментами поиска [базы данных](#), и найдите страничку вашей любимой игры. Запустите игру прямо в браузере или обсудите её с другими фанатами.
+Воспользуйтесь инструментами поиска базы данных, и найдите страничку вашей любимой игры. Запустите игру прямо в браузере или обсудите её с другими фанатами.
 
 `,
         header_2: `

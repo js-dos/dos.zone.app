@@ -1,7 +1,7 @@
 import { Plugins } from "@capacitor/core";
 const { Browser } = Plugins;
 
-const repositoryUrl = "https://talks.dos.zone/c/rep/11";
+const repositoryUrl = "https://talks.dos.zone/t/collections/44653";
 Browser.prefetch({ urls: [repositoryUrl] });
 
 export function openRepository() {

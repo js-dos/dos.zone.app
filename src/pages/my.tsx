@@ -203,7 +203,7 @@ export function My(props: { user: User | null }) {
         </div>
         <div className="one-row">
             <h1>{t("recently_played")}</h1>
-            <Button onClick={() => openRepository()} icon={IconNames.SEARCH} intent={Intent.PRIMARY}></Button>
+            <Button large={true} onClick={() => openRepository()} icon={IconNames.SEARCH} intent={Intent.NONE}>{t("browse_database")}</Button>
         </div>
         <div className="recently-played">{
             keys.map((a) => <GameThumb onClick={() => setSelected(a)} gamePromise={gamesData[a]} key={"all-" + a} selected={false} />)
