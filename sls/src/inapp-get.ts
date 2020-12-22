@@ -1,4 +1,4 @@
-import { Handler } from 'aws-lambda';
+import { Handler } from "aws-lambda";
 
 import { badRequest, noSession, success } from "./responses";
 import { validateUser } from "./session";

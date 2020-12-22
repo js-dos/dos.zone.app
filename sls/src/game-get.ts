@@ -1,9 +1,9 @@
-import { Handler } from 'aws-lambda';
+import { Handler } from "aws-lambda";
 import * as AWS from "aws-sdk";
 
-import { getKey } from './storage';
-import { badRequest, noSession, success, error } from './responses';
-import { validateUser } from './session';
+import { getKey } from "./storage";
+import { badRequest, noSession, success, error } from "./responses";
+import { validateUser } from "./session";
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 const TableName = process.env.GAME_DATA_TABLE as string;

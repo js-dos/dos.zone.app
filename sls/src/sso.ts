@@ -13,7 +13,7 @@ export interface User {
 
 export function makeUrl(nonce: string, backUrl: string) {
     const payload = "nonce=" + nonce + "&return_sso_url=" + backUrl;
-    const sso = new Buffer(payload, "utf-8").toString('base64');
+    const sso = new Buffer(payload, "utf-8").toString("base64");
     const signature = calculateSig(sso);
     return "https://talks.dos.zone/session/sso_provider?sso=" + encodeURI(sso) + "&sig=" + signature;
 }
@@ -41,15 +41,15 @@ export function decodeUser(sso: string, sig: string): User | null {
 }
 
 function calculateSig(sso: string) {
-    return crypto.createHmac('sha256', SECRET).update(sso).digest("hex");
+    return crypto.createHmac("sha256", SECRET).update(sso).digest("hex");
 }
 
 function parseQuery(queryString: string) {
-    var query: {[key: string]: string} = {};
-    var pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
-    for (var i = 0; i < pairs.length; i++) {
-        var pair = pairs[i].split('=');
-        query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+    let query: {[key: string]: string} = {};
+    let pairs = (queryString[0] === "?" ? queryString.substr(1) : queryString).split("&");
+    for (let i = 0; i < pairs.length; i++) {
+        let pair = pairs[i].split("=");
+        query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || "");
     }
     return query;
 }

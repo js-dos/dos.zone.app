@@ -65,6 +65,10 @@ export async function POST_OBJECT(url: string, data: string): Promise<any> {
     throw new Error("POST Request failed:\n Payload:\n" + JSON.stringify(response.body, null, 2));
 }
 
+export function GET_TEXT(url: string): Promise<string> {
+    return _GET(url, "text") as Promise<string>;
+}
+
 export function GET_BUFFER(url: string,
                            onprogress?: (progress: number) => void): Promise<ArrayBuffer> {
     return _GET(url, "arraybuffer", onprogress) as Promise<ArrayBuffer>;

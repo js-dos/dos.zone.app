@@ -23,7 +23,7 @@ function initStorePlugin(plugins: any) {
         return undefined;
     }
 
-    store.validator = 'https://validator.fovea.cc/v1/validate?appName=zone.dos.app&apiKey=53f36d2b-7bcf-419a-80c2-9eaedc180afe';
+    store.validator = "https://validator.fovea.cc/v1/validate?appName=zone.dos.app&apiKey=53f36d2b-7bcf-419a-80c2-9eaedc180afe";
 
     return store;
 }
@@ -60,10 +60,10 @@ async function subscribeToUpdates(store: IapStore.IStore | null,
 
     store.applicationUsername = user.email;
     store.register([{
-        id:    'donate',
+        id:    "donate",
         type:   store.PAID_SUBSCRIPTION,
     }, {
-        id:    'turbo_2h',
+        id:    "turbo_2h",
         type:   store.PAID_SUBSCRIPTION,
     }]);
 
@@ -155,13 +155,13 @@ export function Subscriptions(props: { user: User | null }) {
         <Card interactive={true} elevation={Elevation.TWO}>
             <h3>{t("turbo_2h_title")}</h3>
             <p>{t("turbo_2h_desc")}</p>
-            <Actions state={subscriptionsState["turbo_2h"]} store={store || null} id="turbo_2h" />
+            <Actions state={subscriptionsState.turbo_2h} store={store || null} id="turbo_2h" />
         </Card>
         <br/>
         <Card interactive={true} elevation={Elevation.TWO}>
             <h3>{t("donate_title")}</h3>
             <p>{t("donate_desc")}</p>
-            <Actions state={subscriptionsState["donate"]} store={store || null} id="donate" />
+            <Actions state={subscriptionsState.donate} store={store || null} id="donate" />
         </Card>
         <br/>
     </div>;
@@ -197,7 +197,7 @@ function Actions(props: { state: State, store: IapStore.IStore | null, id: strin
 }
 
 
-async function getInapp(user: User): Promise<Array<"donate" | "turbo_2h">> {
+async function getInapp(user: User): Promise<("donate" | "turbo_2h")[]> {
     try {
         return (await GET_OBJECT(inappGet + "?sso=" + user.sso + "&sig=" + user.sig)).active;
     } catch (e) {

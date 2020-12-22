@@ -472,11 +472,17 @@ const resources = {
 }
 
 const supportedLanguages = ["en", "ru", "fr", "de", "es", "zh"];
+const detectionOrder = ["path", "querystring", "cookie", "localStorage", "navigator", "htmlTag", "subdomain"];
 
 class ShortLanguageDetector extends LanguageDetector {
-    detect(detectionOrder?: any): string | undefined {
-        let lang = super.detect(detectionOrder) || "en";
+    detect(order?: any): string | undefined {
+        let lang = super.detect(order) || "en";
         lang = lang.split("-")[0];
+
+        if (lang === "rep") {
+            lang = super.detect([...detectionOrder].slice(1)) || "en";
+            lang = lang.split("-")[0];
+        }
 
         if (lang === "rep" || supportedLanguages.indexOf(lang) === -1) {
             lang = "en";
@@ -491,7 +497,7 @@ i18n
     .use(initReactI18next)
     .init({
         detection: {
-            order: ["path", "querystring", "cookie", "localStorage", "navigator", "htmlTag", "subdomain"],
+            order: detectionOrder,
         },
         resources,
         fallbackLng: "en",

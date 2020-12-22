@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
     Spinner,
     Intent,
     Button,
-    Switch,
-    Popover,
-    Position,
-    Classes,
-    Icon,
-    AnchorButton,
 } from "@blueprintjs/core";
 
 import { getRecentlyPlayed, RecentlyPlayed, setRecentlyPlayed as updateRecentlyPlayed  } from "../core/storage/recently-played";
@@ -26,11 +20,12 @@ import { getTurboSession } from "../core/turbo";
 import { Capacitor } from "@capacitor/core";
 import { AndroidPromo } from "./components/android-promo";
 import { TurboOptions } from "./components/turbo-options";
+import { GET_BUFFER, GET_TEXT } from "../core/xhr/GET";
 
-const isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
+const isSafari = navigator.vendor && navigator.vendor.indexOf("Apple") > -1 &&
                  navigator.userAgent &&
-                 navigator.userAgent.indexOf('CriOS') == -1 &&
-                 navigator.userAgent.indexOf('FxiOS') == -1;
+                 navigator.userAgent.indexOf("CriOS") == -1 &&
+                 navigator.userAgent.indexOf("FxiOS") == -1;
 
 export function My(props: { user: User | null }) {
     const [recentlyPlayed, _setRecentlyPlayed] = useState<RecentlyPlayed | null>(null);
@@ -39,7 +34,7 @@ export function My(props: { user: User | null }) {
     const [selectedData, setSelectedData] = useState<GameData | null>(null);
     const [fullDescription, setFullDescription] = useState<boolean>(false);
     const { t, i18n } = useTranslation("my");
-    const { url } = useParams<{ url: string }>();
+    const { url, listUrl } = useParams<{ url?: string, listUrl?: string }>();
     const history = useHistory();
     const user = props.user;
 
@@ -104,20 +99,49 @@ export function My(props: { user: User | null }) {
     }
 
     useEffect(() => {
+        let cancel = false;
         setRecentlyPlayed(null); // reset state
-
         getRecentlyPlayed(user).then((recentlyPlayed) => {
+            if (cancel) {
+                return;
+            }
+
             if (url !== undefined && url !== null && url.length > 0) {
                 const decodedUrl = decodeURIComponent(url);
                 recentlyPlayed[decodedUrl] = {
                     visitedAtMs: Date.now(),
                 }
                 updateRecentlyPlayed(user, recentlyPlayed);
-            }
+                setRecentlyPlayed(recentlyPlayed);
+            } else if (listUrl !== undefined && listUrl !== null && listUrl.length > 0) {
+                GET_TEXT(decodeURIComponent(listUrl)).then((listContent) => {
+                    if (cancel) {
+                        return;
+                    }
 
-            setRecentlyPlayed(recentlyPlayed);
+                    for (const next of listContent.split("\n")) {
+                        const fullUrl = (next.split(" ")[1] || "").trim();
+                        const myIndex = fullUrl.indexOf("/my/");
+                        if (myIndex > 0) {
+                            const url = decodeURIComponent(fullUrl.substr(myIndex + "/my/".length));
+                            recentlyPlayed[url] = {
+                                visitedAtMs: Date.now(),
+                            }
+                        }
+                    }
+
+                    updateRecentlyPlayed(user, recentlyPlayed);
+                    setRecentlyPlayed(recentlyPlayed);
+                })
+            } else {
+                setRecentlyPlayed(recentlyPlayed);
+            }
         });
-    }, [user, url]);
+
+        return () => {
+            cancel = true;
+        }
+    }, [user, url, listUrl]);
 
     if (recentlyPlayed === null || selected === null || selectedData === null) {
         return <div>

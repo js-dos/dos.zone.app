@@ -92,7 +92,7 @@ function App() {
                 <Navigator user={user} />
                 <FeaturesGuide />
             </Route>
-            <Route path={["/:lang/my/:url", "/:lang/my"]}>
+            <Route path={["/:lang/my/list/:listUrl", "/:lang/my/:url", "/:lang/my"]}>
                 <Navigator user={user} />
                 <My user={user} />
             </Route>

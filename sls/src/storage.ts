@@ -23,7 +23,7 @@ export function putKey(email: string, key: string, value: string) {
     const params: AWS.DynamoDB.DocumentClient.UpdateItemInput = {
         TableName,
         Key: {
-            email, key, 
+            email, key,
         },
         AttributeUpdates: {
             value: { Action: "PUT", Value: value }
