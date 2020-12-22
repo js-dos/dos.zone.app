@@ -20,7 +20,10 @@ import { renderers } from "../core/renderers";
 
 import { requestLogin, requestLogout, User } from "../core/auth";
 
-export function LoginButton(props: { user: User | null }) {
+export function LoginButton(props: {
+    user: User | null,
+    resetUser: () => void,
+}) {
     const { t, i18n } = useTranslation("login");
     const lang = i18n.language;
     const [busy, setBusy] = useState<boolean>(false);
@@ -39,7 +42,11 @@ export function LoginButton(props: { user: User | null }) {
                   to={"/" + lang + "/profile"}>
                 <Icon icon={IconNames.COG} iconSize={16} />
             </Link>
-            <Button icon={IconNames.LOG_OUT} minimal={true} onClick={requestLogout}></Button>
+            <Button
+                icon={IconNames.LOG_OUT}
+                minimal={true}
+                onClick={() => requestLogout(props.resetUser) }>
+            </Button>
         </div>;
         return <Popover content={controls} position={Position.BOTTOM}>
             <div className="pointer">

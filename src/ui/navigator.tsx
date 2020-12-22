@@ -22,7 +22,10 @@ export function goBack(history: any, lang: string) {
     }
 }
 
-export function Navigator(props: { user: User | null }) {
+export function Navigator(props: {
+    user: User | null,
+    resetUser: () => void,
+}) {
     const { t, i18n } = useTranslation("navigator");
     const lang = i18n.language;
 

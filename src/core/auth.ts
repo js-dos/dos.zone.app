@@ -101,7 +101,7 @@ async function validateUser(user: User): Promise<User | null> {
     }
 }
 
-export async function requestLogout() {
+export async function requestLogout(resetUser: () => void) {
     const user = getCachedUser();
     if (user !== null) {
         try {
@@ -110,7 +110,7 @@ export async function requestLogout() {
             if (payload.success) {
                 localStorage.removeItem(userKey);
                 document.cookie = userCookie + "=;path=/";
-                window.location.reload();
+                resetUser();
             }
         } catch (e) {
             logError(e);

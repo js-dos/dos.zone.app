@@ -44,7 +44,7 @@ export function Landing(props: { user: User | null }) {
         <ReactMardown renderers={renderers}
                       source={t("header_1", {lang: i18n.language})}
                       escapeHtml={false}></ReactMardown>
-        <div style={{display: "flex", alignItems: "center"}}>
+        <div style={{display: "flex", flexWrap: "wrap", alignItems: "center"}}>
             {showRecentlyPlayed ?
              <Button large={true}
                      style={{marginRight: "10px", marginBottom: "10px"}}

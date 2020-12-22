@@ -13,11 +13,15 @@ import { Spinner } from "@blueprintjs/core";
 import { parseQuery } from "./query-string";
 import { authenticate, User } from "./auth";
 
-export function Deeplink(props: { user: User | null }) {
+export function Deeplink(props: {
+    setUser: (user: User | null) => void,
+}) {
     const { lang, url } = useParams<{ lang: string, url: string }>();
     const [ decodedUrl, setDecodedUrl ] = useState<string | null>(null);
+    const setUser = props.setUser;
 
     useEffect(() => {
+        let cancel = false;
         const decoded = atob(url);
         const queryIndex = decoded.indexOf("?");
         const queryParams = queryIndex > 0 ? parseQuery(decoded.substr(queryIndex)) : {};
@@ -27,18 +31,21 @@ export function Deeplink(props: { user: User | null }) {
 
         if (sso && sig) {
             authenticate(sso, sig).then((user) => {
-                const backUrl = decoded.substr(0, queryIndex);
-                const pathname = backUrl.substr(backUrl.indexOf("/", "https://".length + 1));
-                if (window.location.pathname === pathname) {
-                    window.location.reload();
-                } else {
-                    window.location.pathname = pathname;
+                if (cancel) {
+                    return;
                 }
+
+                setUser(user);
+                setDecodedUrl("/");
             });
         } else {
             setDecodedUrl(decoded);
         }
-    }, [url]);
+
+        return () => {
+            cancel = true;
+        }
+    }, [url, setUser]);
 
 
     if (decodedUrl === null) {

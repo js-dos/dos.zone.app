@@ -67,6 +67,10 @@ function App() {
         //  eslint-disable-next-line
     }, []);
 
+    function resetUser() {
+        setUser(null);
+    }
+
     return <Router>
         <Route path={["/:lang/play/:url", "/:lang/player/:url", "/"]} render={({location}) => {
             return <GoogleAnalytics location={location} />;
@@ -77,27 +81,27 @@ function App() {
                 <Redirect to={"/" + lang} />
             </Route>
             <Route exact path="/:lang/">
-                <Navigator user={user} />
+                <Navigator user={user} resetUser={resetUser} />
                 <Landing user={user} />
             </Route>
             <Route path="/:lang/studio">
-                <Navigator user={user} />
+                <Navigator user={user} resetUser={resetUser} />
                 <GameStudio />
             </Route>
             <Route path="/:lang/guide/studio">
-                <Navigator user={user} />
+                <Navigator user={user} resetUser={resetUser} />
                 <GameStudioGuide />
             </Route>
             <Route path="/:lang/guide/features">
-                <Navigator user={user} />
+                <Navigator user={user} resetUser={resetUser} />
                 <FeaturesGuide />
             </Route>
             <Route path={["/:lang/my/list/:listUrl", "/:lang/my/:url", "/:lang/my"]}>
-                <Navigator user={user} />
+                <Navigator user={user} resetUser={resetUser} />
                 <My user={user} />
             </Route>
             <Route path={["/:lang/profile"]}>
-                <Navigator user={user} />
+                <Navigator user={user} resetUser={resetUser} />
                 <Profile user={user} />
             </Route>
             <Route path="/:lang/play/:url">
@@ -112,7 +116,7 @@ function App() {
                 <PlayerWrapper user={user} embedded={true} queryParams={queryParams} onDosInstance={setDosInsatnce} />
             </Route>
             <Route path="/:lang/dl/:url">
-                <Deeplink user={user} />
+                <Deeplink setUser={setUser} />
             </Route>
         </Switch>
     </Router>;
