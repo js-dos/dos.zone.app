@@ -74,8 +74,7 @@ export function TurboPlayer(props: IPlayerProps) {
     }
 
     const playerProps: IPlayerProps = {...props};
-    playerProps.sourceBundleUrl = props.bundleUrl;
-    playerProps.bundleUrl = "http://" + publicIp + ":8088/janus";
+    playerProps.janusServerUrl =  "http://" + publicIp + ":8088/janus";
     return <DosPlayer {...playerProps} />;
 }
 

@@ -1,21 +1,18 @@
-import { GET_OBJECT } from "./xhr/GET";
-import { User } from "./auth"
-import { personalUrl } from "./config";
-import { logError } from "./log";
+import { HEAD } from "./xhr/GET";
+import { uploadsPersonalBase, uploadsS3Url} from "./config";
 
-export interface TurboSession {
-    email: string;
-    timeLimit: number;
-    restTime: number;
-    arn?: string;
-}
 
-export async function getPersonalBundleUrl(user: User, bundleUrl: string): Promise<string | null> {
+export async function getPersonalBundleUrl(email: string, bundleUrl: string): Promise<string> {
+    const index = bundleUrl.lastIndexOf("/");
+    const basename = bundleUrl.substr(index + 1);
+    const personalBundleKey = uploadsPersonalBase + "/" + email + "/" + basename;
+    const personalBundleUrl = uploadsS3Url + "/" + personalBundleKey;
+
     try {
-        return (await GET_OBJECT(personalUrl + "?sso=" + user.sso + "&sig=" + user.sig + "&bundleUrl=" + bundleUrl)).personalBundleUrl;
-    } catch(e) {
-        logError(e);
-        return null;
+        await HEAD(personalBundleUrl);
+        return personalBundleUrl;
+    } catch (e) {
+        return bundleUrl;
     }
 }
 

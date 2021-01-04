@@ -1,4 +1,4 @@
-function _SEND(method: "get" | "post",
+function _SEND(method: "get" | "post" | "head",
                url: string,
                responseType: XMLHttpRequestResponseType,
                body?: string,
@@ -9,7 +9,9 @@ function _SEND(method: "get" | "post",
         request.open(method, url, true);
 
         request.addEventListener("load", () => {
-            if (responseType === "text") {
+            if (request.status !== 200) {
+                reject("Wrong status code " + request.status);
+            } else if (responseType === "text") {
                 resolve(request.responseText);
             } else if (responseType === "arraybuffer") {
                 resolve(request.response);
@@ -72,4 +74,8 @@ export function GET_TEXT(url: string): Promise<string> {
 export function GET_BUFFER(url: string,
                            onprogress?: (progress: number) => void): Promise<ArrayBuffer> {
     return _GET(url, "arraybuffer", onprogress) as Promise<ArrayBuffer>;
+}
+
+export function HEAD(url: string) {
+    return _SEND("head", url, "text");
 }

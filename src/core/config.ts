@@ -1,3 +1,6 @@
+export const uploadsS3Url = "https://doszone-uploads.s3.dualstack.eu-central-1.amazonaws.com";
+export const uploadsPersonalBase = "personal";
+
 const endpointBase = "https://mjaoyuabnd.execute-api.eu-central-1.amazonaws.com/dev";
 
 export const ssoUrl = endpointBase + "/sso/url";
@@ -8,8 +11,6 @@ export const turboLimits = endpointBase + "/turbo/limits";
 export const turboConnect = endpointBase + "/turbo/connect";
 export const turboDisconnect = endpointBase + "/turbo/disconnect";
 export const turboDescribe = endpointBase + "/turbo/describe";
-
-export const personalUrl = endpointBase + "/personal/url";
 
 export const storageGet = endpointBase + "/storage/get";
 export const storagePut = endpointBase + "/storage/put";

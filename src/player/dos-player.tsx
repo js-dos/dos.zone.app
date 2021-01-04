@@ -6,6 +6,7 @@ import { CommandInterface } from "emulators";
 import { dhry2Bundle } from "../core/storage/recently-played";
 
 import { IPlayerProps } from "./player";
+import { getPersonalBundleUrl } from "../core/personal";
 
 declare const Dos: DosFactoryType;
 
@@ -26,11 +27,13 @@ export function DosPlayer(props: IPlayerProps) {
         const preventListener = (e: any) => {
             e.preventDefault();
         };
+
         window.addEventListener("keydown", preventListener);
 
         const instance = Dos(root, {
             emulatorFunction: props.turbo ? "janus" : "dosWorker",
         });
+
         setDos(instance);
 
         return () => {
@@ -44,15 +47,40 @@ export function DosPlayer(props: IPlayerProps) {
             return;
         }
 
-        if (props.bundleUrl === undefined) {
+        let cancel = false;
+        function setCiIfNeeded(ci: CommandInterface) {
+            if (cancel) {
+                return;
+            }
+
+            setCi(ci);
+        }
+
+        if (props.turbo && props.janusServerUrl !== undefined) {
+            dos.run(props.janusServerUrl).then(setCiIfNeeded);
+        } else if (props.user === null && props.bundleUrl !== undefined) {
+            dos.run(props.bundleUrl).then(setCiIfNeeded);
+        } else if (props.user !== null && props.bundleUrl !== undefined) {
+            getPersonalBundleUrl(props.user.email, props.bundleUrl).then((personalUrl) => {
+                if (cancel) {
+                    return;
+                }
+
+                dos.run(personalUrl).then(setCiIfNeeded);
+            })
+        } else {
             dos.stop();
             setCi(null);
-        } else {
-            dos.run(props.bundleUrl).then(setCi);
         }
-    }, [dos, props.bundleUrl, props.embedded]);
+
+        return () => {
+            cancel = true;
+            dos.stop();
+            setCi(null);
+        }
+    }, [dos, props.turbo, props.bundleUrl, props.embedded]);
 
     return <div ref={rootRef} className="player">
-        { ci === null || (props.sourceBundleUrl || props.bundleUrl || "").indexOf(dhry2Bundle) < 0 ? null : <Dhry2 ci={ci} /> }
+        { ci === null || (props.bundleUrl || "").indexOf(dhry2Bundle) < 0 ? null : <Dhry2 ci={ci} /> }
     </div>;
 }
