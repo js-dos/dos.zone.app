@@ -90,22 +90,28 @@ export function TurboOptions(props: { user: User | null, onClick: () => void }) 
         }
     };
 
-    return <div className="turbo-border">
-        <div className="turbo-options">
-          <Button  icon={IconNames.FAST_FORWARD} onClick={onClick}>{t("play_turbo")}</Button>
-          &nbsp;&nbsp;{timeInfo(turboTime, t)}&nbsp;&nbsp;
+    return <div>
+        <div className="turbo-border">
+            <div className="turbo-options">
+                <Button  icon={IconNames.FAST_FORWARD} onClick={onClick}>{t("play_turbo")}</Button>
+                &nbsp;&nbsp;{timeInfo(turboTime, t)}&nbsp;&nbsp;
           <Link className={[Classes.BUTTON, Classes.MINIMAL].join(" ")}
               to={"/" + lang + "/profile"}>
             <Icon icon={IconNames.COG} iconSize={16} />
           </Link>
+            </div>
+            <div className="my-region-selector">{t("region")}&nbsp;
+                <HTMLSelect minimal={true}
+                            options={[{label: "Europe", value: "eu-central-1"}, {label: "N. America", value: "us-east-1"}]}
+                            onChange={onChangeRegion}
+                            disabled={updating}
+                            value={ region === null ? undefined : region } />
+          &nbsp;{ updating ? <Spinner  className="spinner-inline" size={12} /> : null }
+            </div>
         </div>
-        <div className="my-region-selector">{t("region")}&nbsp;
-            <HTMLSelect minimal={true}
-                        options={["eu-central-1", "us-east-1"]}
-                        onChange={onChangeRegion}
-                        disabled={updating}
-                        value={ region === null ? undefined : region } />
-                &nbsp;{ updating ? <Spinner  className="spinner-inline" size={12} /> : null }
+
+        <div className="sup-text">
+            <sup>*</sup>&nbsp;{t("streaming_service")}
         </div>
     </div>;
 }

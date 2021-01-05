@@ -5,6 +5,7 @@ import {
     Spinner,
     Intent,
     Button,
+    ButtonGroup
 } from "@blueprintjs/core";
 
 import { getRecentlyPlayed, RecentlyPlayed, setRecentlyPlayed as updateRecentlyPlayed  } from "../core/storage/recently-played";
@@ -21,6 +22,7 @@ import { Capacitor } from "@capacitor/core";
 import { AndroidPromo } from "./components/android-promo";
 import { TurboOptions } from "./components/turbo-options";
 import { GET_BUFFER, GET_TEXT } from "../core/xhr/GET";
+import { getPersonalBundleUrl } from "../core/personal";
 
 const isSafari = navigator.vendor && navigator.vendor.indexOf("Apple") > -1 &&
                  navigator.userAgent &&
@@ -177,6 +179,14 @@ export function My(props: { user: User | null }) {
         }
     }
 
+    async function downloadArchive() {
+        if (user === null || selectedData === null) {
+            return;
+        }
+        const url = await getPersonalBundleUrl(user.email, selectedData.canonicalUrl);
+        window.open(url, "blank");
+    }
+
     const keys = Object.keys(recentlyPlayed);
     keys.sort(recentlyPlayedSorterFn(recentlyPlayed));
 
@@ -187,8 +197,11 @@ export function My(props: { user: User | null }) {
             <GameThumb key={"selected-" + selectedData.canonicalUrl} onClick={() => runBundle(false)} game={selectedData} selected={true} />
             <div className="thumb-options">
                 <div>
-                    <Button icon={IconNames.PLAY} onClick={() => runBundle(false)}>{t("play")}</Button>
-                    &nbsp;&nbsp;<Button minimal={true} onClick={remove} icon={IconNames.TRASH}></Button>
+                    <ButtonGroup>
+                        <Button icon={IconNames.PLAY} intent={Intent.PRIMARY} onClick={() => runBundle(false)}>{t("play")}</Button>
+                        { user !== null ? <Button icon={IconNames.ARCHIVE} onClick={downloadArchive}></Button> : null }
+                        <Button onClick={remove} icon={IconNames.TRASH}></Button>
+                    </ButtonGroup>
                     { canTurbo ? <TurboOptions user={user} onClick={() => runBundle(true) } /> : null }
                 </div>
                 <br/><br/>

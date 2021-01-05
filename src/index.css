@@ -284,3 +284,9 @@ body {
     margin-left: 8px;
     margin-top: 8px;
 }
+
+.sup-text {
+    font-size: 10px;
+    color: gray;
+    margin-left: 10px;
+}

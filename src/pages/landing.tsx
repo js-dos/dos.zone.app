@@ -15,26 +15,39 @@ import { openRepository } from "../core/browser-tab";
 import { useHistory } from "react-router-dom";
 
 import { AndroidPromo } from "./components/android-promo";
-import { getRecentlyPlayed } from "../core/storage/recently-played";
+import { getRecentlyPlayed, setRecentlyPlayed } from "../core/storage/recently-played";
 import { User } from "../core/auth";
 
+let redirected = false;
 
 export function Landing(props: { user: User | null }) {
     const { t, i18n } = useTranslation("landing");
     const dbGuide = useTranslation("guides").t("database", {lang: i18n.language});
     const [dbGuideOpened, setDbGuideOpened] = useState<boolean>(false);
-    const showRecentlyPlayed = false;//true;
+    const [showRecentlyPlayed, setShowRecentlyPlayed] = useState<boolean>(false);
     const history = useHistory();
     const user = props.user;
     const lang = i18n.language;
 
-
     useEffect(() => {
+        let cancle = false;
         getRecentlyPlayed(user).then((recentlyPlayed) => {
+            if (cancle) {
+                return;
+            }
+
             if (Object.keys(recentlyPlayed).length > 1) {
-                history.push("/" + lang + "/my");
+                if (redirected) {
+                    setShowRecentlyPlayed(true);
+                } else {
+                    history.push("/" + lang + "/my");
+                    redirected = true;
+                }
             }
         });
+        return () => {
+            cancle = true;
+        }
     }, [user]);
 
     return <div className={[Classes.RUNNING_TEXT, Classes.TEXT_LARGE].join(" ")}
