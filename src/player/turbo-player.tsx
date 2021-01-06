@@ -32,33 +32,51 @@ export function TurboPlayer(props: IPlayerProps) {
     }, [user, arn]);
 
     useEffect(() => {
+        let cancel = false;
+
         if (user === null) {
             return;
         }
 
+        if (arn !== null) {
+            closeTurboSession(user, arn);
+        }
+
         openTurboSession(user, bundle).then(async (newArn) => {
             if (newArn === null) {
+                goBack(history, i18n.language);
+            } else if (cancel) {
+                closeTurboSession(user, newArn);
                 goBack(history, i18n.language);
             } else {
                 setArn(newArn);
                 let countDown = initialCountDown;
                 const countDownId = setInterval(() => {
                     countDown--;
-                    setCountDown(countDown);
+                    if (!cancel) {
+                        setCountDown(countDown);
+                    }
                     if (countDown === 0) {
                         clearInterval(countDownId);
                     }
                 }, 1000);
-                try {
-                    setPublicIp(await getPublicIp(user, newArn));
+
+                getPublicIp(user, newArn).then((ip) => {
                     clearInterval(countDownId);
-                } catch(e) {
+                    if (cancel) {
+                        return;
+                    }
+                    setPublicIp(ip);
+                }).catch((e) => {
+                    clearInterval(countDownId);
                     logError(e);
-                    goBack(history, i18n.language);
-                    clearInterval(countDownId);
-                }
+                });
             }
-        })
+        });
+
+        return () => {
+            cancel = true;
+        }
     }, [user, bundle]);
 
     if (user === null) {

@@ -5,6 +5,7 @@ import {
     Popover,
     Position,
     Button,
+    ButtonGroup,
     Spinner,
     Classes,
     Icon,
@@ -93,12 +94,13 @@ export function TurboOptions(props: { user: User | null, onClick: () => void }) 
     return <div>
         <div className="turbo-border">
             <div className="turbo-options">
+                <ButtonGroup>
                 <Button  icon={IconNames.FAST_FORWARD} onClick={onClick}>{t("play_turbo")}</Button>
-                &nbsp;&nbsp;{timeInfo(turboTime, t)}&nbsp;&nbsp;
-          <Link className={[Classes.BUTTON, Classes.MINIMAL].join(" ")}
-              to={"/" + lang + "/profile"}>
+          <Link className={Classes.BUTTON} to={"/" + lang + "/profile"}>
             <Icon icon={IconNames.COG} iconSize={16} />
           </Link>
+    </ButtonGroup>
+          &nbsp;&nbsp;{timeInfo(turboTime, t)}&nbsp;&nbsp;
             </div>
             <div className="my-region-selector">{t("region")}&nbsp;
                 <HTMLSelect minimal={true}
