@@ -1,16 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
-import { useHistory } from "react-router-dom";
-import { Loader } from "./loader";
 
 import { User, isSuperUser } from "../core/auth";
 import { DosPlayer } from "./dos-player";
 import { TurboPlayer } from "./turbo-player";
-import { getPersonalBundleUrl } from "../core/personal";
-
-import { goBack } from "../ui/navigator";
 import { getCachedGameData } from "../core/game-query";
-
 import { DosInstance } from "emulators-ui/dist/types/js-dos";
 
 export interface IPlayerProps {

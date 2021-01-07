@@ -57,7 +57,10 @@ export function DosPlayer(props: IPlayerProps) {
         }
 
         if (props.turbo && props.janusServerUrl !== undefined) {
-            dos.run(props.janusServerUrl).then(setCiIfNeeded);
+            dos.run(props.janusServerUrl).then((ci) => {
+                setCiIfNeeded(ci);
+                dos.layers.setOnSave(() => Promise.resolve());
+            });
         } else if (props.user === null && props.bundleUrl !== undefined) {
             dos.run(props.bundleUrl).then(setCiIfNeeded);
         } else if (props.user !== null && props.bundleUrl !== undefined) {
@@ -66,7 +69,12 @@ export function DosPlayer(props: IPlayerProps) {
                     return;
                 }
 
-                dos.run(personalUrl).then(setCiIfNeeded);
+                dos.run(personalUrl).then((ci) => {
+                    setCiIfNeeded(ci);
+                    dos.layers.setOnSave(() => {
+                        return Promise.reject(new Error("Not implemented"));
+                    });
+                });
             })
         } else {
             dos.stop();
@@ -78,7 +86,7 @@ export function DosPlayer(props: IPlayerProps) {
             dos.stop();
             setCi(null);
         }
-    }, [dos, props.turbo, props.bundleUrl, props.embedded]);
+    }, [dos, props.user, props.turbo, props.bundleUrl, props.embedded]);
 
     return <div ref={rootRef} className="player">
         { ci === null || (props.bundleUrl || "").indexOf(dhry2Bundle) < 0 ? null : <Dhry2 ci={ci} /> }

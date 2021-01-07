@@ -43,6 +43,7 @@ const en = {
         buttons: "Buttons",
         joysticks: "Joysticks",
         mapper: "Mapper",
+        games: "Games",
     },
     login: {
         please: "Please",
@@ -277,6 +278,7 @@ const ru = {
         buttons: "Кнопки",
         joysticks: "Джойстики",
         mapper: "Маппер",
+        games: "Игры",
     },
     login: {
         please: "Пожалуйста",

@@ -267,7 +267,6 @@ body {
 .turbo-options {
     display: flex;
     flex-direction: row;
-    margin-top: 16px;
     align-items: center;
 }
 
@@ -288,5 +287,6 @@ body {
 .sup-text {
     font-size: 10px;
     color: gray;
-    margin-left: 10px;
+    margin-top: 16px;
+    margin-bottom: 4px;
 }

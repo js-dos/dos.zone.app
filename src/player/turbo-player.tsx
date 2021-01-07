@@ -3,7 +3,6 @@ import { Redirect, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { IPlayerProps } from "./player";
 import { openTurboSession, describeSession, closeTurboSession } from "../core/turbo";
-import { goBack } from "../ui/navigator";
 
 import { User } from "../core/auth";
 
@@ -12,6 +11,10 @@ import { Loader } from "./loader";
 import { logError } from "../core/log";
 
 const initialCountDown = 50;
+
+function goBack(history: any, lang: string) {
+    history.replace("/" + lang + "/my");
+}
 
 export function TurboPlayer(props: IPlayerProps) {
     const { t, i18n } = useTranslation("turbo");

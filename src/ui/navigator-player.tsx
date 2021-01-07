@@ -6,10 +6,8 @@ import { Navbar, Alignment, Button, Intent, Overlay, Classes, Card } from "@blue
 import { IconNames } from "@blueprintjs/icons";
 
 import { useTranslation } from "react-i18next";
-import { goBack } from "./navigator";
 import { DosInstance } from "emulators-ui/dist/types/js-dos";
 import { Capacitor } from "@capacitor/core";
-import { Layers } from "emulators-ui/dist/types/dom/layers";
 import { Button as ButtonType } from "emulators-ui/dist/types/controls/button";
 import { LayersType } from "../pages/layers";
 import { EmulatorsUi } from "emulators-ui";
@@ -78,7 +76,7 @@ export function NavigatorPlayer(props: { dos: DosInstance | null }) {
             <Navbar.Group align={Alignment.LEFT}>
                 <Navbar.Heading>
                     <Button icon={IconNames.ARROW_LEFT} minimal={true}
-                          onClick={() => goBack(history, lang)}>DOS.Zone</Button>
+                          onClick={() => history.replace("/" + lang + "/my")}>{t("games")}</Button>
                 </Navbar.Heading>
             </Navbar.Group>
             <Navbar.Group align={Alignment.RIGHT}>

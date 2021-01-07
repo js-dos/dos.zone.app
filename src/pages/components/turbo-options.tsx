@@ -51,29 +51,44 @@ export function TurboOptions(props: { user: User | null, onClick: () => void }) 
     }, [userStorage, user]);
 
     if (user === null) {
-        return <div className="turbo-options turbo-border">
-            <Popover content={<div className="popover-inner-card">{t("please_login_for_turbo_mode")}, <Link to={"/" + i18n.language + "/guide/features"}>{t("more")}</Link></div>} position={Position.BOTTOM} isOpen={true}>
-                <Button disabled={true}  icon={IconNames.FAST_FORWARD}>{t("play_turbo")}</Button>
-            </Popover>
+        return <div>
+            <div className="sup-text">
+                {t("streaming_service")}
+            </div>
+            <div className="turbo-options turbo-border">
+                <Popover content={<div className="popover-inner-card">{t("please_login_for_turbo_mode")}, <Link to={"/" + i18n.language + "/guide/features"}>{t("more")}</Link></div>} position={Position.BOTTOM} isOpen={true}>
+                    <Button disabled={true}  icon={IconNames.FAST_FORWARD}>{t("play_turbo")}</Button>
+                </Popover>
+            </div>
         </div>;
     }
 
     if (turboTime === null) {
-        return <div className="turbo-options turbo-border">
-            <Button disabled={true}  icon={IconNames.FAST_FORWARD}>{t("play_turbo")}</Button>
-            &nbsp;&nbsp;<Spinner size={16} />
+        return <div>
+            <div className="sup-text">
+                {t("streaming_service")}
+            </div>
+            <div className="turbo-options turbo-border">
+                <Button disabled={true}  icon={IconNames.FAST_FORWARD}>{t("play_turbo")}</Button>
+              &nbsp;&nbsp;<Spinner size={16} />
+            </div>
         </div>;
     }
 
     if (turboTime < 60) {
         const popoeverInner = <div className="popover-inner-card">{t("no_time_for_turbo_mode")}, <Link to={"/" + i18n.language + "/profile"}>{t("settings")}</Link></div>;
-        return <div className="turbo-options turbo-border">
+        return <div>
+            <div className="sup-text">
+                {t("streaming_service")}
+            </div>
+            <div className="turbo-options turbo-border">
             <Popover content={<div className="popover-inner-card">{popoeverInner}</div>} position={Position.BOTTOM} isOpen={true}>
                 <div>
                     <Button disabled={true}  icon={IconNames.FAST_FORWARD}>{t("play_turbo")}</Button>
                     &nbsp;&nbsp;{timeInfo(turboTime, t)}
                 </div>
             </Popover>
+            </div>
         </div>;
     }
 
@@ -92,6 +107,9 @@ export function TurboOptions(props: { user: User | null, onClick: () => void }) 
     };
 
     return <div>
+        <div className="sup-text">
+            {t("streaming_service")}
+        </div>
         <div className="turbo-border">
             <div className="turbo-options">
                 <ButtonGroup>
@@ -110,10 +128,6 @@ export function TurboOptions(props: { user: User | null, onClick: () => void }) 
                             value={ region === null ? undefined : region } />
           &nbsp;{ updating ? <Spinner  className="spinner-inline" size={12} /> : null }
             </div>
-        </div>
-
-        <div className="sup-text">
-            <sup>*</sup>&nbsp;{t("streaming_service")}
         </div>
     </div>;
 }
