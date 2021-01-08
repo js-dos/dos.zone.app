@@ -1,8 +1,9 @@
-function _SEND(method: "get" | "post" | "head",
-               url: string,
-               responseType: XMLHttpRequestResponseType,
-               body?: string,
-               onprogress?: (progress: number) => void): Promise<string | ArrayBuffer> {
+export function SEND(method: "get" | "post" | "head" | "put",
+                     url: string,
+                     responseType: XMLHttpRequestResponseType,
+                     body?: string | ArrayBuffer,
+                     onprogress?: (progress: number) => void,
+                     headers?: {[name: string]: string}): Promise<string | ArrayBuffer> {
     return new Promise<string>((resolve, reject) => {
         const request = new XMLHttpRequest();
         request.responseType = responseType;
@@ -32,6 +33,16 @@ function _SEND(method: "get" | "post" | "head",
             }
         };
 
+        if (headers !== undefined) {
+            for (const key of Object.keys(headers)) {
+                request.setRequestHeader(key, headers[key]);
+            }
+        }
+
+        //if (body !== undefined && typeof body !== "string") {
+        //    request.overrideMimeType("application/octet-stream");
+        //}
+
         request.send(body);
     });
 }
@@ -39,13 +50,13 @@ function _SEND(method: "get" | "post" | "head",
 function _GET(url: string,
               responseType: XMLHttpRequestResponseType,
               onprogress?: (progress: number) => void): Promise<string | ArrayBuffer> {
-    return _SEND("get", url, responseType, undefined, onprogress);
+    return SEND("get", url, responseType, undefined, onprogress);
 }
 
-function _POST(url: string,
+export function _POST(url: string,
                responseType: XMLHttpRequestResponseType,
-               data: string): Promise<string | ArrayBuffer> {
-    return _SEND("post", url, responseType, data);
+               data?: string | ArrayBuffer): Promise<string | ArrayBuffer> {
+    return SEND("post", url, responseType, data);
 }
 
 export async function GET_OBJECT(url: string,
@@ -58,7 +69,7 @@ export async function GET_OBJECT(url: string,
     throw new Error("GET Request failed:\n Payload:\n" + JSON.stringify(response.body, null, 2));
 }
 
-export async function POST_OBJECT(url: string, data: string): Promise<any> {
+export async function POST_OBJECT(url: string, data?: string | ArrayBuffer): Promise<any> {
     const response = JSON.parse(await (_POST(url, "text", data) as Promise<string>));
     if (response.success) {
         return response;
@@ -77,5 +88,5 @@ export function GET_BUFFER(url: string,
 }
 
 export function HEAD(url: string) {
-    return _SEND("head", url, "text");
+    return SEND("head", url, "text");
 }

@@ -15,6 +15,7 @@ provider:
     SUBSCRIPTIONS_TABLE: "dzsubscriptions"
     GAME_DATA_TABLE: "dzgamedata"
     RUN_INSTANCE: "jjs-runInstance"
+    PUT_CURL: "jjs-putCurl"
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -35,6 +36,7 @@ provider:
         - lambda:InvokeFunction
       Resource:
         - "arn:aws:lambda:${opt:region, self:provider.region}:*:function:${self:provider.environment.RUN_INSTANCE}"
+        - "arn:aws:lambda:${opt:region, self:provider.region}:*:function:${self:provider.environment.PUT_CURL}"
     - Effect: Allow
       Action:
         - s3:ListBucket
@@ -86,6 +88,22 @@ functions:
     events:
       - http:
           path: /storage/put
+          method: post
+          cors: true
+  personalPut:
+    handler: src/personal-put.personalPut
+    name: doszone-sls-personalPut
+    events:
+      - http:
+          path: /personal/put
+          method: post
+          cors: true
+  personalAcl:
+    handler: src/personal-acl.personalAcl
+    name: doszone-sls-personalAcl
+    events:
+      - http:
+          path: /personal/acl
           method: post
           cors: true
   gameGet:

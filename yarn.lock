@@ -3907,10 +3907,10 @@ copy-descriptor@^0.1.0:
   resolved "https://registry.yarnpkg.com/copy-descriptor/-/copy-descriptor-0.1.1.tgz#676f6eb3c39997c2ee1ac3a924fd6124748f578d"
   integrity sha1-Z29us8OZl8LuGsOpJP1hJHSPV40=
 
-cordova-plugin-purchase@^10.5.0:
-  version "10.5.0"
-  resolved "https://registry.yarnpkg.com/cordova-plugin-purchase/-/cordova-plugin-purchase-10.5.0.tgz#1ce705fc1fc2792a42dbc38922ea57f51434039d"
-  integrity sha512-MHapUNvWUYSZR4wMdr9C/d9y0T5/Xdu+A4kot/kNy9a1BEqwdaUie7agl7b9ktZr67E/WbxTf7ha9hpMgDI26g==
+cordova-plugin-purchase@^10.5.1:
+  version "10.5.1"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-purchase/-/cordova-plugin-purchase-10.5.1.tgz#ac704ffe384a1f686ecc32c4035ef7374546419e"
+  integrity sha512-tCIvVOm+LQ21xjToZkGj6gguVesSF+L9IG7FEB3t9FUKhhkTJNyFZ7TO2r924hCWtJhJ4Qq32McSeTubgFDghg==
 
 cordova-plugin-screen-orientation@^3.0.2:
   version "3.0.2"

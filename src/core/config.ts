@@ -17,3 +17,6 @@ export const storagePut = endpointBase + "/storage/put";
 
 export const gameGet = endpointBase + "/game/get";
 export const inappGet = endpointBase + "/inapp/get";
+
+export const perosnalPut = endpointBase + "/personal/put";
+export const personalAcl = endpointBase + "/personal/acl";

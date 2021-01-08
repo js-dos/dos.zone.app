@@ -6,7 +6,8 @@ import { CommandInterface } from "emulators";
 import { dhry2Bundle } from "../core/storage/recently-played";
 
 import { IPlayerProps } from "./player";
-import { getPersonalBundleUrl } from "../core/personal";
+import { getPersonalBundleUrl, putPresonalBundle } from "../core/personal";
+import { User } from "../core/auth";
 
 declare const Dos: DosFactoryType;
 
@@ -72,7 +73,9 @@ export function DosPlayer(props: IPlayerProps) {
                 dos.run(personalUrl).then((ci) => {
                     setCiIfNeeded(ci);
                     dos.layers.setOnSave(() => {
-                        return Promise.reject(new Error("Not implemented"));
+                        return ci.persist().then((data) => {
+                            return putPresonalBundle(props.user as User, data, props.bundleUrl);
+                        })
                     });
                 });
             })
