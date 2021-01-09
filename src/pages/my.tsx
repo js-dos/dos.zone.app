@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
     Spinner,
     Intent,
     Button,
-    ButtonGroup
+    ButtonGroup,
+    Classes
 } from "@blueprintjs/core";
 
 import { getRecentlyPlayed, RecentlyPlayed, setRecentlyPlayed as updateRecentlyPlayed  } from "../core/storage/recently-played";
@@ -190,6 +191,19 @@ export function My(props: { user: User | null }) {
     const keys = Object.keys(recentlyPlayed);
     keys.sort(recentlyPlayedSorterFn(recentlyPlayed));
 
+    const slug = selectedData.slug[i18n.language] || selectedData.slug["en"];
+    function openSlug() {
+        window.open("https://talks.dos.zone/t/" + slug, "_blank");
+    }
+
+    function openBuild() {
+        if (selectedData === null) {
+            return;
+        }
+
+        history.push("/" + i18n.language + "/studio/" + encodeURIComponent(selectedData.canonicalUrl));
+    }
+
     return <div className="left-margin">
         <AndroidPromo />
         <h1>{t("selected")}</h1>
@@ -199,7 +213,9 @@ export function My(props: { user: User | null }) {
                 <div>
                     <ButtonGroup>
                         <Button icon={IconNames.PLAY} intent={Intent.PRIMARY} onClick={() => runBundle(false)}>{t("play")}</Button>
+                        { slug !== undefined && slug.length > 0 ? <Button onClick={openSlug} icon={IconNames.COMMENT}></Button> : null }
                         { user !== null ? <Button icon={IconNames.ARCHIVE} onClick={downloadArchive}></Button> : null }
+                        <Button onClick={openBuild} icon={IconNames.BUILD}></Button>
                         <Button onClick={remove} icon={IconNames.TRASH}></Button>
                     </ButtonGroup>
                     { canTurbo ? <TurboOptions user={user} onClick={() => runBundle(true) } /> : null }

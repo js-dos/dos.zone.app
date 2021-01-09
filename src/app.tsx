@@ -84,7 +84,7 @@ function App() {
                 <Navigator user={user} resetUser={resetUser} />
                 <Landing user={user} />
             </Route>
-            <Route path="/:lang/studio">
+            <Route path={["/:lang/studio/:url", "/:lang/studio"]}>
                 <Navigator user={user} resetUser={resetUser} />
                 <GameStudio />
             </Route>

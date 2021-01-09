@@ -10,6 +10,7 @@ export interface GameData {
     description: {[locale: string]: {
         description: string,
     }},
+    slug: {[locale: string]: string},
     turbo: "optional" | "required" | "no",
     canonicalUrl: string,
 }

@@ -32,7 +32,9 @@ async function getGameData(url: string) {
     }
 
     response.Item.description = {} as {[locale: string]: string};
+    response.Item.slug = {} as {[locale: string]: string};
     const keys = Object.keys(response.Item);
+
     for (const next of keys) {
         if (!next.startsWith("description") || next === "description") {
             continue;
@@ -41,6 +43,15 @@ async function getGameData(url: string) {
         response.Item.description[locale] = {
             description: response.Item[next],
         }
+        delete response.Item[next];
+    }
+
+    for (const next of keys) {
+        if (!next.startsWith("slug") || next === "slug") {
+            continue;
+        }
+        const [x, locale] = next.split("-");
+        response.Item.slug[locale] = response.Item[next];
         delete response.Item[next];
     }
 

@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 
 import { useTranslation } from "react-i18next";
 import {
     H1, H2, Classes, FileInput, Intent, Spinner,
-    Tree, ITreeNode, Button, AnchorButton
+    Tree, ITreeNode, Button, AnchorButton, ButtonGroup
 } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 
@@ -19,10 +19,13 @@ import ReactMardown from "react-markdown/with-html";
 import { renderers } from "../core/renderers";
 
 import { Player } from "../player/player";
+import { GET_BUFFER } from "../core/xhr/GET";
+import { getCachedGameData } from "../core/game-query";
 
 declare const emulators: Emulators;
 
 interface State {
+    slug?: string,
     name?: string,
     zip?: Uint8Array,
     executables?: string[],
@@ -40,58 +43,122 @@ interface StepProps {
     restart: () => void;
 }
 
-const steps = [
-    (props: StepProps) => {
-        const {t, nextStep} = props;
-        const [error, setError] = useState<string>("");
-        const [loadProgress, setLoadProgress] = useState<number>(0);
-        const [reader, setReader] = useState<FileReader|null>(null);
 
-        function onInputChange(e: any) {
-            const files = e.currentTarget.files as FileList;
-            if (files.length === 0) {
+function InitFromFileStep(props: StepProps) {
+    const {t, nextStep} = props;
+    const [error, setError] = useState<string>("");
+    const [loadProgress, setLoadProgress] = useState<number>(0);
+    const [reader, setReader] = useState<FileReader|null>(null);
+
+    function onInputChange(e: any) {
+        const files = e.currentTarget.files as FileList;
+        if (files.length === 0) {
+            setReader(null);
+            return;
+        }
+
+        setError("");
+
+        const file = files[0];
+        const reader = new FileReader();
+        reader.addEventListener("load", async (e) => {
+            const zip = new Uint8Array(reader.result as ArrayBuffer);
+            const blob = new Blob([zip]);
+            setLoadProgress(100);
+
+            try {
+                const jsdosZipData = await ZipExecutables(blob);
+                const name = file.name.substr(0, file.name.lastIndexOf("."));
+                nextStep({
+                    name,
+                    zip,
+                    executables: jsdosZipData.executables,
+                    config: jsdosZipData.config,
+                });
+            } catch (e) {
+                setError(t("zip_error") + e);
                 setReader(null);
+                setLoadProgress(0);
+            }
+        });
+        reader.addEventListener("progress", (e) => setLoadProgress(e.loaded / e.total));
+        reader.readAsArrayBuffer(file);
+        setReader(reader);
+    }
+
+    return <div>
+        <p>{t("upload")}&nbsp;
+            <span style={{color: "#D9822B", fontWeight: "bold", borderBottom: "2px solid #DB3737"}}>ZIP</span>&nbsp;or&nbsp;
+    <span style={{color: "#D9822B", fontWeight: "bold", borderBottom: "2px solid #DB3737"}}>JsDos</span>&nbsp;{t("archive")} ({t("try")} <a href="https://caiiiycuk.github.io/dosify/digger.zip">digger.zip</a>)</p>
+    <div style={{display: "flex"}}><FileInput disabled={reader !== null} text={t("choose_file")} onInputChange={onInputChange} />&nbsp;&nbsp;<Spinner size={16} intent={Intent.PRIMARY} value={loadProgress} /></div>
+    <p><span style={{color: "#DB3737", display: (error.length === 0 ? "none" : "block") }}>*&nbsp;{error}</span></p>
+    </div>;
+};
+
+function initFromUrl(url: string) {
+    return function InitFromUrlSteps(props: StepProps) {
+        const [error, setError] = useState<string>("");
+
+        useEffect(() => {
+            if (url === undefined) {
                 return;
             }
 
-            setError("");
+            let cancel = false;
+            GET_BUFFER(url)
+                .then(async (data) => {
+                    if (cancel) {
+                        return;
+                    }
 
-            const file = files[0];
-            const reader = new FileReader();
-            reader.addEventListener("load", async (e) => {
-                const zip = new Uint8Array(reader.result as ArrayBuffer);
-                const blob = new Blob([zip]);
-                setLoadProgress(100);
+                    const zip = new Uint8Array(data);
+                    const blob = new Blob([zip]);
+                    try {
+                        const jsdosZipData = await ZipExecutables(blob);
+                        if (cancel) {
+                            return;
+                        }
 
-                try {
-                    const jsdosZipData = await ZipExecutables(blob);
-                    const name = file.name.substr(0, file.name.lastIndexOf("."));
-                    nextStep({
-                        name,
-                        zip,
-                        executables: jsdosZipData.executables,
-                        config: jsdosZipData.config,
-                    });
-                } catch (e) {
-                    setError(t("zip_error") + e);
-                    setReader(null);
-                    setLoadProgress(0);
-                }
-            });
-            reader.addEventListener("progress", (e) => setLoadProgress(e.loaded / e.total));
-            reader.readAsArrayBuffer(file);
-            setReader(reader);
+                        const gameData = getCachedGameData(url);
+                        const slug = gameData?.slug[props.lang] || gameData?.slug["en"];
+                        props.nextStep({
+                            name: slug,
+                            slug,
+                            zip,
+                            executables: jsdosZipData.executables,
+                            config: jsdosZipData.config,
+                        });
+                    } catch (e) {
+                        setError(props.t("zip_error") + e);
+                    }
+                })
+                .catch((e) => {
+                    if (cancel) {
+                        return;
+                    }
+
+                    setError(e);
+                });
+
+            return () => {
+                cancel = true;
+            }
+        }, []);
+
+        if (error.length > 0) {
+            return <div>
+                <p><span style={{color: "#DB3737", display: (error.length === 0 ? "none" : "block") }}>*&nbsp;{error}</span></p>
+            </div>;
         }
 
         return <div>
-            <p>{t("upload")}&nbsp;
-                <span style={{color: "#D9822B", fontWeight: "bold", borderBottom: "2px solid #DB3737"}}>ZIP</span>&nbsp;or&nbsp;
-                <span style={{color: "#D9822B", fontWeight: "bold", borderBottom: "2px solid #DB3737"}}>JsDos</span>&nbsp;{t("archive")} ({t("try")} <a href="https://caiiiycuk.github.io/dosify/digger.zip">digger.zip</a>)</p>
-            <div style={{display: "flex"}}><FileInput disabled={reader !== null} text={t("choose_file")} onInputChange={onInputChange} />&nbsp;&nbsp;<Spinner size={16} intent={Intent.PRIMARY} value={loadProgress} /></div>
-            <p><span style={{color: "#DB3737", display: (error.length === 0 ? "none" : "block") }}>*&nbsp;{error}</span></p>
+            {props.t("loading")}
+            <div style={{display: "flex", marginTop: "12px"}}><Spinner/></div>
         </div>;
-    },
+    }
+}
 
+const commonSteps = [
     (props: StepProps) => {
         const {t, state, nextStep} = props;
         const [executable, setExecutable] = useState<string | null>(null);
@@ -252,6 +319,16 @@ const steps = [
             }
         }
 
+        function openTopic() {
+            if (state.slug === undefined) {
+                return;
+            }
+
+            window.open("https://talks.dos.zone/t/" + state.slug, "_target");
+        }
+
+        console.log(state);
+
         return <div>
             <div style={{
                 position: "relative",
@@ -262,9 +339,12 @@ const steps = [
                 <Player bundleUrl={bundleUrl as string} user={null} embedded={true} turbo={false} />
             </div>
             <br/>
-            <Button onClick={back}>{t("back")}</Button>&nbsp;
-            <Button onClick={onDownload} intent={Intent.PRIMARY}>{t("download")}</Button>&nbsp;
-            <Button onClick={onStopStart} intent={Intent.WARNING}>{bundleUrl ? t("stop") : t("start")}</Button>
+            <ButtonGroup>
+            <Button onClick={back} icon={IconNames.ARROW_LEFT}>{t("back")}</Button>
+            <Button onClick={onDownload} icon={IconNames.ARCHIVE} intent={Intent.PRIMARY}>{t("download")}</Button>
+            { state.slug !== undefined ? <Button onClick={openTopic} icon={IconNames.COMMENT} intent={Intent.NONE}>{t("open_topic")}</Button> : null }
+            <Button onClick={onStopStart} icon={IconNames.STOP} intent={Intent.WARNING}>{bundleUrl ? t("stop") : t("start")}</Button>
+            </ButtonGroup>
             <br/><br/>
             <ReactMardown renderers={renderers}
                           source={t("help", {lang: props.lang, game: state.name})}
@@ -275,6 +355,7 @@ const steps = [
 
 export function GameStudio() {
     const { t, i18n } = useTranslation("studio");
+    const { url } = useParams<{ url?: string }>();
     const [step, setStep] = useState<number>(1);
     const [state, setState] = useState<State>({});
 
@@ -284,7 +365,7 @@ export function GameStudio() {
         state,
         nextStep: (state: State) => {
             setState(state);
-            setStep(step + 1);
+            setStep(step + (state.config !== undefined && step == 1 ? 2 : 1));
         },
         back: () => {
             setStep(step - 1);
@@ -295,6 +376,9 @@ export function GameStudio() {
         },
     };
 
+    const steps = url === undefined ?
+                  [InitFromFileStep, ...commonSteps] :
+                  [initFromUrl(decodeURIComponent(url)), ...commonSteps];
     const stepComponent = React.createElement(steps[step - 1], props);
 
     return <div className={Classes.TEXT_LARGE}
