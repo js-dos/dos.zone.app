@@ -215,7 +215,7 @@ export function My(props: { user: User | null }) {
                         <Button icon={IconNames.PLAY} intent={Intent.PRIMARY} onClick={() => runBundle(false)}>{t("play")}</Button>
                         { slug !== undefined && slug.length > 0 ? <Button onClick={openSlug} icon={IconNames.COMMENT}></Button> : null }
                         { user !== null ? <Button icon={IconNames.ARCHIVE} onClick={downloadArchive}></Button> : null }
-                        <Button onClick={openBuild} icon={IconNames.BUILD}></Button>
+                        <Button onClick={openBuild} icon={IconNames.FORK}></Button>
                         <Button onClick={remove} icon={IconNames.TRASH}></Button>
                     </ButtonGroup>
                     { canTurbo ? <TurboOptions user={user} onClick={() => runBundle(true) } /> : null }
