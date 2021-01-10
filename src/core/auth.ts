@@ -6,7 +6,7 @@ import { Capacitor } from "@capacitor/core";
 import { storage } from "./storage/storage";
 
 const userKey = "zone.dos.user";
-const userCookie = userKey.replaceAll(".", "_");
+const userCookie = userKey.replace(/\./g, "_");
 
 export interface User {
     avatarUrl: string,
