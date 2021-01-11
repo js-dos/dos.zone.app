@@ -37,12 +37,12 @@ export async function getGameData(bundleUrl: string): Promise<GameData> {
         const canonicalUrl = decodeHashToUrl(hash);
         const description = "Source: https://talks.dos.zone/t/" + slug;
         return (await getGameDataByUrl(canonicalUrl)) || {
-            title: "from uploads",
-            game: name,
+            title: name,
+            game: slug.charAt(0).toUpperCase() + slug.substr(1),
             author: hash,
             screenshot: "",
             description: { en: { description }, },
-            slug: {},
+            slug: { en: slug },
             canonicalUrl,
             turbo: "no",
         }

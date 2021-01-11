@@ -8,7 +8,7 @@ import {
 } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 
-import { ZipExecutables } from "../core/zip-explorer";
+import { JsDosZipData, ZipExecutables } from "../core/zip-explorer";
 import { TFunction } from "i18next";
 import { Emulators } from "emulators";
 
@@ -43,6 +43,27 @@ interface StepProps {
     restart: () => void;
 }
 
+async function restoreConfig(jsdosZipData: JsDosZipData): Promise<DosConfig | undefined> {
+    if (jsdosZipData.config !== undefined) {
+        return jsdosZipData.config;
+    }
+
+    if (jsdosZipData.dosboxConf !== undefined && jsdosZipData.dosboxConf.length > 0) {
+        const content = jsdosZipData.dosboxConf.split("\n");
+        const index = content.indexOf("type jsdos~1/readme.txt");
+        if (index < 0 || index + 3 >= content.length) {
+            return undefined;
+        }
+
+        const dosBundle = await emulators.dosBundle();
+        const config = dosBundle.config;
+        config.autoexec.options.script.value = content[index + 3];
+        return config;
+    }
+
+    return undefined;
+}
+
 
 function InitFromFileStep(props: StepProps) {
     const {t, nextStep} = props;
@@ -73,7 +94,7 @@ function InitFromFileStep(props: StepProps) {
                     name,
                     zip,
                     executables: jsdosZipData.executables,
-                    config: jsdosZipData.config,
+                    config: await restoreConfig(jsdosZipData),
                 });
             } catch (e) {
                 setError(t("zip_error") + e);
@@ -126,7 +147,7 @@ function initFromUrl(url: string) {
                             slug,
                             zip,
                             executables: jsdosZipData.executables,
-                            config: jsdosZipData.config,
+                            config: await restoreConfig(jsdosZipData),
                         });
                     } catch (e) {
                         setError(props.t("zip_error") + e);

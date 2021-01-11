@@ -1505,7 +1505,7 @@ function jsdos_warn(tag,message){ Module.log("[dosbox-warn ]", UTF8ToString(tag)
 function now(){ return performance.now(); }
 function syncSleep(){ if (!Module.sync_sleep) { throw new Error("Async environment does not exists"); return; } return Asyncify.handleSleep(function(wakeUp) { Module.sync_sleep(wakeUp); }); }
 function ws_client_stdout(data,amount){ Module.sendMessage("ws-stdout", { message: UTF8ToString(data, amount) }); }
-function ws_init_runtime(){ function sendMessage(name, props) { postMessage({ name, props }); }; Module.sendMessage = sendMessage; Module.ping = function(msg) { }; Module.log = function() { sendMessage("ws-log", { args: Array.prototype.slice.call(arguments) }); }; Module.warn = function() { sendMessage("ws-warn", { args: Array.prototype.slice.call(arguments) }); }; Module.err = function() { sendMessage("ws-err", { args: Array.prototype.slice.call(arguments) }); }; Module.print = Module.log; Module.printErr = Module.err; onmessage = function(e) { var data = e.data; if (data.type === "sync_sleep_message") { return; } switch (data.name) { case "wc-run": { Module.bundle = data.props.bundle; Module._extractBundleToFs(); Module._runRuntime(); sendMessage("ws-server-ready"); } break; case "wc-exit": { try { Module._requestExit(); } catch (e) { if (e.name !== "ExitStatus") { throw e; } } } break; case "wc-pack-fs-to-bundle": { try { Module.persist = function(archive) { sendMessage("ws-persist", { bundle: archive }); }; Module._packFsToBundle(); delete Module.persist; } catch (e) { Module.err(e.message); } } break; case "wc-add-key": { Module._addKey(data.props.key, data.props.pressed, data.props.timeMs); } break; default: { console.log("ws " + JSON.stringify(data)); } break; } }; sendMessage("ws-ready"); }
+function ws_init_runtime(){ function sendMessage(name, props) { postMessage({ name, props }); }; Module.sendMessage = sendMessage; Module.ping = function(msg) { }; Module.log = function() { sendMessage("ws-log", { args: Array.prototype.slice.call(arguments) }); }; Module.warn = function() { sendMessage("ws-warn", { args: Array.prototype.slice.call(arguments) }); }; Module.err = function() { sendMessage("ws-err", { args: Array.prototype.slice.call(arguments) }); }; Module.print = Module.log; Module.printErr = Module.err; onmessage = function(e) { var data = e.data; if (data.type === "sync_sleep_message") { return; } switch (data.name) { case "wc-run": { Module.bundle = data.props.bundle; Module._extractBundleToFs(); Module._runRuntime(); sendMessage("ws-server-ready"); } break; case "wc-exit": { try { Module._requestExit(); } catch (e) { if (e.name !== "ExitStatus") { throw e; } } } break; case "wc-pack-fs-to-bundle": { try { Module.persist = function(archive) { sendMessage("ws-persist", { bundle: archive }); }; Module._packFsToBundle(); delete Module.persist; } catch (e) { Module.err(e.message); } } break; case "wc-add-key": { Module._addKey(data.props.key, data.props.pressed, data.props.timeMs); } break; case "wc-mouse-move": { Module._mouseMove(data.props.x, data.props.y, data.props.timeMs); } break; case "wc-mouse-button": { Module._mouseButton(data.props.button, data.props.pressed, data.props.timeMs); } break; default: { console.log("ws " + JSON.stringify(data)); } break; } }; sendMessage("ws-ready"); }
 
 
 
@@ -6126,6 +6126,16 @@ var _addKey = Module["_addKey"] = function() {
 };
 
 /** @type {function(...*):?} */
+var _mouseMove = Module["_mouseMove"] = function() {
+  return (_mouseMove = Module["_mouseMove"] = Module["asm"]["mouseMove"]).apply(null, arguments);
+};
+
+/** @type {function(...*):?} */
+var _mouseButton = Module["_mouseButton"] = function() {
+  return (_mouseButton = Module["_mouseButton"] = Module["asm"]["mouseButton"]).apply(null, arguments);
+};
+
+/** @type {function(...*):?} */
 var _exitRuntime = Module["_exitRuntime"] = function() {
   return (_exitRuntime = Module["_exitRuntime"] = Module["asm"]["exitRuntime"]).apply(null, arguments);
 };
@@ -6552,17 +6562,19 @@ onmessage = (e) => {
     }
 
     if (data.name === "wc-install") {
-        const wasmModule = data.props.module;
-        const instantiateWasm = (info, receiveInstance) => {
-            info.env = info.env || {};
-            WebAssembly.instantiate(wasmModule, info)
-                .then((instance) => receiveInstance(instance, wasmModule));
-            return; // no-return
-        };
+        const module = {};
 
-        const module = {
-            instantiateWasm,
-        };
+        if (data.props.module !== undefined) {
+            const wasmModule = data.props.module;
+            const instantiateWasm = (info, receiveInstance) => {
+                info.env = info.env || {};
+                WebAssembly.instantiate(wasmModule, info)
+                    .then((instance) => receiveInstance(instance, wasmModule));
+                return; // no-return
+            };
+
+            module.instantiateWasm = instantiateWasm;
+        }
 
         module.onRuntimeInitialized = () => {
             module.callMain([]);
@@ -6572,4 +6584,3 @@ onmessage = (e) => {
         return;
     }
 };
-

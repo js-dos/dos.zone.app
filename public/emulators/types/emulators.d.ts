@@ -18,6 +18,8 @@ export interface CommandInterface {
     exit: () => Promise<void>;
     simulateKeyPress: (...keyCodes: number[]) => void;
     sendKeyEvent: (keyCode: number, pressed: boolean) => void;
+    sendMouseMotion: (x: number, y: number) => void;
+    sendMouseButton: (button: number, pressed: boolean) => void;
     persist(): Promise<Uint8Array>;
     events(): CommandInterfaceEvents;
 }

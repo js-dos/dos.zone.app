@@ -1,6 +1,6 @@
 import { WasmModule } from "../../../impl/modules";
 import { DosConfig } from "../../bundle/dos-conf";
-declare type ClientMessage = "wc-install" | "wc-run" | "wc-pack-fs-to-bundle" | "wc-add-key" | "wc-exit";
+declare type ClientMessage = "wc-install" | "wc-run" | "wc-pack-fs-to-bundle" | "wc-add-key" | "wc-mouse-move" | "wc-mouse-button" | "wc-exit";
 declare type ServerMessage = "ws-ready" | "ws-server-ready" | "ws-frame-set-size" | "ws-update-lines" | "ws-log" | "ws-warn" | "ws-err" | "ws-stdout" | "ws-exit" | "ws-persist" | "ws-sound-init" | "ws-sound-push" | "ws-config";
 export interface FrameLine {
     start: number;
@@ -33,6 +33,8 @@ export declare class WorkerClient {
         [key: string]: any;
     }): void;
     addKey(keyCode: number, pressed: boolean, timeMs: number): void;
+    sendMouseMotion(x: number, y: number, timeMs: number): void;
+    sendMouseButton(button: number, pressed: boolean, timeMs: number): void;
     persist(): void;
     exit(): void;
 }
