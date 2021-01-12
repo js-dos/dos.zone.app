@@ -22,6 +22,10 @@ import { Player } from "../player/player";
 import { GET_BUFFER } from "../core/xhr/GET";
 import { getCachedGameData } from "../core/game-query";
 
+import { Capacitor, FilesystemDirectory, Plugins } from "@capacitor/core";
+import i18n from "../i18n";
+
+const { Filesystem } = Plugins;
 declare const emulators: Emulators;
 
 interface State {
@@ -320,8 +324,24 @@ const commonSteps = [
             return URL.createObjectURL(blob);
         });
         const [bundleUrl, setBundleUrl] = useState<string|undefined>(url);
+        const [platformUri, setPlatformUri] = useState<string|undefined>(undefined);
 
         const onDownload = () => {
+            if (Capacitor.isNative) {
+                const reader = new FileReader();
+                reader.readAsDataURL(new Blob([state.bundle as Uint8Array]));
+                reader.onloadend = async () => {
+                    const result = await Filesystem.writeFile({
+                        path: state.name + ".jsdos",
+                        data: reader.result as string,
+                        directory: FilesystemDirectory.Documents,
+                    });
+
+                    setPlatformUri(result.uri);
+                }
+                return;
+            }
+
             const a = document.createElement("a");
             a.href = url;
             a.download = state.name + ".jsdos";
@@ -362,11 +382,21 @@ const commonSteps = [
             <br/>
             <ButtonGroup>
             <Button onClick={back} icon={IconNames.ARROW_LEFT}>{t("back")}</Button>
-            <Button onClick={onDownload} icon={IconNames.ARCHIVE} intent={Intent.PRIMARY}>{t("download")}</Button>
-            { state.slug !== undefined ? <Button onClick={openTopic} icon={IconNames.COMMENT} intent={Intent.NONE}>{t("open_topic")}</Button> : null }
+        { platformUri === undefined ?
+          <Button onClick={onDownload} icon={IconNames.ARCHIVE} intent={Intent.PRIMARY}>{t("download")}</Button> :
+          null
+        }
+        { state.slug !== undefined ?
+          <Button onClick={openTopic} icon={IconNames.COMMENT} intent={Intent.NONE}>{t("open_topic")}</Button> :
+          <AnchorButton href={"https://talks.dos.zone/search?expanded=true&q=" + encodeURIComponent((state.name || "") + " #" + i18n.language)}
+                        target="_blank"
+                        icon={IconNames.COMMENT}>{t("open_topic")}</AnchorButton>
+        }
             <Button onClick={onStopStart} icon={IconNames.STOP} intent={Intent.WARNING}>{bundleUrl ? t("stop") : t("start")}</Button>
             </ButtonGroup>
-            <br/><br/>
+            <br/>
+            { platformUri !== undefined ? <div><br/><strong>{t("downloded_to")}:</strong>&nbsp;{platformUri}</div> : null }
+            <br/>
             <ReactMardown renderers={renderers}
                           source={t("help", {lang: props.lang, game: state.name})}
                           escapeHtml={false}></ReactMardown>
