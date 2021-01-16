@@ -368,8 +368,6 @@ const commonSteps = [
             window.open("https://talks.dos.zone/t/" + state.slug, "_target");
         }
 
-        console.log(state);
-
         return <div>
             <div style={{
                 position: "relative",
