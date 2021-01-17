@@ -4,6 +4,11 @@
   "bundledWebRuntime": false,
   "npmClient": "yarn",
   "webDir": "build",
+  "hideLogs": false,
+  "android": {
+    "webContentsDebuggingEnabled": true,
+    "hideLogs": false
+  },
   "plugins": {
     "SplashScreen": {
       "launchShowDuration": 0

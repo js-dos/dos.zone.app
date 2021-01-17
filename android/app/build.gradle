@@ -6,8 +6,8 @@ android {
         applicationId "zone.dos.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1022
-        versionName "1.022"
+        versionCode 1023
+        versionName "1.023"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
@@ -31,7 +31,10 @@ android {
             signingConfig signingConfigs.debug
         }
         release {
-            minifyEnabled true
+            // minifyEnabled does not work correctly with appOpenUrl:
+            // https://github.com/ionic-team/capacitor/issues/739
+            // https://github.com/ionic-team/capacitor/issues/674
+            minifyEnabled false
             multiDexEnabled false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

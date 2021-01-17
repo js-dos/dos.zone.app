@@ -327,12 +327,13 @@ const commonSteps = [
         const [platformUri, setPlatformUri] = useState<string|undefined>(undefined);
 
         const onDownload = () => {
+            const fileName = state.name + ".jsdos";
             if (Capacitor.isNative) {
                 const reader = new FileReader();
                 reader.readAsDataURL(new Blob([state.bundle as Uint8Array]));
                 reader.onloadend = async () => {
                     const result = await Filesystem.writeFile({
-                        path: state.name + ".jsdos",
+                        path: fileName,
                         data: reader.result as string,
                         directory: FilesystemDirectory.Documents,
                     });
@@ -344,7 +345,7 @@ const commonSteps = [
 
             const a = document.createElement("a");
             a.href = url;
-            a.download = state.name + ".jsdos";
+            a.download = fileName;
             a.style.display = "none";
             document.body.appendChild(a);
 
