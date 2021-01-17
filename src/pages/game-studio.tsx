@@ -394,7 +394,7 @@ const commonSteps = [
             <Button onClick={onStopStart} icon={IconNames.STOP} intent={Intent.WARNING}>{bundleUrl ? t("stop") : t("start")}</Button>
             </ButtonGroup>
             <br/>
-            { platformUri !== undefined ? <div><br/><strong>{t("downloded_to")}:</strong>&nbsp;{platformUri}</div> : null }
+            { platformUri !== undefined ? <div className="platformUri"><br/><strong>{t("downloded_to")}:</strong>&nbsp;{platformUri}</div> : null }
             <br/>
             <ReactMardown renderers={renderers}
                           source={t("help", {lang: props.lang, game: state.name})}

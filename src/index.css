@@ -290,3 +290,8 @@ body {
     margin-top: 16px;
     margin-bottom: 4px;
 }
+
+.platformUri {
+    color: darkgray;
+    word-break: break-all;
+}
