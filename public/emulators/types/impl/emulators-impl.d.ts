@@ -4,6 +4,7 @@ import { IWasmModules } from "./modules";
 import DosBundle from "../dos/bundle/dos-bundle";
 declare class EmulatorsImpl implements Emulators {
     pathPrefix: string;
+    cacheSeed: string;
     private cachePromise?;
     private wasmModulesPromise?;
     cache(): Promise<Cache>;
