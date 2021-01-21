@@ -44,7 +44,7 @@ export async function getGameData(bundleUrl: string): Promise<GameData> {
             description: { en: { description }, },
             slug: { en: slug },
             canonicalUrl,
-            turbo: "no",
+            turbo: "optional",
         }
     }
 
