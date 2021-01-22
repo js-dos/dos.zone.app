@@ -136,6 +136,15 @@ function GoogleAnalytics(props: { location: any }) {
         }
     }
 
+    if (props.location.pathname.indexOf("/player/") > 0) {
+        try {
+            reportPageEvent(pagePath, window.top.location.href);
+            return null;
+        } catch {
+            // do nothing
+        }
+    }
+
     if (url === undefined) {
         reportPageEvent(pagePath, location.pathname);
     } else {
