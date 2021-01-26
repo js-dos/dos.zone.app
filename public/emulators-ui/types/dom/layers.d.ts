@@ -18,16 +18,13 @@ export declare class Layers {
     private onKeyDown;
     private onKeyUp;
     private onKeyPress;
-    private onMouseDown;
-    private onMouseUp;
-    private onMouseMove;
     private onSave;
     private fullscreen;
     private onFullscreenChanged;
     private scale;
     constructor(root: HTMLDivElement, options: LayersOptions);
     private initKeyEvents;
-    private initPointerEvents;
+    preventContextMenu(): void;
     setOnResize(handler: (width: number, height: number) => void): void;
     setOnKeyDown(handler: (keyCode: number) => void): void;
     fireKeyDown(keyCode: number): void;
@@ -35,9 +32,6 @@ export declare class Layers {
     fireKeyUp(keyCode: number): void;
     setOnKeyPress(handler: (keyCode: number) => void): void;
     fireKeyPress(keyCode: number): void;
-    setOnMouseDown(handler: (x: number, y: number, button: number) => void): void;
-    setOnMouseUp(handler: (x: number, y: number, button: number) => void): void;
-    setOnMouseMove(handler: (x: number, y: number) => void): void;
     toggleFullscreen(): void;
     setOnFullscreen(onFullscreenChanged: (fullscreen: boolean) => void): void;
     save(): void;

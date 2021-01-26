@@ -17,6 +17,7 @@ import { CapConfig } from "./cap-config";
 
 import { Navigator } from "./ui/navigator";
 import { NavigatorPlayer } from "./ui/navigator-player";
+import { NavigatorHidden } from "./ui/navigator-hidden";
 
 import { Landing } from "./pages/landing";
 import { GameStudio } from "./pages/game-studio";
@@ -113,6 +114,7 @@ function App() {
                 </div>
             </Route>
             <Route path="/:lang/player/:url">
+                <NavigatorHidden dos={dos} />
                 <PlayerWrapper user={user} embedded={true} queryParams={queryParams} onDosInstance={setDosInsatnce} />
             </Route>
             <Route path="/:lang/dl/:url">
@@ -138,7 +140,7 @@ function GoogleAnalytics(props: { location: any }) {
 
     if (props.location.pathname.indexOf("/player/") > 0) {
         try {
-            reportPageEvent(pagePath, window.top.location.href);
+            reportPageEvent(pagePath, document.referrer || "iframe|" + location.pathname);
             return null;
         } catch {
             // do nothing

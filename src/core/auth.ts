@@ -44,8 +44,12 @@ export function getCachedUser(): User | null {
     }
 
     // give chance to ls
-    const cachedValue = localStorage.getItem(userKey);
-    return cachedValue === null || cachedValue === undefined ? null : JSON.parse(cachedValue);
+    try {
+        const cachedValue = localStorage.getItem(userKey);
+        return cachedValue === null || cachedValue === undefined ? null : JSON.parse(cachedValue);
+    } catch (e) {
+        return null;
+    }
 }
 
 export async function refresh(user: User | null): Promise<User | null> {
@@ -57,13 +61,21 @@ export async function refresh(user: User | null): Promise<User | null> {
         const cachedUser = getCachedUser();
         const shouldUpdateDefaults = cachedUser === null || cachedUser.email !== user.email;
         const stringified = JSON.stringify(user);
-        localStorage.setItem(userKey, stringified);
+        try {
+            localStorage.setItem(userKey, stringified);
+        } catch (e) {
+            // do nothing
+        }
         document.cookie = userCookie + "=" + btoa(stringified) + ";path=/;max-age=2592000";
         if (shouldUpdateDefaults) {
             initDefaults(user);
         }
     } else {
-        localStorage.removeItem(userKey);
+        try {
+            localStorage.removeItem(userKey);
+        } catch (e) {
+            // do nothing
+        }
         document.cookie = userCookie + "=;path=/";
     }
 
@@ -108,7 +120,11 @@ export async function requestLogout(resetUser: () => void) {
             const payload = await GET_OBJECT(ssoLogout + "?sso=" + user.sso +
                 "&sig=" + user.sig);
             if (payload.success) {
-                localStorage.removeItem(userKey);
+                try {
+                    localStorage.removeItem(userKey);
+                } catch (e) {
+                    // do nothing
+                }
                 document.cookie = userCookie + "=;path=/";
                 resetUser();
             }
