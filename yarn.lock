@@ -4718,15 +4718,15 @@ emojis-list@^3.0.0:
   resolved "https://registry.yarnpkg.com/emojis-list/-/emojis-list-3.0.0.tgz#5570662046ad29e2e916e71aae260abdff4f6a78"
   integrity sha512-/kyM18EfinwXZbno9FyUGeFh87KC8HRQBQGildHZbEuRyWFOmv1U10o9BBp8XVZDVNNuQKyIGIu5ZYAAXJ0V2Q==
 
-emulators-ui@^0.0.47:
-  version "0.0.47"
-  resolved "https://registry.yarnpkg.com/emulators-ui/-/emulators-ui-0.0.47.tgz#e2ba160f3df9054b2554632879d6de17217893ba"
-  integrity sha512-BX2D+IxwcG7H0KPgtW2Qs+86yHtUZ7ojF73Y67zppZz14bsptBU1Df2exV55Qmd+gWPnnz1UMcUCbze9vRgQQg==
+emulators-ui@^0.0.48:
+  version "0.0.48"
+  resolved "https://registry.yarnpkg.com/emulators-ui/-/emulators-ui-0.0.48.tgz#7a5a156297a1178d04b93dd838837c3fb6b6382f"
+  integrity sha512-P14eeddcKZW21VSH8Y4f/EXGztqZd0L2X28daVqojJBADduQbDp03SaNUjN0uWgK3eSYtLBH39IgX5piJK9EOg==
 
-emulators@^0.0.46:
-  version "0.0.46"
-  resolved "https://registry.yarnpkg.com/emulators/-/emulators-0.0.46.tgz#71341292d01fb5e544f46e8ac5b8d9d455652a5b"
-  integrity sha512-Z2bD2sIoy9ReUDCQcLavzOfcVxqCn7xpBlEKxRBf6x6WZT1OvV921ZTcH0qs0VkWgiMknPcFlXwv+NgEJq2kcw==
+emulators@^0.0.47:
+  version "0.0.47"
+  resolved "https://registry.yarnpkg.com/emulators/-/emulators-0.0.47.tgz#1eb50f5117df520a0ff0aa2d88931f3a2f9522a8"
+  integrity sha512-7RUHWgk3cS6HnFkEhmVdlobc7QPjpL/cbwFmS6TqdS5CJlX9nxZ6LIbKwZ9GwgUE6GQoFsgIz8pDVXh5SRpNAg==
 
 encodeurl@~1.0.2:
   version "1.0.2"

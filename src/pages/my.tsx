@@ -23,7 +23,7 @@ import { Capacitor } from "@capacitor/core";
 import { AndroidPromo } from "./components/android-promo";
 import { TurboOptions } from "./components/turbo-options";
 import { GET_BUFFER, GET_TEXT } from "../core/xhr/GET";
-import { getPersonalBundleUrl } from "../core/personal";
+import { getPersonalBundleUrlIfExists } from "../core/personal";
 
 const isSafari = navigator.vendor && navigator.vendor.indexOf("Apple") > -1 &&
                  navigator.userAgent &&
@@ -184,7 +184,7 @@ export function My(props: { user: User | null }) {
         if (user === null || selectedData === null) {
             return;
         }
-        const url = await getPersonalBundleUrl(user.email, selectedData.canonicalUrl);
+        const url = await getPersonalBundleUrlIfExists(user.email, selectedData.canonicalUrl);
         window.open(url, "blank");
     }
 

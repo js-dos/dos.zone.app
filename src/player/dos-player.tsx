@@ -65,20 +65,15 @@ export function DosPlayer(props: IPlayerProps) {
         } else if (props.user === null && props.bundleUrl !== undefined) {
             dos.run(props.bundleUrl).then(setCiIfNeeded);
         } else if (props.user !== null && props.bundleUrl !== undefined) {
-            getPersonalBundleUrl(props.user.email, props.bundleUrl).then((personalUrl) => {
-                if (cancel) {
-                    return;
-                }
-
-                dos.run(personalUrl).then((ci) => {
-                    setCiIfNeeded(ci);
-                    dos.layers.setOnSave(() => {
-                        return ci.persist().then((data) => {
-                            return putPresonalBundle(props.user as User, data, props.bundleUrl);
-                        })
-                    });
+            const personalBundleUrl = getPersonalBundleUrl(props.user.email, props.bundleUrl);
+            dos.run(props.bundleUrl, personalBundleUrl).then((ci) => {
+                setCiIfNeeded(ci);
+                dos.layers.setOnSave(() => {
+                    return ci.persist().then((data) => {
+                        return putPresonalBundle(props.user as User, data, props.bundleUrl);
+                    })
                 });
-            })
+            });
         } else {
             dos.stop();
             setCi(null);
