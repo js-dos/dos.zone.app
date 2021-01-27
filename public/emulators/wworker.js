@@ -1472,7 +1472,7 @@ var tempI64;
 // === Body ===
 
 var ASM_CONSTS = {
-  91219: function() {Module['screenIsReadOnly'] = true;}
+  90835: function() {Module['screenIsReadOnly'] = true;}
 };
 function destroySyncSleep(){ if (worker) { self.removeEventListener("message", Module.receive); } else { window.removeEventListener("message", Module.receive); } Module.alive = false; delete Module.sync_sleep; }
 function emsc_add_frame_line(start,ptr,len){ Module.frame_update_lines.push( {start : start, heapu8 : Module.HEAPU8.slice(ptr, ptr + len)}); }
