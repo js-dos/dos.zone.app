@@ -9,8 +9,8 @@ declare class EmulatorsImpl implements Emulators {
     private wasmModulesPromise?;
     cache(): Promise<Cache>;
     dosBundle(): Promise<DosBundle>;
-    dosDirect(bundle: Uint8Array): Promise<CommandInterface>;
-    dosWorker(bundle: Uint8Array): Promise<CommandInterface>;
+    dosDirect(bundle: Uint8Array | Uint8Array[]): Promise<CommandInterface>;
+    dosWorker(bundle: Uint8Array | Uint8Array[]): Promise<CommandInterface>;
     janus(restUrl: string): Promise<CommandInterface>;
     wasmModules(): Promise<IWasmModules>;
 }

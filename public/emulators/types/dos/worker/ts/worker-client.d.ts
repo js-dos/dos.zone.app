@@ -21,11 +21,11 @@ export interface WorkerHost {
 }
 export declare class WorkerClient {
     private worker;
-    private bundle?;
+    private bundles?;
     private host;
     private ready;
     private keyMatrix;
-    constructor(workerUrl: string, wasmModule: WasmModule, bundle: Uint8Array, host: WorkerHost, ready: () => void);
+    constructor(workerUrl: string, wasmModule: WasmModule, bundles: Uint8Array[], host: WorkerHost, ready: () => void);
     sendMessage(name: ClientMessage, props?: {
         [key: string]: any;
     }): void;
