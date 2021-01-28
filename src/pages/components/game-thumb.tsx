@@ -6,6 +6,8 @@ import { IconNames } from "@blueprintjs/icons";
 
 import { GameData } from "../../core/game";
 
+import { cdnUrl } from "../../core/cdn";
+
 export function GameThumb(props: {
     game?: GameData,
     gamePromise?: Promise<GameData>,
@@ -55,7 +57,7 @@ export function GameThumb(props: {
     return <Card onClick={props.onClick} className={["thumb-frame", props.selected ? "thumb-frame-selected" : ""].join(" ")} interactive={true}>
         <div className="thumb-title">{data.game}</div>
         <div className="thumb-title-2">{data.title}</div>
-        <img src={data.screenshot || "/default.jpg"} className="thumb-screenshot" alt="screenshot"></img>
+        <img src={cdnUrl(data.screenshot) || "/default.jpg"} className="thumb-screenshot" alt="screenshot"></img>
         <div className="thumb-author">{"@" + data.author}</div>
         {props.selected ? <Icon icon={IconNames.PLAY} iconSize={32} className="thumb-play"></Icon> : null}
     </Card>;

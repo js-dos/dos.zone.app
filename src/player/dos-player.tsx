@@ -8,6 +8,7 @@ import { dhry2Bundle } from "../core/storage/recently-played";
 import { IPlayerProps } from "./player";
 import { getPersonalBundleUrl, putPresonalBundle } from "../core/personal";
 import { User } from "../core/auth";
+import { cdnUrl } from "../core/cdn";
 
 declare const Dos: DosFactoryType;
 
@@ -63,10 +64,10 @@ export function DosPlayer(props: IPlayerProps) {
                 dos.layers.setOnSave(() => Promise.resolve());
             });
         } else if (props.user === null && props.bundleUrl !== undefined) {
-            dos.run(props.bundleUrl).then(setCiIfNeeded);
+            dos.run(cdnUrl(props.bundleUrl)).then(setCiIfNeeded);
         } else if (props.user !== null && props.bundleUrl !== undefined) {
             const personalBundleUrl = getPersonalBundleUrl(props.user.email, props.bundleUrl);
-            dos.run(props.bundleUrl, personalBundleUrl).then((ci) => {
+            dos.run(cdnUrl(props.bundleUrl), personalBundleUrl).then((ci) => {
                 setCiIfNeeded(ci);
                 dos.layers.setOnSave(() => {
                     return ci.persist().then((data) => {

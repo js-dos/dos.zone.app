@@ -25,6 +25,8 @@ import { TurboOptions } from "./components/turbo-options";
 import { GET_BUFFER, GET_TEXT } from "../core/xhr/GET";
 import { getPersonalBundleUrlIfExists } from "../core/personal";
 
+import striptags from "striptags";
+
 const isSafari = navigator.vendor && navigator.vendor.indexOf("Apple") > -1 &&
                  navigator.userAgent &&
                  navigator.userAgent.indexOf("CriOS") == -1 &&
@@ -153,7 +155,7 @@ export function My(props: { user: User | null }) {
         </div>;
     }
 
-    const description = selectedData.description[i18n.language]?.description || selectedData.description.en?.description || "";
+    const description = striptags(selectedData.description[i18n.language]?.description || selectedData.description.en?.description || "");
     const canTurbo = selectedData.turbo !== "no" && !isSafari;
     const runUrl = "/" + i18n.language + "/play/" + encodeURIComponent(selectedData.canonicalUrl);
 
