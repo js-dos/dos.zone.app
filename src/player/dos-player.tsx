@@ -10,7 +10,26 @@ import { getPersonalBundleUrl, putPresonalBundle } from "../core/personal";
 import { User } from "../core/auth";
 import { cdnUrl } from "../core/cdn";
 
+declare const zip: any;
 declare const Dos: DosFactoryType;
+
+function isEmptyArchive(data: Uint8Array): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+        zip.createReader(new zip.BlobReader(new Blob([data])), (reader: any) => {
+            reader.getEntries((entries: any) => {
+                let empty = true;
+                for (const next of entries) {
+                    empty = next.directory === true;
+                    if (!empty) {
+                        break;
+                    }
+                }
+                reader.close();
+                resolve(empty);
+            });
+        }, (e: any) => reject(new Error("not a zip archive")));
+    });
+}
 
 export function DosPlayer(props: IPlayerProps) {
     const rootRef = useRef<HTMLDivElement>(null);
@@ -70,7 +89,11 @@ export function DosPlayer(props: IPlayerProps) {
             dos.run(cdnUrl(props.bundleUrl), personalBundleUrl).then((ci) => {
                 setCiIfNeeded(ci);
                 dos.layers.setOnSave(() => {
-                    return ci.persist().then((data) => {
+                    return ci.persist().then(async (data) => {
+                        const isEmpty = await isEmptyArchive(data);
+                        if (isEmpty) {
+                            return Promise.resolve();
+                        }
                         return putPresonalBundle(props.user as User, data, props.bundleUrl);
                     })
                 });

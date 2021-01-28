@@ -26,22 +26,21 @@ export function SEND(method: "get" | "post" | "head" | "put",
         request.addEventListener("abort", () => {
             reject("HTTP GET canceled for url " + url);
         }, false);
-        request.onprogress = (event) => {
-            const porgress = Math.round(event.loaded * 10000 / event.total) / 100;
-            if (onprogress !== undefined) {
-                onprogress(porgress);
+
+        if (onprogress !== undefined) {
+            request.onprogress = (event) => {
+                if (event.loaded && event.total && event.total > 0) {
+                    const porgress = Math.round(event.loaded * 10000 / event.total) / 100;
+                    onprogress(porgress);
+                }
             }
-        };
+        }
 
         if (headers !== undefined) {
             for (const key of Object.keys(headers)) {
                 request.setRequestHeader(key, headers[key]);
             }
         }
-
-        //if (body !== undefined && typeof body !== "string") {
-        //    request.overrideMimeType("application/octet-stream");
-        //}
 
         request.send(body);
     });

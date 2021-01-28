@@ -165,6 +165,7 @@ Our database is community drived. Database sources is [here](https://github.com/
         browse_database: "Browse database",
     },
     studio: {
+        quick_tour: "Tutorial: adding mobile controls to a DOS game",
         loading: "Loading...",
         open_topic: "Game Topic",
         welcome: "Welcome to Game Studio",
@@ -406,6 +407,7 @@ DOS.Zone - это управляемая сообществом <span style="col
         browse_database: "Поиск в базе",
     },
     studio: {
+        quick_tour: "Видео урок: мобильное управление для DOS игр",
         loading: "Загрузка...",
         open_topic: "Открыть форум",
         welcome: "Добро пожаловать в творческую студию",

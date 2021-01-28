@@ -457,6 +457,19 @@ export function GameStudio() {
         <div>
             {stepComponent}
         </div>
+        <br/>
+        <div>
+            <H2>{t("quick_tour")}</H2>
+            <iframe
+                width="560"
+                height="315"
+                style={{maxWidth: "100%"}}
+                src="https://www.youtube.com/embed/KPetnv4atXg"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen>
+            </iframe>
+        </div>
     </div>;
 }
 

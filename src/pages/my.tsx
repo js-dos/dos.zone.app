@@ -29,8 +29,8 @@ import striptags from "striptags";
 
 const isSafari = navigator.vendor && navigator.vendor.indexOf("Apple") > -1 &&
                  navigator.userAgent &&
-                 navigator.userAgent.indexOf("CriOS") == -1 &&
-                 navigator.userAgent.indexOf("FxiOS") == -1;
+                 navigator.userAgent.indexOf("CriOS") === -1 &&
+                 navigator.userAgent.indexOf("FxiOS") === -1;
 
 export function My(props: { user: User | null }) {
     const [recentlyPlayed, _setRecentlyPlayed] = useState<RecentlyPlayed | null>(null);

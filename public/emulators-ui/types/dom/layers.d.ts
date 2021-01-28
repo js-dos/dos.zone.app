@@ -12,6 +12,7 @@ export declare class Layers {
     width: number;
     height: number;
     notyf: Notyf;
+    toggleKeyboard: () => boolean;
     private clickToStart;
     private loaderText;
     private onResize;

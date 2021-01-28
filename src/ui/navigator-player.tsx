@@ -12,6 +12,7 @@ import { Button as ButtonType } from "emulators-ui/dist/types/controls/button";
 import { LayersType } from "../pages/layers";
 import { EmulatorsUi } from "emulators-ui";
 import { TFunction } from "i18next";
+import { layers } from "emulators-ui/dist/types/dom/layers";
 
 declare const emulatorsUi: EmulatorsUi;
 const isMobile = Capacitor.isNative || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -26,6 +27,7 @@ export function NavigatorPlayer(props: { dos: DosInstance | null }) {
     const [mobileMode, setMobileMode] = useState<boolean>(isMobile);
     const [overlay, setOverlay] = useState<boolean>(false);
     const [hint, setHint] = useState<JSX.Element | null>(null);
+    const [keyboardVisible, setKeyboardVisible] = useState<boolean>(false);
 
     const showOverlay = overlay && hint !== null;
 
@@ -71,6 +73,30 @@ export function NavigatorPlayer(props: { dos: DosInstance | null }) {
         setMobileMode(!mobileMode);
     }
 
+    function toggleFullscreen() {
+        if (dos === null) {
+            return;
+        }
+
+        dos.layers.toggleFullscreen();
+    }
+
+    function onSave() {
+        if (dos === null) {
+            return;
+        }
+
+        dos.layers.save();
+    }
+
+    function toggleKeyboard() {
+        if (dos == null) {
+            return;
+        }
+
+        setKeyboardVisible(dos.layers.toggleKeyboard());
+    }
+
     return <div>
         <Navbar fixedToTop={false}>
             <Navbar.Group align={Alignment.LEFT}>
@@ -101,6 +127,23 @@ export function NavigatorPlayer(props: { dos: DosInstance | null }) {
                     icon={IconNames.MOBILE_PHONE}
                     minimal={true}
                     onClick={toggleMobileMode}>
+                </Button>
+                <Navbar.Divider />
+                <Button
+                    intent={keyboardVisible ? Intent.PRIMARY : Intent.NONE}
+                    icon={IconNames.MANUALLY_ENTERED_DATA}
+                    minimal={true}
+                    onClick={toggleKeyboard}>
+                </Button>
+                <Button
+                    icon={IconNames.FLOPPY_DISK}
+                    minimal={true}
+                    onClick={onSave}>
+                </Button>
+                <Button
+                    icon={IconNames.MAXIMIZE}
+                    minimal={true}
+                    onClick={toggleFullscreen}>
                 </Button>
             </Navbar.Group>
         </Navbar>
