@@ -369,6 +369,18 @@ const commonSteps = [
             window.open("https://talks.dos.zone/t/" + state.slug, "_target");
         }
 
+        const gameTopicComponent =  (state.slug !== undefined ?
+                                     <Button onClick={openTopic} icon={IconNames.COMMENT} intent={Intent.NONE}>{t("open_topic")}</Button> :
+                                     <AnchorButton
+            href={"https://talks.dos.zone/search?expanded=true&q=" + encodeURIComponent((state.name || "") + " #" + i18n.language)}
+            target="_blank"
+            icon={IconNames.COMMENT}>{t("open_topic")}</AnchorButton>);
+
+        const markdownRenderers = {...renderers};
+        markdownRenderers.link = (props: any) => {
+            return gameTopicComponent;
+        }
+
         return <div>
             <div style={{
                 position: "relative",
@@ -385,18 +397,13 @@ const commonSteps = [
           <Button onClick={onDownload} icon={IconNames.ARCHIVE} intent={Intent.PRIMARY}>{t("download")}</Button> :
           null
         }
-        { state.slug !== undefined ?
-          <Button onClick={openTopic} icon={IconNames.COMMENT} intent={Intent.NONE}>{t("open_topic")}</Button> :
-          <AnchorButton href={"https://talks.dos.zone/search?expanded=true&q=" + encodeURIComponent((state.name || "") + " #" + i18n.language)}
-                        target="_blank"
-                        icon={IconNames.COMMENT}>{t("open_topic")}</AnchorButton>
-        }
+        { gameTopicComponent }
             <Button onClick={onStopStart} icon={IconNames.STOP} intent={Intent.WARNING}>{bundleUrl ? t("stop") : t("start")}</Button>
             </ButtonGroup>
             <br/>
             { platformUri !== undefined ? <div className="platformUri"><br/><strong>{t("downloded_to")}:</strong>&nbsp;{platformUri}</div> : null }
             <br/>
-            <ReactMardown renderers={renderers}
+            <ReactMardown renderers={markdownRenderers}
                           source={t("help", {lang: props.lang, game: state.name})}
                           escapeHtml={false}></ReactMardown>
         </div>;
@@ -458,18 +465,22 @@ export function GameStudio() {
             {stepComponent}
         </div>
         <br/>
-        <div>
-            <H2>{t("quick_tour")}</H2>
-            <iframe
-                width="560"
-                height="315"
-                style={{maxWidth: "100%"}}
-                src="https://www.youtube.com/embed/KPetnv4atXg"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen>
-            </iframe>
-        </div>
+        {
+            step == 1 ?
+            (<div>
+                <H2>{t("quick_tour")}</H2>
+                <iframe
+                    width="560"
+                    height="315"
+                    style={{maxWidth: "100%"}}
+                    src="https://www.youtube.com/embed/KPetnv4atXg"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen>
+                </iframe>
+            </div>) :
+            null
+        }
     </div>;
 }
 

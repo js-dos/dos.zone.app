@@ -218,7 +218,7 @@ Our database is community drived. Database sources is [here](https://github.com/
         help: `
 ### Help to community
 
-You can help community if you [search](https://talks.dos.zone/search?expanded=true&q=%23{{lang}}%20{{game}}) for game in our database and post it in game thread. It will make our database better.
+You can help community if you add jsdos bundle to [search](#). This will make our database better.
 
 On the game page:
 
@@ -235,6 +235,7 @@ Enter description of bundle and press "Reply"
 3. Flag the message to add it in post header
 
 ![flag](/guides/flag_0.jpg)
+
 ![flag](/guides/flag.jpg)
 
 Thank you!
@@ -460,7 +461,7 @@ DOS.Zone - это управляемая сообществом <span style="col
         help: `
 ### Помогите сообществу
 
-Вы можете помочь сообществу если [найдете](https://talks.dos.zone/search?expanded=true&q=%23{{lang}}%20{{game}}) страницу игры в нашей базе данных и прикрепите ваш архив к игре. Это сделает нашу базуданных лучше.
+Вы можете помочь, если прикрепите созданный архив к игре [игре](#). Это сделает нашу базуданных лучше.
 
 На странице игры:
 
@@ -477,7 +478,10 @@ DOS.Zone - это управляемая сообществом <span style="col
 3. Призовите администратора что бы опубликовать архив в шапке игры.
 
 ![flag](/guides/flag_0.jpg)
+
 ![flag](/guides/flag.jpg)
+
+Спасибо!
 `
     }
 }
