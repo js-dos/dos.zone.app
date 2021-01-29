@@ -1,5 +1,6 @@
 const mapping: {[host: string]: string} = {
     "https://doszone-uploads.s3.dualstack.eu-central-1.amazonaws.com/": "https://cdn.dos.zone/",
+    "https://doszone-uploads.s3.eu-central-1.amazonaws.com/": "https://cdn.dos.zone/",
 };
 
 const mappingKeys = Object.keys(mapping);
