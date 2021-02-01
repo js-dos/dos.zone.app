@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { useHistory } from "react-router-dom";
 
-import { Navbar, Alignment, Button, Intent, Overlay, Classes, Card } from "@blueprintjs/core";
+import { Navbar, Alignment, Button, Intent, Overlay, Classes, Card, Spinner } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 
 import { useTranslation } from "react-i18next";
@@ -28,6 +28,7 @@ export function NavigatorPlayer(props: { dos: DosInstance | null }) {
     const [overlay, setOverlay] = useState<boolean>(false);
     const [hint, setHint] = useState<JSX.Element | null>(null);
     const [keyboardVisible, setKeyboardVisible] = useState<boolean>(false);
+    const [saving, setSaving] = useState<boolean>(false);
 
     const showOverlay = overlay && hint !== null;
 
@@ -81,12 +82,15 @@ export function NavigatorPlayer(props: { dos: DosInstance | null }) {
         dos.layers.toggleFullscreen();
     }
 
-    function onSave() {
+    function doSave(): Promise<void> {
         if (dos === null) {
-            return;
+            return Promise.resolve();
         }
 
-        dos.layers.save();
+        setSaving(true);
+        return dos.layers.save()
+                  .then(() => setSaving(false))
+                  .catch(() => setSaving(false))
     }
 
     function toggleKeyboard() {
@@ -97,22 +101,20 @@ export function NavigatorPlayer(props: { dos: DosInstance | null }) {
         setKeyboardVisible(dos.layers.toggleKeyboard());
     }
 
+    function doClose() {
+        doSave().then(() => history.replace("/" + lang + "/my"));
+    }
+
     return <div>
         <Navbar fixedToTop={false}>
             <Navbar.Group align={Alignment.LEFT}>
                 <Navbar.Heading>
-                    <Button icon={IconNames.ARROW_LEFT} minimal={true}
-                          onClick={() => history.replace("/" + lang + "/my")}>{t("games")}</Button>
+                    { saving ?
+                    (<div style={{display: "flex", flexDirection: "row"}}><Spinner size={16} /><p style={{margin: 0, paddingLeft: "8px" }}>{t("saving")}</p></div>) :
+                      (<Button icon={IconNames.ARROW_LEFT} minimal={true}
+                               onClick={doClose}>{t("games")}</Button>)
+                    }
                 </Navbar.Heading>
-            </Navbar.Group>
-            <Navbar.Group align={Alignment.RIGHT}>
-                <Navbar.Divider />
-                <a href="https://twitter.com/doszone_db" target="_blank" rel="noopener noreferrer" style={{ marginRight: "5px"}} >
-                    <img src="/twitter.svg" alt="twitter" width="20px" />
-                </a>
-                <a href="https://discord.com/invite/hMVYEbG" target="_blank" rel="noopener noreferrer">
-                    <img src="/discord.svg" alt="discord" width="24px" />
-                </a>
             </Navbar.Group>
             <Navbar.Group align={Alignment.RIGHT}>
                 <Button
@@ -137,8 +139,9 @@ export function NavigatorPlayer(props: { dos: DosInstance | null }) {
                 </Button>
                 <Button
                     icon={IconNames.FLOPPY_DISK}
+                    disabled={saving}
                     minimal={true}
-                    onClick={onSave}>
+                    onClick={doSave}>
                 </Button>
                 <Button
                     icon={IconNames.MAXIMIZE}

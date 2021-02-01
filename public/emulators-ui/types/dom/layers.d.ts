@@ -35,7 +35,7 @@ export declare class Layers {
     fireKeyPress(keyCode: number): void;
     toggleFullscreen(): void;
     setOnFullscreen(onFullscreenChanged: (fullscreen: boolean) => void): void;
-    save(): void;
+    save(): Promise<void>;
     setOnSave(handler: () => Promise<void>): void;
     hideLoadingLayer(): void;
     showLoadingLayer(): void;
