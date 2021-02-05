@@ -6,8 +6,8 @@ android {
         applicationId "zone.dos.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1027
-        versionName "1.027"
+        versionCode 1028
+        versionName "1.028"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
