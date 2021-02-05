@@ -6,7 +6,8 @@ import {
     Intent,
     Button,
     ButtonGroup,
-    Classes
+    Popover,
+    Position
 } from "@blueprintjs/core";
 
 import { getRecentlyPlayed, RecentlyPlayed, setRecentlyPlayed as updateRecentlyPlayed  } from "../core/storage/recently-played";
@@ -156,7 +157,8 @@ export function My(props: { user: User | null }) {
     }
 
     const description = striptags(selectedData.description[i18n.language]?.description || selectedData.description.en?.description || "");
-    const canTurbo = selectedData.turbo !== "no" && !isSafari;
+    const canPlay = selectedData.turbo !== "required";
+    const canTurbo = !canPlay || selectedData.turbo !== "no" && !isSafari;
     const runUrl = "/" + i18n.language + "/play/" + encodeURIComponent(selectedData.canonicalUrl);
 
     function runBundle(turboMode: boolean) {
@@ -205,6 +207,11 @@ export function My(props: { user: User | null }) {
 
         history.push("/" + i18n.language + "/studio/" + encodeURIComponent(selectedData.canonicalUrl));
     }
+    const playButton = (<Button disabled={!canPlay}
+        className={canPlay ? "heartbeat" : ""}
+        icon={IconNames.PLAY}
+        intent={canPlay ? Intent.PRIMARY : Intent.NONE}
+        onClick={() => runBundle(false)}>{t("play")}</Button>);
 
     return <div className="left-margin">
         <AndroidPromo />
@@ -214,13 +221,21 @@ export function My(props: { user: User | null }) {
             <div className="thumb-options">
                 <div>
                     <ButtonGroup>
-                        <Button className="heartbeat" icon={IconNames.PLAY} intent={Intent.PRIMARY} onClick={() => runBundle(false)}>{t("play")}</Button>
+    { canPlay ?
+      playButton :
+      <Popover content={<div className="popover-inner-card">{t("turbo_mode_required")}</div>} position={Position.TOP} isOpen={true}>
+        {playButton}
+      </Popover>
+    }
                         { slug !== undefined && slug.length > 0 ? <Button onClick={openSlug} icon={IconNames.COMMENT}></Button> : null }
                         { user !== null ? <Button icon={IconNames.ARCHIVE} onClick={downloadArchive}></Button> : null }
                         <Button onClick={openBuild} icon={IconNames.FORK}></Button>
                         <Button onClick={remove} icon={IconNames.TRASH}></Button>
                     </ButtonGroup>
-                    { canTurbo ? <TurboOptions user={user} onClick={() => runBundle(true) } /> : null }
+                    { canTurbo ? <TurboOptions
+                                     intent={!canPlay ? Intent.PRIMARY : Intent.NONE}
+                                     user={user}
+                                     onClick={() => runBundle(true) } /> : null }
                 </div>
                 <br/><br/>
                 <div className="thumb-description">

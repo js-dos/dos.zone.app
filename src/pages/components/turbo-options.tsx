@@ -9,7 +9,8 @@ import {
     Spinner,
     Classes,
     Icon,
-    HTMLSelect
+    HTMLSelect,
+    Intent
 } from "@blueprintjs/core";
 
 import { useTranslation } from "react-i18next";
@@ -21,7 +22,7 @@ import { Storage, storage } from "../../core/storage/storage";
 
 
 
-export function TurboOptions(props: { user: User | null, onClick: () => void }) {
+export function TurboOptions(props: { user: User | null, onClick: () => void, intent: Intent }) {
     const { t, i18n } = useTranslation("my");
     const [turboTime, setTurboTime] = useState<number | null>(null);
     const [userStorage, setUserStorage] = useState<Storage | null>(null);
@@ -113,7 +114,7 @@ export function TurboOptions(props: { user: User | null, onClick: () => void }) 
         <div className="turbo-border">
             <div className="turbo-options">
                 <ButtonGroup>
-                <Button  icon={IconNames.FAST_FORWARD} onClick={onClick}>{t("play_turbo")}</Button>
+                <Button className={props.intent === Intent.PRIMARY ? "heartbeat" : "" } intent={props.intent} icon={IconNames.FAST_FORWARD} onClick={onClick}>{t("play_turbo")}</Button>
           <Link className={Classes.BUTTON} to={"/" + lang + "/profile"}>
             <Icon icon={IconNames.COG} iconSize={16} />
           </Link>

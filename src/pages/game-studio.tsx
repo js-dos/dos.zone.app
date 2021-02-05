@@ -36,6 +36,7 @@ interface State {
     executable?: string,
     config?: DosConfig,
     bundle?: Uint8Array,
+    canSkipArchiveCreation: boolean,
 }
 
 interface StepProps {
@@ -70,7 +71,7 @@ async function restoreConfig(jsdosZipData: JsDosZipData): Promise<DosConfig | un
 
 
 function InitFromFileStep(props: StepProps) {
-    const {t, nextStep} = props;
+    const {t, state, nextStep} = props;
     const [error, setError] = useState<string>("");
     const [loadProgress, setLoadProgress] = useState<number>(0);
     const [reader, setReader] = useState<FileReader|null>(null);
@@ -95,6 +96,7 @@ function InitFromFileStep(props: StepProps) {
                 const jsdosZipData = await ZipExecutables(blob);
                 const name = file.name.substr(0, file.name.lastIndexOf("."));
                 nextStep({
+                    ...state,
                     name,
                     zip,
                     executables: jsdosZipData.executables,
@@ -122,6 +124,7 @@ function InitFromFileStep(props: StepProps) {
 
 function initFromUrl(url: string) {
     return function InitFromUrlSteps(props: StepProps) {
+        const { state } = props;
         const [error, setError] = useState<string>("");
 
         useEffect(() => {
@@ -147,6 +150,7 @@ function initFromUrl(url: string) {
                         const gameData = getCachedGameData(url);
                         const slug = gameData?.slug[props.lang] || gameData?.slug["en"];
                         props.nextStep({
+                            ...state,
                             name: slug,
                             slug,
                             zip,
@@ -299,6 +303,13 @@ const commonSteps = [
             });
         };
 
+        const startArchive = async () => {
+            nextStep({
+                ...state,
+                bundle: state.zip as Uint8Array,
+            })
+        };
+
         if (loading || config === null) {
             return <div>
                 <Spinner/>
@@ -309,9 +320,10 @@ const commonSteps = [
         return <div>
             {error}
             <DosConfigUi config={config as DosConfig} t={t}></DosConfigUi>
-            <Button onClick={() => {
-                createArchive().catch(setError);
-            }}>{t("create")}</Button>
+            <ButtonGroup>
+                <Button onClick={() => createArchive().catch(setError)} intent={Intent.PRIMARY}>{t("create")}</Button>
+                { state.canSkipArchiveCreation ? <Button onClick={() => startArchive()}>{t("skip_create")}</Button> : null }
+            </ButtonGroup>
         </div>;
     },
 
@@ -325,6 +337,10 @@ const commonSteps = [
         });
         const [bundleUrl, setBundleUrl] = useState<string|undefined>(url);
         const [platformUri, setPlatformUri] = useState<string|undefined>(undefined);
+
+        useEffect(() => {
+            window.scrollTo(0, 0);
+        }, []);
 
         const onDownload = () => {
             const fileName = state.name + ".jsdos";
@@ -414,21 +430,28 @@ export function GameStudio() {
     const { t, i18n } = useTranslation("studio");
     const { url } = useParams<{ url?: string }>();
     const [step, setStep] = useState<number>(1);
-    const [state, setState] = useState<State>({});
+    const [state, setState] = useState<State>({
+        canSkipArchiveCreation: false,
+    });
 
     const props = {
         t,
         lang: i18n.language,
         state,
         nextStep: (state: State) => {
-            setState(state);
-            setStep(step + (state.config !== undefined && step == 1 ? 2 : 1));
+            if (step == 1 && state.config !== undefined) {
+                setState({ ...state, canSkipArchiveCreation: true });
+                setStep(3);
+            } else {
+                setState(state);
+                setStep(step + 1);
+            }
         },
         back: () => {
             setStep(step - 1);
         },
         restart: () => {
-            setState({});
+            setState({canSkipArchiveCreation: false});
             setStep(1);
         },
     };
