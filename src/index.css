@@ -16,8 +16,14 @@ body {
     flex-wrap: wrap;
     height: auto;
     margin-left: 20px;
+    flex-direction: column-reverse;
 }
 
+@media only screen and (min-width: 960px) {
+    .recently-played {
+        flex-direction: row;
+    }
+}
 
 .thumb-frame {
     background: black !important;
@@ -294,4 +300,33 @@ body {
 .platformUri {
     color: darkgray;
     word-break: break-all;
+}
+
+.heartbeat {
+	  animation: heartbeat 5s ease-in-out infinite both;
+    animation-delay: 2s;
+}
+
+@keyframes heartbeat {
+  from {
+      transform: scale(1);
+      transform-origin: center center;
+      animation-timing-function: ease-out;
+  }
+  2% {
+      transform: scale(1.09);
+      animation-timing-function: ease-in;
+  }
+  4% {
+      transform: scale(1.02);
+      animation-timing-function: ease-out;
+  }
+  8% {
+      transform: scale(1.14);
+      animation-timing-function: ease-in;
+  }
+  11% {
+      transform: scale(1);
+      animation-timing-function: ease-out;
+  }
 }

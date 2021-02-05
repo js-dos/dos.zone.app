@@ -214,7 +214,7 @@ export function My(props: { user: User | null }) {
             <div className="thumb-options">
                 <div>
                     <ButtonGroup>
-                        <Button icon={IconNames.PLAY} intent={Intent.PRIMARY} onClick={() => runBundle(false)}>{t("play")}</Button>
+                        <Button className="heartbeat" icon={IconNames.PLAY} intent={Intent.PRIMARY} onClick={() => runBundle(false)}>{t("play")}</Button>
                         { slug !== undefined && slug.length > 0 ? <Button onClick={openSlug} icon={IconNames.COMMENT}></Button> : null }
                         { user !== null ? <Button icon={IconNames.ARCHIVE} onClick={downloadArchive}></Button> : null }
                         <Button onClick={openBuild} icon={IconNames.FORK}></Button>
