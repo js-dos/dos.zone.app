@@ -26,7 +26,8 @@ export function NavigatorPlayer(props: { dos: DosInstance | null }) {
 
     const [mobileMode, setMobileMode] = useState<boolean>(isMobile);
     const [overlay, setOverlay] = useState<boolean>(false);
-    const [hint, setHint] = useState<JSX.Element | null>(null);
+    const [hint, setHintComponent] = useState<JSX.Element | null>(null);
+    const [rtt, setRttComponent] = useState<JSX.Element | null>(null);
     const [keyboardVisible, setKeyboardVisible] = useState<boolean>(false);
     const [saving, setSaving] = useState<boolean>(false);
 
@@ -42,7 +43,18 @@ export function NavigatorPlayer(props: { dos: DosInstance | null }) {
         }
 
         let cancel = false;
-        dos.ciPromise?.then((ci) => ci.config()).then((config) => {
+        dos.ciPromise?.then((ci) => {
+            ci.events().onStdout((message) => {
+                if (cancel) {
+                    return;
+                }
+
+                if (message.startsWith("rtt-data=")) {
+                    setRttComponent(renderRttComponent(message));
+                }
+            });
+            return ci.config();
+        }).then((config) => {
             if (cancel) {
                 return;
             }
@@ -52,7 +64,7 @@ export function NavigatorPlayer(props: { dos: DosInstance | null }) {
                 return;
             }
 
-            setHint(renderHintComponent(layers, t));
+            setHintComponent(renderHintComponent(layers, t));
         });
 
         return () => {
@@ -124,6 +136,8 @@ export function NavigatorPlayer(props: { dos: DosInstance | null }) {
                 </Navbar.Heading>
             </Navbar.Group>
             <Navbar.Group align={Alignment.RIGHT}>
+                {rtt}
+                {rtt !== null ? <Navbar.Divider /> : null}
                 <Button
                     intent={showOverlay ? Intent.PRIMARY : Intent.NONE}
                     disabled={hint === null }
@@ -172,6 +186,12 @@ export function NavigatorPlayer(props: { dos: DosInstance | null }) {
     </div>;
 }
 
+function renderRttComponent(rttdata: string) {
+    const [rttTime, bitrate] = rttdata.substr("rtt-data=".length).split(" ");
+    return <div>
+        {rttTime}ms | {bitrate}kbs
+    </div>;
+}
 
 function renderHintComponent(layers: LayersType, t: TFunction) {
     const names = Object.keys(layers);

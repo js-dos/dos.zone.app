@@ -7,6 +7,16 @@ export function Dhry2(props: {
     const ci = props.ci;
     const [tokens, setTokens] = useState<string[]>([]);
 
+    const listeners: Array<(message: string) => void> = [];
+    ci.events().onStdout((message: string) => {
+        for (const next of listeners) {
+            next(message);
+        }
+    });
+    ci.events().onStdout = (fn: (message: string) => void) => {
+        listeners.push(fn);
+    }
+
     useEffect(() => {
         // listen program outpus for `~>dtime` marker
         ci.events().onStdout((message) => {
