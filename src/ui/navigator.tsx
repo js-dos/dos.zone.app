@@ -33,7 +33,7 @@ export function Navigator(props: {
             </Navbar.Group>
             <Navbar.Group align={Alignment.RIGHT}>
                 <Navbar.Divider />
-                <a href="https://twitter.com/doszone_db" target="_blank" rel="noopener noreferrer" style={{ marginRight: "5px"}} >
+                <a href="https://twitter.com/intent/user?screen_name=doszone_db" target="_blank" rel="noopener noreferrer" style={{ marginRight: "5px"}} >
                     <img src="/twitter.svg" alt="twitter" width="20px" />
                 </a>
                 <a href="https://discord.com/invite/hMVYEbG" target="_blank" rel="noopener noreferrer">

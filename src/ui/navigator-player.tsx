@@ -60,6 +60,10 @@ export function NavigatorPlayer(props: { dos: DosInstance | null }) {
         };
     }, [dos]);
 
+    function restoreFocus() {
+        document.body.focus();
+    }
+
     function toggleMobileMode() {
         if (dos === null) {
             return;
@@ -72,6 +76,7 @@ export function NavigatorPlayer(props: { dos: DosInstance | null }) {
         }
 
         setMobileMode(!mobileMode);
+        restoreFocus();
     }
 
     function toggleFullscreen() {
@@ -80,6 +85,7 @@ export function NavigatorPlayer(props: { dos: DosInstance | null }) {
         }
 
         dos.layers.toggleFullscreen();
+        restoreFocus();
     }
 
     function doSave(): Promise<void> {
@@ -99,6 +105,7 @@ export function NavigatorPlayer(props: { dos: DosInstance | null }) {
         }
 
         setKeyboardVisible(dos.layers.toggleKeyboard());
+        restoreFocus();
     }
 
     function doClose() {
