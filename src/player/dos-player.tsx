@@ -1,9 +1,10 @@
 import React, { useRef, useEffect, useState } from "react";
 import { DosFactoryType, DosInstance } from "emulators-ui/dist/types/js-dos";
 
+import { A1 } from "./a1";
 import { Dhry2 } from "./dhry2";
 import { CommandInterface } from "emulators";
-import { dhry2Bundle } from "../core/storage/recently-played";
+import { a1Bundle, dhry2Bundle } from "../core/storage/recently-played";
 
 import { IPlayerProps } from "./player";
 import { getPersonalBundleUrl, putPresonalBundle } from "../core/personal";
@@ -35,6 +36,9 @@ export function DosPlayer(props: IPlayerProps) {
     const rootRef = useRef<HTMLDivElement>(null);
     const [dos, setDos] = useState<DosInstance | null>(null);
     const [ci, _setCi] = useState<CommandInterface | null>(null);
+
+    const isA1Bundle = props.bundleUrl?.indexOf(a1Bundle) >= 0;
+    const isDhry2Bundle = props.bundleUrl?.indexOf(dhry2Bundle) >= 0;
 
     function setCi(ci: CommandInterface | null) {
         _setCi(ci);
@@ -84,19 +88,26 @@ export function DosPlayer(props: IPlayerProps) {
             });
         } else if (props.user === null && props.bundleUrl !== undefined) {
             dos.run(cdnUrl(props.bundleUrl)).then(setCiIfNeeded);
+            if (isA1Bundle || isDhry2Bundle) {
+                dos.layers.setOnSave(() => Promise.resolve());
+            }
         } else if (props.user !== null && props.bundleUrl !== undefined) {
             const personalBundleUrl = getPersonalBundleUrl(props.user.email, props.bundleUrl);
             dos.run(cdnUrl(props.bundleUrl), personalBundleUrl).then((ci) => {
                 setCiIfNeeded(ci);
-                dos.layers.setOnSave(() => {
-                    return ci.persist().then(async (data) => {
-                        const isEmpty = await isEmptyArchive(data);
-                        if (isEmpty) {
-                            return Promise.resolve();
-                        }
-                        return putPresonalBundle(props.user as User, data, props.bundleUrl);
-                    })
-                });
+                if (isA1Bundle || isDhry2Bundle) {
+                    dos.layers.setOnSave(() => Promise.resolve());
+                } else {
+                    dos.layers.setOnSave(() => {
+                        return ci.persist().then(async (data) => {
+                            const isEmpty = await isEmptyArchive(data);
+                            if (isEmpty) {
+                                return Promise.resolve();
+                            }
+                            return putPresonalBundle(props.user as User, data, props.bundleUrl);
+                        })
+                    });
+                }
             });
         } else {
             dos.stop();
@@ -108,9 +119,17 @@ export function DosPlayer(props: IPlayerProps) {
             dos.stop();
             setCi(null);
         }
-    }, [dos, props.user, props.turbo, props.bundleUrl, props.embedded]);
+    }, [dos, props.user, props.turbo, props.bundleUrl, props.embedded, isA1Bundle, isDhry2Bundle]);
 
+    let decorator: JSX.Element | null = null;
+    if (ci !== null && dos !== null) {
+        if (isA1Bundle) {
+            decorator = <A1 ci={ci} dos={dos} />;
+        } else if (isDhry2Bundle) {
+            decorator = <Dhry2 ci={ci} />;
+        }
+    }
     return <div ref={rootRef} className="player">
-        { ci === null || (props.bundleUrl || "").indexOf(dhry2Bundle) < 0 ? null : <Dhry2 ci={ci} /> }
+        {decorator}
     </div>;
 }

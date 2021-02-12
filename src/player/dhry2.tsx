@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CommandInterface } from "emulators";
+import { DosInstance } from "emulators-ui/dist/types/js-dos";
 
 export function Dhry2(props: {
     ci: CommandInterface,
@@ -7,15 +8,18 @@ export function Dhry2(props: {
     const ci = props.ci;
     const [tokens, setTokens] = useState<string[]>([]);
 
-    const listeners: Array<(message: string) => void> = [];
-    ci.events().onStdout((message: string) => {
-        for (const next of listeners) {
-            next(message);
+    useEffect(() => {
+        const listeners: Array<(message: string) => void> = [];
+        ci.events().onStdout((message: string) => {
+            for (const next of listeners) {
+                next(message);
+            }
+        });
+
+        ci.events().onStdout = (fn: (message: string) => void) => {
+            listeners.push(fn);
         }
-    });
-    ci.events().onStdout = (fn: (message: string) => void) => {
-        listeners.push(fn);
-    }
+    }, [ci]);
 
     useEffect(() => {
         // listen program outpus for `~>dtime` marker
