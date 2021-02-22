@@ -1,5 +1,6 @@
 import { storage } from "./storage";
 import { User } from "../auth";
+import { getCachedGameData } from "../game-query";
 
 const recentlyPlayedKey = "recentlyPlayed";
 
@@ -24,6 +25,18 @@ export async function getRecentlyPlayed(user: User | null): Promise<RecentlyPlay
 }
 
 export function setRecentlyPlayed(user: User | null, recentlyPlayed: RecentlyPlayed): Promise<boolean> {
+    const urls = Object.keys(recentlyPlayed);
+    for (const next of urls) {
+        const gameData = getCachedGameData(next);
+        if (gameData !== null && gameData.canonicalUrl !== next) {
+            const canonicalUrl = gameData.canonicalUrl;
+            const time = recentlyPlayed[next].visitedAtMs;
+            const canonicalTime = recentlyPlayed[canonicalUrl]?.visitedAtMs || 0;
+            const maxTime = Math.max(time, canonicalTime);
+            delete recentlyPlayed[next];
+            recentlyPlayed[canonicalUrl] = { visitedAtMs: maxTime };
+        }
+    }
     return storage(user).set(recentlyPlayedKey, JSON.stringify(recentlyPlayed));
 }
 

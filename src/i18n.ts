@@ -46,6 +46,7 @@ const en = {
         games: "Games",
         close: "Close",
         saving: "Saving...",
+        turbo_time_warn: "You Turbo session will close in 5 minutes, please save your game",
     },
     login: {
         please: "Please",
@@ -290,6 +291,7 @@ const ru = {
         games: "Игры",
         save: "Закрыть",
         saving: "Сохранение...",
+        turbo_time_warn: "Turbo сессия закроется в течении 5 минут, пожалуйста сохраните игру",
     },
     login: {
         please: "Пожалуйста",

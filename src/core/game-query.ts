@@ -9,6 +9,20 @@ export function getCachedGameData(bundleUrl: string) {
         return data;
     }
 
+    if (!bundleUrl.startsWith("http://") &&
+        !bundleUrl.startsWith("https://") &&
+        bundleUrl.indexOf("@") > 0 &&
+        bundleUrl.indexOf(":") > 0) {
+        const [slug, rest] = bundleUrl.split("@");
+        const [name, hash] = rest.split(":");
+        const canonicalUrl = decodeHashToUrl(hash);
+
+        if (cachedGameData[canonicalUrl] !== undefined) {
+            const data = {...cachedGameData[canonicalUrl]};
+            return data;
+        }
+    }
+
     return null;
 }
 

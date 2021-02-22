@@ -107,7 +107,7 @@ function App() {
             </Route>
             <Route path="/:lang/play/:url">
                 <div className="play-player-root">
-                    <NavigatorPlayer dos={dos} />
+                    <NavigatorPlayer dos={dos} user={user} />
                     <div className="play-player-container">
                         <PlayerWrapper user={user} embedded={false} queryParams={queryParams} onDosInstance={setDosInsatnce} />
                     </div>

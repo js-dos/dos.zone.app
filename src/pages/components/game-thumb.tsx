@@ -9,6 +9,7 @@ import { GameData } from "../../core/game";
 import { cdnUrl } from "../../core/cdn";
 
 export function GameThumb(props: {
+    canPlay: boolean,
     game?: GameData,
     gamePromise?: Promise<GameData>,
     selected: boolean;
@@ -59,7 +60,7 @@ export function GameThumb(props: {
         <div className="thumb-title-2">{data.title}</div>
         <img src={cdnUrl(data.screenshot) || "/default.jpg"} className="thumb-screenshot" alt="screenshot"></img>
         <div className="thumb-author">{"@" + data.author}</div>
-        {props.selected ? <Icon icon={IconNames.PLAY} iconSize={32} className="thumb-play"></Icon> : null}
+        {props.selected && props.canPlay ? <Icon icon={IconNames.PLAY} iconSize={32} className="thumb-play heartbeat"></Icon> : null}
     </Card>;
 }
 

@@ -13,16 +13,23 @@ import { LayersType } from "../pages/layers";
 import { EmulatorsUi } from "emulators-ui";
 import { TFunction } from "i18next";
 import { layers } from "emulators-ui/dist/types/dom/layers";
+import { User } from "../core/auth";
+import { getTurboSession } from "../core/turbo";
 
 declare const emulatorsUi: EmulatorsUi;
 const isMobile = Capacitor.isNative || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 const keyOptions = Object.keys(emulatorsUi.controls.namedKeyCodes);
 
-export function NavigatorPlayer(props: { dos: DosInstance | null }) {
+export function NavigatorPlayer(props: {
+    dos: DosInstance | null,
+    user: User | null,
+}) {
     const { t, i18n } = useTranslation("navigator");
     const lang = i18n.language;
     const history = useHistory();
     const dos = props.dos;
+    const user = props.user;
+    const turbo = history.location.search.indexOf("turbo=1") >= 0;
 
     const [mobileMode, setMobileMode] = useState<boolean>(isMobile);
     const [overlay, setOverlay] = useState<boolean>(false);
@@ -30,6 +37,8 @@ export function NavigatorPlayer(props: { dos: DosInstance | null }) {
     const [rtt, setRttComponent] = useState<JSX.Element | null>(null);
     const [keyboardVisible, setKeyboardVisible] = useState<boolean>(false);
     const [saving, setSaving] = useState<boolean>(false);
+    const [endTime, setEndTime] = useState<number>(0);
+    const [endTimeWarn, setEndTimeWarn] = useState<boolean>(false);
 
     const showOverlay = overlay && hint !== null;
 
@@ -71,6 +80,43 @@ export function NavigatorPlayer(props: { dos: DosInstance | null }) {
             cancel = true;
         };
     }, [dos]);
+
+    useEffect(() => {
+        if (!turbo || user === null || dos === null) {
+            return;
+        }
+
+        let cancle = false;
+        let warnNotified = false;
+        const update = () => {
+            if (cancle) {
+                return;
+            }
+
+            getTurboSession(user).then((session) => {
+                if (cancle || session === null) {
+                    return;
+                }
+
+                setEndTime(Date.now() + session.restTime * 1000);
+                const shouldWarn = session.restTime <= 5 * 60;
+                setEndTimeWarn(shouldWarn);
+                if (shouldWarn) {
+                    if (!warnNotified) {
+                        alert(t("turbo_time_warn"));
+                        warnNotified = true;
+                    }
+                }
+            });
+        };
+
+        const id = setTimeout(update, 60 * 1000);
+        update();
+        return () => {
+            cancle = true;
+            clearTimeout(id);
+        };
+    }, [turbo, user, dos, t]);
 
     function restoreFocus() {
         document.body.focus();
@@ -136,8 +182,10 @@ export function NavigatorPlayer(props: { dos: DosInstance | null }) {
                 </Navbar.Heading>
             </Navbar.Group>
             <Navbar.Group align={Alignment.RIGHT}>
-                {rtt}
-                {rtt !== null ? <Navbar.Divider /> : null}
+                { turbo && endTime > 0 ? <div style={{fontSize: "10px", color: endTimeWarn ? "#DB3737" : "#BFCCD6"}}>{timeInfo((endTime - Date.now()) / 1000, t)}</div> : null }
+                { turbo && endTime > 0 && rtt !== null ? <Navbar.Divider /> : null}
+                { rtt }
+                { turbo || rtt !== null ? <Navbar.Divider /> : null }
                 <Button
                     intent={showOverlay ? Intent.PRIMARY : Intent.NONE}
                     disabled={hint === null }
@@ -188,7 +236,7 @@ export function NavigatorPlayer(props: { dos: DosInstance | null }) {
 
 function renderRttComponent(rttdata: string) {
     const [rttTime, bitrate] = rttdata.substr("rtt-data=".length).split(" ");
-    return <div>
+    return <div style={{fontSize: "10px", color: "#BFCCD6"}}>
         {rttTime}ms | {bitrate}kbs
     </div>;
 }
@@ -273,3 +321,11 @@ function getKeyCodeName(keyCode: number) {
 
     return "KBD_none";
 }
+
+function timeInfo(time: number, t: TFunction) {
+    if (time < 60) {
+        return "0 " + t("min");
+    }
+
+    return Math.round(time / 60 * 10) / 10 + " "+ t("min");
+};

@@ -72,6 +72,11 @@ export function My(props: { user: User | null }) {
             setSelectedData(null);
         } else {
             updateSelectedData(bundleUrl, gamesData);
+
+            if (recentlyPlayed !== null && selected !== null) {
+                recentlyPlayed[bundleUrl].visitedAtMs = Date.now();
+                updateRecentlyPlayed(user, recentlyPlayed);
+            }
         }
         window.scrollTo(0,0);
     }
@@ -162,10 +167,6 @@ export function My(props: { user: User | null }) {
     const runUrl = "/" + i18n.language + "/play/" + encodeURIComponent(selectedData.canonicalUrl);
 
     function runBundle(turboMode: boolean) {
-        if (recentlyPlayed !== null && selected !== null) {
-            recentlyPlayed[selected].visitedAtMs = Date.now();
-            updateRecentlyPlayed(user, recentlyPlayed);
-        }
         const startTurbo = canTurbo && turboMode;
         const url = runUrl + "?turbo=" + (startTurbo ? "1" : "0")
         if (startTurbo && window.location.protocol === "https:") {
@@ -217,7 +218,7 @@ export function My(props: { user: User | null }) {
         <AndroidPromo />
         <h1>{t("selected")}</h1>
         <div className="recently-played">
-            <GameThumb key={"selected-" + selectedData.canonicalUrl} onClick={() => runBundle(false)} game={selectedData} selected={true} />
+            <GameThumb canPlay={canPlay} key={"selected-" + selectedData.canonicalUrl} onClick={() => { if (canPlay) { runBundle(false) }}} game={selectedData} selected={true} />
             <div className="thumb-options">
                 <div>
                     <ButtonGroup>
@@ -252,7 +253,7 @@ export function My(props: { user: User | null }) {
             <Button large={true} onClick={() => openRepository()} icon={IconNames.SEARCH} intent={Intent.NONE}>{t("browse_database")}</Button>
         </div>
         <div className="recently-played">{
-            keys.map((a) => <GameThumb onClick={() => setSelected(a)} gamePromise={gamesData[a]} key={"all-" + a} selected={false} />)
+            keys.map((a) => <GameThumb canPlay={false} onClick={() => setSelected(a)} gamePromise={gamesData[a]} key={"all-" + a} selected={false} />)
         }</div>
     </div>
 }
