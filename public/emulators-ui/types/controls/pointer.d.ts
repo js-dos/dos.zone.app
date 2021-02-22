@@ -3,6 +3,7 @@ export declare const pointer: {
     changers: string[];
     enders: string[];
     prevents: string[];
+    leavers: string[];
 };
 export interface PointerState {
     x: number;
