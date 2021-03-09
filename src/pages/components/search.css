@@ -1,0 +1,16 @@
+.search-root {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.search-non-ideal {
+    margin-top: 20px;
+    width: 80%;
+}
+
+.search {
+    width: 100%;
+}
+

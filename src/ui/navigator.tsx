@@ -17,15 +17,20 @@ import { User } from "../core/auth";
 export function Navigator(props: {
     user: User | null,
     resetUser: () => void,
+    showTalksLink?: boolean,
 }) {
     const { t, i18n } = useTranslation("navigator");
     const lang = i18n.language;
+    const showTalksLink = props.showTalksLink || false;
 
     return <Navbar fixedToTop={false}>
             <Navbar.Group align={Alignment.LEFT}>
                 <Navbar.Heading>
-                    <Link className={[Classes.BUTTON, Classes.MINIMAL].join(" ")}
-                          to="/">DOS.Zone</Link>
+                    { showTalksLink === false ?
+                      <Link className={[Classes.BUTTON, Classes.MINIMAL].join(" ")}
+                         to="/">DOS.Zone</Link> :
+                      <a className={[Classes.BUTTON, Classes.MINIMAL].join(" ")} target="_blank"
+                         href={ lang === "ru" ? "https://talks.dos.zone/t/dos-zone/7427" : "https://talks.dos.zone/t/welcome-to-dos-zone/11" }>Talks</a> }
                 </Navbar.Heading>
                 <Navbar.Divider />
                 <Link className={[Classes.BUTTON, Classes.MINIMAL, Classes.ICON + "-" + IconNames.PLUS].join(" ")}

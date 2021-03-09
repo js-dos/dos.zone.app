@@ -1,4 +1,4 @@
-import { gameGet } from "./config";
+import { gameGet, gameSearch } from "./config";
 import { GET_OBJECT } from "./xhr/GET";
 import { logError } from "./log";
 
@@ -26,5 +26,15 @@ export async function getGame(bundleUrl: string): Promise<GameData | null> {
     } catch (e) {
         logError(e);
         return null;
+    }
+}
+
+export async function searchGame(searchTerm: string): Promise<GameData[]> {
+    try {
+        const games = (await GET_OBJECT(gameSearch + "?request=" + encodeURIComponent(searchTerm))).games;
+        return games || [];
+    } catch (e) {
+        logError(e);
+        return [];
     }
 }

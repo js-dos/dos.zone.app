@@ -20,6 +20,12 @@ const en = {
     },
     common: {
         loading: "Loading...",
+        play: "Play",
+        versions_1: "1 version",
+        versions_2: "2 versions",
+        versions_3: "3 versions",
+        versions_4: "4 versions",
+        versions_5: "5 versions",
     },
     promo: {
         title: "Dos.Zone Android App",
@@ -143,6 +149,21 @@ Take attention that our base support multiple languages, please post messages in
 Our database is community drived. Database sources is [here](https://github.com/caiiiycuk/dos.zone). Report about your problem and we will try to solve it asap.
 `,
     },
+    landing2: {
+        search_result: "Best match",
+        more_search: "More...",
+        recently_played: "Your favorites",
+        more_recent: "All..."
+    },
+    search: {
+        searching: "Searching...",
+        search_placeholder: "Enter game name to search",
+        search_action: "Press to search",
+        search_no_results: "No search result",
+        search_no_results_description: "No results found. Try advanced search.",
+        search_advanced: "Advanced Search",
+        search_too_short: "Your search term is too short.",
+    },
     landing: {
         about_db: "Read more about database",
         quick_tour: "Quick tour",
@@ -265,6 +286,12 @@ const ru = {
     },
     common: {
         loading: "Загрузка...",
+        play: "Играть",
+        versions_1: "1 версия",
+        versions_2: "2 версии",
+        versions_3: "3 версии",
+        versions_4: "4 версии",
+        versions_5: "5 версий",
     },
     promo: {
         title: "Dos.Zone приложение",
@@ -388,6 +415,21 @@ Dos.Zone предоставляет минимальну функциональ�
 
 Наша база данных управляется сообществом. Её исходный код опубликован [здесь](https://github.com/caiiiycuk/dos.zone). Сообщите нам о проблеме и мы постораемся решить её как можно скорее.
 `,
+    },
+    landing2: {
+        search_result: "Релевантные результаты",
+        more_search: "Ещё...",
+        recently_played: "Избранные",
+        more_recent: "Все..."
+    },
+    search: {
+        searching: "Поиск...",
+        search_placeholder: "Введите название игры",
+        search_action: "Нажимите для поиска",
+        search_no_results: "Нет результатов",
+        search_no_results_description: "Ничего не найдено. Попробуйтe расширенный поиск.",
+        search_advanced: "Расширенный поиск",
+        search_too_short: "Слишком короткое слово для поиска"
     },
     landing: {
         about_db: "Подробнее о базе данных",

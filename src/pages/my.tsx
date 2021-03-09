@@ -10,7 +10,9 @@ import {
     Position
 } from "@blueprintjs/core";
 
-import { getRecentlyPlayed, RecentlyPlayed, setRecentlyPlayed as updateRecentlyPlayed  } from "../core/storage/recently-played";
+import { getRecentlyPlayed, RecentlyPlayed,
+         setRecentlyPlayed as updateRecentlyPlayed,
+         recentlyPlayedSorterFn } from "../core/storage/recently-played";
 import { GameThumb } from "./components/game-thumb";
 import { IconNames } from "@blueprintjs/icons";
 
@@ -155,7 +157,7 @@ export function My(props: { user: User | null }) {
     }, [user, url, listUrl]);
 
     if (recentlyPlayed === null || selected === null || selectedData === null) {
-        return <div>
+        return <div style={{ alignSelf: "center", }}>
             <br/>
             <Spinner></Spinner>
         </div>;
@@ -190,7 +192,7 @@ export function My(props: { user: User | null }) {
             return;
         }
         const url = await getPersonalBundleUrlIfExists(user.email, selectedData.canonicalUrl);
-        window.open(url, "blank");
+        window.open(url, "_blank");
     }
 
     const keys = Object.keys(recentlyPlayed);
@@ -257,12 +259,6 @@ export function My(props: { user: User | null }) {
         }</div>
     </div>
 }
-
-function recentlyPlayedSorterFn(recentlyPlayed: RecentlyPlayed) {
-    return (a: string, b: string) => {
-        return recentlyPlayed[b].visitedAtMs - recentlyPlayed[a].visitedAtMs;
-    };
-};
 
 function peekPromise<T>(promise: Promise<T>) {
     let value: T | null = null;

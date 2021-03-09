@@ -19,7 +19,7 @@ import { Navigator } from "./ui/navigator";
 import { NavigatorPlayer } from "./ui/navigator-player";
 import { NavigatorHidden } from "./ui/navigator-hidden";
 
-import { Landing } from "./pages/landing";
+import { Landing } from "./pages/landing/landing-v2";
 import { GameStudio } from "./pages/game-studio";
 import { FeaturesGuide } from "./pages/guides/features";
 import { My } from "./pages/my";
@@ -82,7 +82,7 @@ function App() {
                 <Redirect to={"/" + lang} />
             </Route>
             <Route exact path="/:lang/">
-                <Navigator user={user} resetUser={resetUser} />
+                <Navigator user={user} resetUser={resetUser} showTalksLink={true} />
                 <Landing user={user} />
             </Route>
             <Route path={["/:lang/studio/:url", "/:lang/studio"]}>

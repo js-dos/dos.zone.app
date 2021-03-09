@@ -1,0 +1,59 @@
+.landing2-root {
+    margin: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-grow: 1;
+    flex-direction: column;
+    align-self: center;
+    width: 100%;
+}
+
+.landing2-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-grow: 0;
+    flex-direction: column;
+    align-self: center;
+    width: 320px;
+    max-width: 100%;
+}
+
+
+.landing2-logo {
+    width: 80%;
+    margin: 40px 0;
+}
+
+.landing2-games {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: center;
+    margin-top: 20px;
+    width: 90%;
+}
+
+@media only screen and (min-width: 640px) {
+    .landing2-root {
+        justify-content: center;
+    }
+
+    .landing2-header {
+        justify-content: center;
+        width: 480px;
+    }
+
+    .landing2-logo {
+        margin: 0 0 40px 0;
+    }
+}
+
+.landing2-games-header {
+    margin-top: 25px;
+    display: flex;
+    align-items: baseline;
+    flex-direction: row;
+}

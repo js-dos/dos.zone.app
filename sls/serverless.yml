@@ -31,6 +31,7 @@ provider:
         - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.TURBO_TABLE}"
         - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.SUBSCRIPTIONS_TABLE}"
         - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.GAME_DATA_TABLE}"
+        - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.GAME_DATA_TABLE}/index/*"
     - Effect: Allow
       Action:
         - lambda:InvokeFunction
@@ -112,6 +113,14 @@ functions:
     events:
       - http:
           path: /game/get
+          method: get
+          cors: true
+  gameSearch:
+    handler: src/game-search.gameSearch
+    name: doszone-sls-gameSearch
+    events:
+      - http:
+          path: /game/search
           method: get
           cors: true
   inappWebhook:
@@ -260,10 +269,22 @@ resources:
           -
             AttributeName: url
             AttributeType: S
+          -
+            AttributeName: repTopic
+            AttributeType: N
         KeySchema:
           -
             AttributeName: url
             KeyType: HASH
+        GlobalSecondaryIndexes:
+          -
+            IndexName: repTopic
+            KeySchema:
+            -
+              AttributeName: repTopic
+              KeyType: HASH
+            Projection:
+              ProjectionType: ALL
         TableName: ${self:provider.environment.GAME_DATA_TABLE}
         BillingMode: PAY_PER_REQUEST
 

@@ -4,6 +4,7 @@ import * as AWS from "aws-sdk";
 import { getKey } from "./storage";
 import { badRequest, noSession, success, error } from "./responses";
 import { validateUser } from "./session";
+import { createGameDataItem } from "./game";
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 const TableName = process.env.GAME_DATA_TABLE as string;
@@ -31,29 +32,5 @@ async function getGameData(url: string) {
         return undefined;
     }
 
-    response.Item.description = {} as {[locale: string]: string};
-    response.Item.slug = {} as {[locale: string]: string};
-    const keys = Object.keys(response.Item);
-
-    for (const next of keys) {
-        if (!next.startsWith("description") || next === "description") {
-            continue;
-        }
-        const [x, locale] = next.split("-");
-        response.Item.description[locale] = {
-            description: response.Item[next],
-        }
-        delete response.Item[next];
-    }
-
-    for (const next of keys) {
-        if (!next.startsWith("slug") || next === "slug") {
-            continue;
-        }
-        const [x, locale] = next.split("-");
-        response.Item.slug[locale] = response.Item[next];
-        delete response.Item[next];
-    }
-
-    return response.Item;
+    return createGameDataItem(response.Item);
 }

@@ -9,14 +9,14 @@ import {
 import { IconNames } from "@blueprintjs/icons";
 
 import ReactMardown from "react-markdown/with-html";
-import { renderers } from "../core/renderers";
+import { renderers } from "../../core/renderers";
 
-import { openRepository } from "../core/browser-tab";
+import { openRepository } from "../../core/browser-tab";
 import { useHistory } from "react-router-dom";
 
-import { AndroidPromo } from "./components/android-promo";
-import { getRecentlyPlayed, setRecentlyPlayed } from "../core/storage/recently-played";
-import { User } from "../core/auth";
+import { AndroidPromo } from "../components/android-promo";
+import { getRecentlyPlayed, setRecentlyPlayed } from "../../core/storage/recently-played";
+import { User } from "../../core/auth";
 
 let redirected = false;
 

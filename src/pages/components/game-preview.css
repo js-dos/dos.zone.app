@@ -1,0 +1,39 @@
+.preview-card {
+    width: 200px;
+    min-height: 250px;
+    margin: 10px 10px;
+    flex-grow: 1;
+    padding: 10px 0 !important;
+    background: #10161A !important;
+    max-width: 40vh;
+    position: relative;
+}
+
+.preview-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.preview-header {
+    color: #48aff0 !important;
+    padding: 0 10px !important;
+}
+
+.preview-desc {
+    padding: 10px;
+}
+
+.preview-footer {
+    display: flex;
+    flex-direction: column;
+}
+
+.preview-image {
+    width: 100%;
+    align-self: center;
+}
+
+.preview-button {
+    margin: 0 5px;
+}
+
