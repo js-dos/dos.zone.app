@@ -74,7 +74,7 @@ export function Landing(props: { user: User | null }) {
         <AndroidPromo />
 
         <div className="landing2-header">
-            <img src="logo-wide.png" className="landing2-logo" />
+            <img src="/logo-wide.png" className="landing2-logo" />
             <Search onSearchResult={(searchTerm, response) => {
                 setSearchTerm(searchTerm);
                 setSearchResponse(response);
