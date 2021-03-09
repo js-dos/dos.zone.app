@@ -21,11 +21,9 @@ import { GameData } from "../core/game";
 import { getGameData } from "../core/game-query";
 
 import { User } from "../core/auth";
-import { getTurboSession } from "../core/turbo";
-import { Capacitor } from "@capacitor/core";
 import { AndroidPromo } from "./components/android-promo";
 import { TurboOptions } from "./components/turbo-options";
-import { GET_BUFFER, GET_TEXT } from "../core/xhr/GET";
+import { GET_TEXT } from "../core/xhr/GET";
 import { getPersonalBundleUrlIfExists } from "../core/personal";
 
 import striptags from "striptags";

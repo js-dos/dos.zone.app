@@ -1,6 +1,7 @@
 import React, { FormEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
+import { Capacitor } from "@capacitor/core";
 
 import {
     Intent,
@@ -18,7 +19,7 @@ import { GamePreview } from "../components/game-preview";
 import "./landing-v2.css";
 import { dhry2Url, getRecentlyPlayed, recentlyPlayedSorterFn  } from "../../core/storage/recently-played";
 import { getGameData } from "../../core/game-query";
-import { openSearch } from "../../core/browser-tab";
+import { openRepository, openSearch } from "../../core/browser-tab";
 
 export function Landing(props: { user: User | null }) {
     const { t, i18n } = useTranslation("landing2");
@@ -81,18 +82,19 @@ export function Landing(props: { user: User | null }) {
         </div>
         {
             searchResponse !== null && searchResponse.length > 0 ?
-            <div className="landing2-games-header"><div>{t("search_result")}&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;</div><Button onClick={onSearchMore} minimal={true} intent={Intent.PRIMARY}>{t("more_search")}</Button></div> :
-            null
+            <div className="landing2-games-header"><div>{t("search_result")}&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;</div><Button onClick={onSearchMore} minimal={true} intent={Intent.PRIMARY}>{t("more_search")}</Button></div> : null
         }
         <div className="landing2-games">
-               { (searchResponse || []).map((game, i) => <GamePreview openInternal={true} game={game} key={"search-" + i + ":" + game.canonicalUrl} />) }
+               { (searchResponse || []).map((game, i) => <GamePreview openInternal={ Capacitor.platform !== "android" } game={game} key={"search-" + i + ":" + game.canonicalUrl} />) }
         </div>
 
         { recentlyResponse !== null && recentlyResponse.length > 0 ? <div className="landing2-games-header"><div>{t("recently_played")}&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;</div><Button onClick={onRecentMore} minimal={true} intent={Intent.PRIMARY}>{t("more_recent")}</Button></div> : null }
         <div className="landing2-games">
             {
                 recentlyResponse === null ? <Spinner/> :
-                (recentlyResponse || []).map((game, i) => <GamePreview openInternal={true} game={game} key={"recently-" + i + ":" + game.canonicalUrl} />)
+                (recentlyResponse.length === 0 ?
+                <div className="landing2-games-header"><Button onClick={openRepository} minimal={true} intent={Intent.PRIMARY}>{t("open_catalog")}</Button></div> :
+                recentlyResponse.map((game, i) => <GamePreview openInternal={true} game={game} key={"recently-" + i + ":" + game.canonicalUrl} />))
             }
         </div>
     </div>);

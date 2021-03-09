@@ -6,6 +6,7 @@ import {
     Navbar,
     Alignment,
     Classes,
+    Button,
 } from "@blueprintjs/core";
 
 import { IconNames } from "@blueprintjs/icons";
@@ -13,6 +14,7 @@ import { useTranslation } from "react-i18next";
 
 import { LoginButton } from "./login-button";
 import { User } from "../core/auth";
+import { openTalks } from "../core/browser-tab";
 
 export function Navigator(props: {
     user: User | null,
@@ -29,8 +31,8 @@ export function Navigator(props: {
                     { showTalksLink === false ?
                       <Link className={[Classes.BUTTON, Classes.MINIMAL].join(" ")}
                          to="/">DOS.Zone</Link> :
-                      <a className={[Classes.BUTTON, Classes.MINIMAL].join(" ")} target="_blank"
-                         href={ lang === "ru" ? "https://talks.dos.zone/t/dos-zone/7427" : "https://talks.dos.zone/t/welcome-to-dos-zone/11" }>Talks</a> }
+                      <Button minimal={true} onClick={() => openTalks(i18n.language)}>Talks</Button>
+                    }
                 </Navbar.Heading>
                 <Navbar.Divider />
                 <Link className={[Classes.BUTTON, Classes.MINIMAL, Classes.ICON + "-" + IconNames.PLUS].join(" ")}

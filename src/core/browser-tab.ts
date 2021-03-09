@@ -28,3 +28,11 @@ export function openSearch(searchTerm: string, locale: string) {
         windowName: "_self",
     });
 }
+
+export function openTalks(locale: string) {
+    Browser.open({
+        url: domain + (locale === "ru" ? "/t/dos-zone/7427" : "/t/welcome-to-dos-zone/11"),
+        toolbarColor: "#000000",
+        windowName: "_self",
+    });
+}

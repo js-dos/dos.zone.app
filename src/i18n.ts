@@ -150,6 +150,7 @@ Our database is community drived. Database sources is [here](https://github.com/
 `,
     },
     landing2: {
+        open_catalog: "Open catalog",
         search_result: "Best match",
         more_search: "More...",
         recently_played: "Your favorites",
@@ -417,6 +418,7 @@ Dos.Zone предоставляет минимальну функциональ�
 `,
     },
     landing2: {
+        open_catalog: "Открыть каталог",
         search_result: "Релевантные результаты",
         more_search: "Ещё...",
         recently_played: "Избранные",
