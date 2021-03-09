@@ -148,7 +148,7 @@ function initFromUrl(url: string) {
                         }
 
                         const gameData = getCachedGameData(url);
-                        const slug = gameData?.slug[props.lang] || gameData?.slug["en"];
+                        const slug = gameData?.slug[props.lang] || gameData?.slug.en;
                         props.nextStep({
                             ...state,
                             name: slug,
@@ -439,7 +439,7 @@ export function GameStudio() {
         lang: i18n.language,
         state,
         nextStep: (state: State) => {
-            if (step == 1 && state.config !== undefined) {
+            if (step === 1 && state.config !== undefined) {
                 setState({ ...state, canSkipArchiveCreation: true });
                 setStep(3);
             } else {
@@ -489,7 +489,7 @@ export function GameStudio() {
         </div>
         <br/>
         {
-            step == 1 ?
+            step === 1 ?
             (<div>
                 <H2>{t("quick_tour")}</H2>
                 <iframe

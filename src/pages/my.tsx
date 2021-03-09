@@ -198,7 +198,7 @@ export function My(props: { user: User | null }) {
     const keys = Object.keys(recentlyPlayed);
     keys.sort(recentlyPlayedSorterFn(recentlyPlayed));
 
-    const slug = selectedData.slug[i18n.language] || selectedData.slug["en"];
+    const slug = selectedData.slug[i18n.language] || selectedData.slug.en;
     function openSlug() {
         window.open("https://talks.dos.zone/t/" + slug, "_blank");
     }

@@ -3,13 +3,9 @@ import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 
 import {
-    Classes,
-    Intent, Overlay, Icon,
-    Card, Button, 
-    H2, Spinner, InputGroup,
-    Popover, Position,
-    NonIdealState,
-    Divider,
+    Intent,
+    Button,
+    Spinner,
 } from "@blueprintjs/core";
 
 import { AndroidPromo } from "../components/android-promo";

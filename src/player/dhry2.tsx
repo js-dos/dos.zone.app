@@ -9,7 +9,7 @@ export function Dhry2(props: {
     const [tokens, setTokens] = useState<string[]>([]);
 
     useEffect(() => {
-        const listeners: Array<(message: string) => void> = [];
+        const listeners: ((message: string) => void)[] = [];
         ci.events().onStdout((message: string) => {
             for (const next of listeners) {
                 next(message);

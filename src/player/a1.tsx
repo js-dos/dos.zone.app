@@ -27,7 +27,7 @@ export function A1(props: {
     }, [dos, keyCharTimes]);
 
     useEffect(() => {
-        const listeners: Array<(message: string) => void> = [];
+        const listeners: ((message: string) => void)[] = [];
         ci.events().onStdout((message: string) => {
             for (const next of listeners) {
                 next(message);
