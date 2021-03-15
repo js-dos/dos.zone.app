@@ -167,12 +167,16 @@ function PlayerWrapper(props: {
     onDosInstance: (dos: DosInstance | null) => void;
 }) {
     const { url } = useParams<{url: string}>();
-    const turbo = props.queryParams().turbo || "0";
+    const turbo = (props.queryParams().turbo || "0") === "1";
+    const local = (props.queryParams().local || "0") === "1";
+    const logVisual = (props.queryParams().logVisual || "0") === "1";
     return <Player
                user={props.user}
                bundleUrl={decodeURIComponent(url)}
                embedded={props.embedded}
-               turbo={turbo === "1"}
+               turbo={turbo}
+               local={local}
+               logVisual={logVisual}
                onDosInstance={props.onDosInstance}
            ></Player>;
 }

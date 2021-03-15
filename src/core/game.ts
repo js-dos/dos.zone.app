@@ -22,6 +22,7 @@ export async function getGame(bundleUrl: string): Promise<GameData | null> {
             return null;
         }
         data.canonicalUrl = bundleUrl;
+        unescapeStrings(data);
         return data;
     } catch (e) {
         logError(e);
@@ -31,10 +32,26 @@ export async function getGame(bundleUrl: string): Promise<GameData | null> {
 
 export async function searchGame(searchTerm: string): Promise<GameData[]> {
     try {
-        const games = (await GET_OBJECT(gameSearch + "?request=" + encodeURIComponent(searchTerm))).games;
-        return games || [];
+        const games = (await GET_OBJECT(gameSearch + "?request=" + encodeURIComponent(searchTerm))).games || [];
+        for (const next of games) {
+            unescapeStrings(next);
+        }
+        return games;
     } catch (e) {
         logError(e);
         return [];
     }
+}
+
+function unescapeStrings(game: GameData | null) {
+    if (game === null) {
+        return;
+    }
+
+    game.title = replaceEntities(game.title);
+    game.game = replaceEntities(game.game);
+}
+
+function replaceEntities(value: string) {
+    return (value || "").replaceAll("&#x26;", "&").replaceAll("&#x27;", "'");
 }

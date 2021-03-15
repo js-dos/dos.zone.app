@@ -106,6 +106,13 @@ async function getGamesData(topics: number[]) {
         }
     }
 
+    const resolved = await Promise.all(promises);
+    const nonNull: any[] = [];
+    for (const next of resolved) {
+        if (next !== null) {
+            nonNull.push(next);
+        }
+    }
 
-    return Promise.all(promises);
+    return nonNull;
 }

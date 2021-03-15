@@ -19,10 +19,15 @@ import { getTurboSession } from "../../core/turbo";
 import { TFunction } from "i18next";
 import { Link } from "react-router-dom";
 import { Storage, storage } from "../../core/storage/storage";
+import { RunOptions } from "../my";
 
 
 
-export function TurboOptions(props: { user: User | null, onClick: () => void, intent: Intent }) {
+export function TurboOptions(props: {
+    user: User | null,
+    onRun: (options: RunOptions) => void,
+    intent: Intent
+}) {
     const { t, i18n } = useTranslation("my");
     const [turboTime, setTurboTime] = useState<number | null>(null);
     const [userStorage, setUserStorage] = useState<Storage | null>(null);
@@ -30,7 +35,7 @@ export function TurboOptions(props: { user: User | null, onClick: () => void, in
     const [updating, setUpdating] = useState<boolean>(false);
 
     const user = props.user;
-    const onClick = props.onClick;
+    const onRun = props.onRun;
     const lang = i18n.language;
 
     useEffect(() => {
@@ -114,12 +119,18 @@ export function TurboOptions(props: { user: User | null, onClick: () => void, in
         <div className="turbo-border">
             <div className="turbo-options">
                 <ButtonGroup>
-                <Button className={props.intent === Intent.PRIMARY ? "heartbeat" : "" } intent={props.intent} icon={IconNames.FAST_FORWARD} onClick={onClick}>{t("play_turbo")}</Button>
-          <Link className={Classes.BUTTON} to={"/" + lang + "/profile"}>
-            <Icon icon={IconNames.COG} iconSize={16} />
-          </Link>
-    </ButtonGroup>
-          &nbsp;&nbsp;{timeInfo(turboTime, t)}&nbsp;&nbsp;
+                <Button className={props.intent === Intent.PRIMARY ? "heartbeat" : "" } intent={props.intent} icon={IconNames.FAST_FORWARD} onClick={() => onRun({ turbo: true })}>{t("play_turbo")}</Button>
+                <Link className={Classes.BUTTON} to={"/" + lang + "/profile"}>
+                    <Icon icon={IconNames.COG} iconSize={16} />
+                </Link>
+                </ButtonGroup>
+                &nbsp;&nbsp;{timeInfo(turboTime, t)}&nbsp;&nbsp;
+                <Button intent={props.intent} icon={IconNames.CONSOLE} minimal={true} onClick={() => onRun({ turbo: true, logVisual: true })}></Button>
+                {
+                    user?.email === "caiiiycuk@gmail.com" ?
+                    <Button intent={props.intent} icon={IconNames.LAB_TEST} minimal={true} onClick={() => onRun({ turbo: true, logVisual: true, local: true })}></Button> :
+                    null
+                }
             </div>
             <div className="my-region-selector">{t("region")}&nbsp;
                 <HTMLSelect minimal={true}

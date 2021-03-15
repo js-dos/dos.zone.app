@@ -1,0 +1,12 @@
+.log-visual {
+    margin: 0;
+    padding: 5px;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    background: #FFFFFF54;
+}
+
+.log-visual-median, .log-visual-dt {
+    background-color: #5f9ea0;
+}

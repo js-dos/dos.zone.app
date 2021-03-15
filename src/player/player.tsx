@@ -12,6 +12,8 @@ export interface IPlayerProps {
     bundleUrl: string;
     embedded: boolean;
     turbo: boolean;
+    local?: boolean;
+    logVisual?: boolean;
     janusServerUrl?: string;
 
     onDosInstance?: (dos: DosInstance | null) => void;
@@ -33,7 +35,9 @@ export function Player(props: IPlayerProps) {
         newProps.turbo = false;
     }
 
-    if (newProps.turbo) {
+    if (newProps.local === true) {
+        return <DosPlayer {...newProps} janusServerUrl="http://127.0.0.1:8088/janus" turbo={true} logVisual={true} />;
+    } else if (newProps.turbo) {
         return <TurboPlayer {...newProps} />;
     } else {
         return <DosPlayer {...newProps} />;

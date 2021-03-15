@@ -1,13 +1,19 @@
 import { Plugins } from "@capacitor/core";
+import { isMobile } from "../cap-config";
+
 const { Browser } = Plugins;
 
 const domain = "https://talks.dos.zone";
-const repositoryUrl = domain + "/t/collections/44653";
-Browser.prefetch({ urls: [repositoryUrl] });
+
+const desktopCatalogUrl = domain + "/t/dos-games-on-mobile/47306";
+const mobileCatalogUrl = domain + "/t/dos-games-on-mobile/47305";
+const catalogUrl = isMobile ? mobileCatalogUrl : desktopCatalogUrl;
+
+Browser.prefetch({ urls: [catalogUrl] });
 
 export function openRepository() {
     Browser.open({
-        url: repositoryUrl,
+        url: catalogUrl,
         toolbarColor: "#000000",
         windowName: "_self",
     });

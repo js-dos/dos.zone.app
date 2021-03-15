@@ -26,6 +26,7 @@ const en = {
         versions_3: "3 versions",
         versions_4: "4 versions",
         versions_5: "5 versions",
+        no_mobile: "No mobile controls",
     },
     promo: {
         title: "Dos.Zone Android App",
@@ -293,6 +294,7 @@ const ru = {
         versions_3: "3 версии",
         versions_4: "4 версии",
         versions_5: "5 версий",
+        no_mobile: "Нет мобильной версии",
     },
     promo: {
         title: "Dos.Zone приложение",

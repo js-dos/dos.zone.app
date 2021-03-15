@@ -7,17 +7,15 @@ import { IconNames } from "@blueprintjs/icons";
 
 import { useTranslation } from "react-i18next";
 import { DosInstance } from "emulators-ui/dist/types/js-dos";
-import { Capacitor } from "@capacitor/core";
 import { Button as ButtonType } from "emulators-ui/dist/types/controls/button";
 import { LayersType } from "../pages/layers";
 import { EmulatorsUi } from "emulators-ui";
 import { TFunction } from "i18next";
-import { layers } from "emulators-ui/dist/types/dom/layers";
 import { User } from "../core/auth";
 import { getTurboSession } from "../core/turbo";
+import { isMobile } from "../cap-config";
 
 declare const emulatorsUi: EmulatorsUi;
-const isMobile = Capacitor.isNative || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 const keyOptions = Object.keys(emulatorsUi.controls.namedKeyCodes);
 
 export function NavigatorPlayer(props: {

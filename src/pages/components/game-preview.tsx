@@ -21,13 +21,26 @@ import { openSlug } from "../../core/browser-tab";
 export function GamePreview(props: {
     game: GameData,
     openInternal: boolean,
+    warnAboutMobile: boolean,
+    openInternalWhiteList?: string[],
 }) {
     const { t, i18n } = useTranslation("common");
     const history = useHistory();
     const data = props.game;
     const versionsCount = (data as any).count || 1;
-    const openInternal = props.openInternal && versionsCount === 1;
+    let openInternal = props.openInternal && versionsCount === 1;
     const description = striptags(data.description[i18n.language]?.description || data.description.en?.description || "");
+    const warnNoMobile = props.warnAboutMobile && data.title.indexOf("mobile") === -1;
+    const openInternalWhiteList = props.openInternalWhiteList || [];
+
+    if (!openInternal) {
+        for (const next of openInternalWhiteList) {
+            if (next === data.canonicalUrl) {
+                openInternal = true;
+                break;
+            }
+        }
+    }
 
     function onClick() {
         if (openInternal) {
@@ -45,10 +58,13 @@ export function GamePreview(props: {
                 <div className="preview-desc">
                     {description.substr(0, 150) + "..."}
                 </div>
-                <Button className="preview-button" intent={ openInternal ? Intent.PRIMARY : Intent.SUCCESS }>
-                    {openInternal ?
-                      t("play") :
-                      t("versions_" + Math.min(versionsCount, 5)) }
+                <Button className="preview-button" intent={ warnNoMobile ? Intent.NONE : (openInternal ? Intent.PRIMARY : Intent.SUCCESS) }>
+                    { warnNoMobile ?
+                      t("no_mobile") :
+                      (openInternal ?
+                       t("play") :
+                       t("versions_" + Math.min(versionsCount, 5)))
+                    }
                 </Button>
             </div>
         </div>

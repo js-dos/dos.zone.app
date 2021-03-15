@@ -33,6 +33,12 @@ const isSafari = navigator.vendor && navigator.vendor.indexOf("Apple") > -1 &&
                  navigator.userAgent.indexOf("CriOS") === -1 &&
                  navigator.userAgent.indexOf("FxiOS") === -1;
 
+export interface RunOptions {
+    turbo: boolean;
+    local?: boolean;
+    logVisual?: boolean;
+}
+
 export function My(props: { user: User | null }) {
     const [recentlyPlayed, _setRecentlyPlayed] = useState<RecentlyPlayed | null>(null);
     const [gamesData, setGamesData] = useState<{[url: string]: Promise<GameData>}>({});
@@ -166,9 +172,10 @@ export function My(props: { user: User | null }) {
     const canTurbo = !canPlay || selectedData.turbo !== "no" && !isSafari;
     const runUrl = "/" + i18n.language + "/play/" + encodeURIComponent(selectedData.canonicalUrl);
 
-    function runBundle(turboMode: boolean) {
+    function runBundle(options: RunOptions) {
+        const turboMode = options.turbo;
         const startTurbo = canTurbo && turboMode;
-        const url = runUrl + "?turbo=" + (startTurbo ? "1" : "0")
+        const url = runUrl + "?turbo=" + (startTurbo ? "1" : "0") + (options.local ? "&local=1" : "") + (options.logVisual ? "&logVisual=1" : "");
         if (startTurbo && window.location.protocol === "https:") {
             window.location.href = "http://dos.zone" + url;
         } else {
@@ -212,13 +219,13 @@ export function My(props: { user: User | null }) {
         className={canPlay ? "heartbeat" : ""}
         icon={IconNames.PLAY}
         intent={canPlay ? Intent.PRIMARY : Intent.NONE}
-        onClick={() => runBundle(false)}>{t("play")}</Button>);
+        onClick={() => runBundle({ turbo: false })}>{t("play")}</Button>);
 
     return <div className="left-margin">
         <AndroidPromo />
         <h1>{t("selected")}</h1>
         <div className="recently-played">
-            <GameThumb canPlay={canPlay} key={"selected-" + selectedData.canonicalUrl} onClick={() => { if (canPlay) { runBundle(false) }}} game={selectedData} selected={true} />
+            <GameThumb canPlay={canPlay} key={"selected-" + selectedData.canonicalUrl} onClick={() => { if (canPlay) { runBundle({ turbo: false }) }}} game={selectedData} selected={true} />
             <div className="thumb-options">
                 <div>
                     <ButtonGroup>
@@ -232,11 +239,10 @@ export function My(props: { user: User | null }) {
                         { user !== null ? <Button icon={IconNames.ARCHIVE} onClick={downloadArchive}></Button> : null }
                         <Button onClick={openBuild} icon={IconNames.FORK}></Button>
                         <Button onClick={remove} icon={IconNames.TRASH}></Button>
-                    </ButtonGroup>
-                    { canTurbo ? <TurboOptions
+                    </ButtonGroup> { canTurbo ? <TurboOptions
                                      intent={!canPlay ? Intent.PRIMARY : Intent.NONE}
                                      user={user}
-                                     onClick={() => runBundle(true) } /> : null }
+                                     onRun={runBundle} /> : null }
                 </div>
                 <br/><br/>
                 <div className="thumb-description">

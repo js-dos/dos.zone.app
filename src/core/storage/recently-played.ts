@@ -4,7 +4,6 @@ import { getCachedGameData } from "../game-query";
 
 const recentlyPlayedKey = "recentlyPlayed";
 
-export const a1Bundle = "/b46a42839934a8710efc5a40139be6ee239204fb.jsdos";
 export const dhry2Bundle = "/b4b5275904d86a4ab8a20917b2b7e34f0df47bf7.jsdos";
 export const dhry2Url = "https://doszone-uploads.s3.dualstack.eu-central-1.amazonaws.com/original/2X/b" + dhry2Bundle;
 

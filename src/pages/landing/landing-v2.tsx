@@ -20,6 +20,7 @@ import "./landing-v2.css";
 import { dhry2Url, getRecentlyPlayed, recentlyPlayedSorterFn  } from "../../core/storage/recently-played";
 import { getGameData } from "../../core/game-query";
 import { openRepository, openSearch } from "../../core/browser-tab";
+import { isMobile } from "../../cap-config";
 
 export function Landing(props: { user: User | null }) {
     const { t, i18n } = useTranslation("landing2");
@@ -27,13 +28,19 @@ export function Landing(props: { user: User | null }) {
     const [ searchTerm, setSearchTerm ] = useState<string>("");
     const [ searchResponse, setSearchResponse ] = useState<GameData[] | null>(null);
     const [ recentlyResponse, setRecentlyResponse ] = useState<GameData[] | null>(null);
+    const [ recentlyUrls, setRecentlyUrls ] = useState<string[]>([]);
     const user = props.user;
 
     useEffect(() => {
         let cancle = false;
         getRecentlyPlayed(user).then(async (recentlyPlayed) => {
+            if (cancle) {
+                return;
+            }
+
             const urls = Object.keys(recentlyPlayed);
             urls.sort(recentlyPlayedSorterFn(recentlyPlayed));
+            setRecentlyUrls(urls);
 
             const gameData: GameData[] = [];
             for (let i = 0; i < Math.min(urls.length, 5); ++i) {
@@ -85,7 +92,11 @@ export function Landing(props: { user: User | null }) {
             <div className="landing2-games-header"><div>{t("search_result")}&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;</div><Button onClick={onSearchMore} minimal={true} intent={Intent.PRIMARY}>{t("more_search")}</Button></div> : null
         }
         <div className="landing2-games">
-               { (searchResponse || []).map((game, i) => <GamePreview openInternal={ Capacitor.platform !== "android" } game={game} key={"search-" + i + ":" + game.canonicalUrl} />) }
+            {
+                searchResponse === null ?
+                <div className="landing2-games-header"><Button onClick={openRepository} minimal={true} intent={Intent.PRIMARY}>{t("open_catalog")}</Button></div> :
+                (searchResponse || []).map((game, i) => <GamePreview openInternalWhiteList={recentlyUrls} warnAboutMobile={isMobile} openInternal={Capacitor.platform !== "android" } game={game} key={"search-" + i + ":" + game.canonicalUrl} />)
+            }
         </div>
 
         { recentlyResponse !== null && recentlyResponse.length > 0 ? <div className="landing2-games-header"><div>{t("recently_played")}&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;</div><Button onClick={onRecentMore} minimal={true} intent={Intent.PRIMARY}>{t("more_recent")}</Button></div> : null }
@@ -93,8 +104,8 @@ export function Landing(props: { user: User | null }) {
             {
                 recentlyResponse === null ? <Spinner/> :
                 (recentlyResponse.length === 0 ?
-                <div className="landing2-games-header"><Button onClick={openRepository} minimal={true} intent={Intent.PRIMARY}>{t("open_catalog")}</Button></div> :
-                recentlyResponse.map((game, i) => <GamePreview openInternal={true} game={game} key={"recently-" + i + ":" + game.canonicalUrl} />))
+                null :
+                recentlyResponse.map((game, i) => <GamePreview warnAboutMobile={false} openInternal={true} game={game} key={"recently-" + i + ":" + game.canonicalUrl} />))
             }
         </div>
     </div>);
