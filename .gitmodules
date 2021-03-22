@@ -1,0 +1,3 @@
+[submodule "android"]
+	path = android
+	url = https://github.com/js-dos/dos.zone.app.android.git
