@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Capacitor } from "@capacitor/core";
 import { useParams, useHistory, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -7,7 +8,8 @@ import {
     Button,
     ButtonGroup,
     Popover,
-    Position
+    Position,
+    Icon
 } from "@blueprintjs/core";
 
 import { getRecentlyPlayed, RecentlyPlayed,
@@ -25,6 +27,9 @@ import { AndroidPromo } from "./components/android-promo";
 import { TurboOptions } from "./components/turbo-options";
 import { GET_TEXT } from "../core/xhr/GET";
 import { getPersonalBundleUrlIfExists } from "../core/personal";
+
+import { HardwareEmulator } from "../plugins/emulator-plugin";
+
 
 import striptags from "striptags";
 
@@ -45,6 +50,7 @@ export function My(props: { user: User | null }) {
     const [selected, _setSelected] = useState<string | null>(null);
     const [selectedData, setSelectedData] = useState<GameData | null>(null);
     const [fullDescription, setFullDescription] = useState<boolean>(false);
+    const [canIUseHardware, setCanIUseHardware] = useState<boolean>(false);
     const { t, i18n } = useTranslation("my");
     const { url, listUrl } = useParams<{ url?: string, listUrl?: string }>();
     const history = useHistory();
@@ -115,6 +121,9 @@ export function My(props: { user: User | null }) {
         }
     }
 
+    useEffect(() => {
+        HardwareEmulator.canIUse().then(setCanIUseHardware);
+    }, []);
     useEffect(() => {
         let cancel = false;
         setRecentlyPlayed(null); // reset state
@@ -239,7 +248,13 @@ export function My(props: { user: User | null }) {
                         { user !== null ? <Button icon={IconNames.ARCHIVE} onClick={downloadArchive}></Button> : null }
                         <Button onClick={openBuild} icon={IconNames.FORK}></Button>
                         <Button onClick={remove} icon={IconNames.TRASH}></Button>
-                    </ButtonGroup> { canTurbo ? <TurboOptions
+                    </ButtonGroup>
+                    <div className="hardware-info">
+                        { Capacitor.platform === "android" ?
+                          <div><Icon intent={canIUseHardware ? Intent.SUCCESS : Intent.DANGER} icon={IconNames.OFFLINE} iconSize={10}></Icon>&nbsp;&nbsp;{t("native_acceleration")}</div> : null
+                        }
+                    </div>
+                    { canTurbo ? <TurboOptions
                                      intent={!canPlay ? Intent.PRIMARY : Intent.NONE}
                                      user={user}
                                      onRun={runBundle} /> : null }

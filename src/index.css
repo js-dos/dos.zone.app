@@ -307,6 +307,12 @@ body {
     margin-bottom: 4px;
 }
 
+.hardware-info {
+    font-size: 10px;
+    color: gray;
+    margin-top: 4px;
+}
+
 .platformUri {
     color: darkgray;
     word-break: break-all;

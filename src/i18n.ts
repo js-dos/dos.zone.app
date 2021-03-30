@@ -67,6 +67,7 @@ This data can be suddenly wiped.<br/>
 `
     },
     my: {
+        native_acceleration: "Native acceleration",
         browse_database: "Browse database",
         selected: "Play",
         recently_played: "Others",
@@ -336,6 +337,7 @@ const ru = {
 `
     },
     my: {
+        native_acceleration: "Нативное ускорение",
         browse_database: "Поиск в базе",
         selected: "Запустить",
         recently_played: "Другие",
