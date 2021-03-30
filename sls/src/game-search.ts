@@ -12,7 +12,7 @@ const TableName = process.env.GAME_DATA_TABLE as string;
 const queryRequestLimit = 5;
 
 interface DiscourseSearchResult {
-    topics: Array<{ id: number }>;
+    topics: { id: number }[];
 }
 
 export const gameSearch: Handler = async (event: any) => {
@@ -42,11 +42,11 @@ function doSearch(searchTerm: string): Promise<DiscourseSearchResult> {
             const contentType = res.headers["content-type"] || "";
 
             if (statusCode !== 200) {
-                reject(new Error('Request Failed.\n `Status Code: ${statusCode}`'));
+                reject(new Error("Request Failed.\n `Status Code: ${statusCode}`"));
                 res.resume();
                 return;
             } else if (!/^application\/json/.test(contentType)) {
-                reject(new Error('Invalid content-type.\n `Expected application/json but received ${contentType}`'));
+                reject(new Error("Invalid content-type.\n `Expected application/json but received ${contentType}`"));
                 res.resume();
                 return;
             }

@@ -1,5 +1,5 @@
-import { Handler } from 'aws-lambda';
-import { success } from './responses';
+import { Handler } from "aws-lambda";
+import { success } from "./responses";
 import { Purchase, updatePurchase } from "./inapp";
 
 interface WebHookPayload {

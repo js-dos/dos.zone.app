@@ -1,8 +1,8 @@
-import { Handler } from 'aws-lambda';
+import { Handler } from "aws-lambda";
 
-import { getPersonalBundleUrl } from './s3';
-import { success, badRequest, noSession } from './responses';
-import { validateUser } from './session';
+import { getPersonalBundleUrl } from "./s3";
+import { success, badRequest, noSession } from "./responses";
+import { validateUser } from "./session";
 
 export const personalUrl: Handler = async (event: any) => {
     const sso = event.queryStringParameters.sso;

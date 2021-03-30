@@ -159,7 +159,7 @@ export async function disconnectSession(email: string, arn: string) {
     const params: AWS.DynamoDB.DocumentClient.UpdateItemInput = {
         TableName,
         Key: {
-            email: email,
+            email,
         },
         AttributeUpdates: {
             arn: { Action: "DELETE" },
@@ -189,7 +189,7 @@ export async function closeSession(email: string, arn: string, sec: number) {
         const params: AWS.DynamoDB.DocumentClient.UpdateItemInput = {
             TableName,
             Key: {
-                email: email,
+                email,
             },
             AttributeUpdates: {
                 usedTime: { Action: "ADD", Value: sec },
@@ -207,7 +207,7 @@ export async function closeSession(email: string, arn: string, sec: number) {
         const params: AWS.DynamoDB.DocumentClient.UpdateItemInput = {
             TableName,
             Key: {
-                email: email,
+                email,
             },
             AttributeUpdates: {
                 arn: { Action: "DELETE" },
@@ -236,7 +236,7 @@ export async function updateIp(email: string, arn: string, ip: string) {
     const params: AWS.DynamoDB.DocumentClient.UpdateItemInput = {
         TableName,
         Key: {
-            email: email,
+            email,
         },
         AttributeUpdates: {
             ip: { Action: "PUT", Value: ip },

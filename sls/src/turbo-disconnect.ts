@@ -1,8 +1,8 @@
-import { Handler } from 'aws-lambda';
+import { Handler } from "aws-lambda";
 
-import { validateUser } from './session';
-import { badRequest, noSession, success } from './responses';
-import { disconnectSession } from './turbo';
+import { validateUser } from "./session";
+import { badRequest, noSession, success } from "./responses";
+import { disconnectSession } from "./turbo";
 
 export const turboDisconnect: Handler = async (event: any) => {
     const sso = event.queryStringParameters.sso;

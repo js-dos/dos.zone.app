@@ -1,8 +1,8 @@
-import { Handler } from 'aws-lambda';
+import { Handler } from "aws-lambda";
 
-import { validateUser } from './session';
-import { noSession, success } from './responses';
-import { getTurboSession } from './turbo';
+import { validateUser } from "./session";
+import { noSession, success } from "./responses";
+import { getTurboSession } from "./turbo";
 
 export const turboDescribe: Handler = async (event: any) => {
     const sso = event.queryStringParameters.sso;

@@ -1,7 +1,7 @@
-import { Handler } from 'aws-lambda';
+import { Handler } from "aws-lambda";
 import { decodeUser } from "./sso";
 import { validateSession } from "./session";
-import { success } from './responses';
+import { success } from "./responses";
 
 export const ssoLogin: Handler = async (event: any) => {
     const sso = event.queryStringParameters.sso;

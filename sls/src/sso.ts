@@ -45,10 +45,10 @@ function calculateSig(sso: string) {
 }
 
 function parseQuery(queryString: string) {
-    let query: {[key: string]: string} = {};
-    let pairs = (queryString[0] === "?" ? queryString.substr(1) : queryString).split("&");
+    const query: {[key: string]: string} = {};
+    const pairs = (queryString[0] === "?" ? queryString.substr(1) : queryString).split("&");
     for (let i = 0; i < pairs.length; i++) {
-        let pair = pairs[i].split("=");
+        const pair = pairs[i].split("=");
         query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || "");
     }
     return query;

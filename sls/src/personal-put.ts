@@ -1,7 +1,7 @@
-import { Handler } from 'aws-lambda';
+import { Handler } from "aws-lambda";
 
-import { badRequest, noSession, success } from './responses';
-import { validateUser } from './session';
+import { badRequest, noSession, success } from "./responses";
+import { validateUser } from "./session";
 
 import * as AWS from "aws-sdk";
 

@@ -1,6 +1,6 @@
-import { Handler } from 'aws-lambda';
+import { Handler } from "aws-lambda";
 import { deleteSession, validateUser } from "./session";
-import { noSession, success } from './responses';
+import { noSession, success } from "./responses";
 
 export const ssoLogout: Handler = async (event: any) => {
     const sso = event.queryStringParameters.sso;

@@ -1,8 +1,8 @@
-import { Handler } from 'aws-lambda';
+import { Handler } from "aws-lambda";
 
-import { getKey } from './storage';
-import { badRequest, noSession, success, error } from './responses';
-import { validateUser } from './session';
+import { getKey } from "./storage";
+import { badRequest, noSession, success, error } from "./responses";
+import { validateUser } from "./session";
 
 export const storageGet: Handler = async (event: any) => {
     const sso = event.queryStringParameters.sso;
