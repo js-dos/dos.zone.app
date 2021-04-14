@@ -17,27 +17,43 @@ function renderDeepLink(lang: string, url: string) {
 
 export const isMobile = Capacitor.isNative || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
+export const BackButton: {
+    customHandler?: () => void,
+    defaultHandler: () => void,
+} = {
+    defaultHandler: () => { /**/ },
+};
+
 export function CapConfig(props: {
     lang: string,
     queryParams: () => QueryParams,
 }) {
     const history = useHistory();
+
     useEffect(() => {
         const firstUrl = history.location.pathname;
+
         CapApp.addListener("appUrlOpen", (data: { url: string }) => {
             if (data.url) {
                 window.location.pathname = renderDeepLink(props.lang, data.url);
             }
         });
 
-        CapApp.addListener("backButton", async () => {
+        BackButton.defaultHandler = async () => {
+            if (BackButton.customHandler) {
+                BackButton.customHandler();
+                return;
+            }
+
             if (history.length === 1 || history.location.pathname === firstUrl) {
                 CapApp.exitApp();
                 return;
             }
 
             history.goBack();
-        });
+        };
+
+        CapApp.addListener("backButton", BackButton.defaultHandler);
 
         return () => {
             CapApp.removeAllListeners();

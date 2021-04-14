@@ -1,11 +1,12 @@
 import { Capacitor } from "@capacitor/core";
 import { Plugins } from "@capacitor/core";
 
-interface EmulatorPlugin {
+export interface EmulatorPlugin {
     canIUse(): Promise<{ ok: boolean }>;
+    sendMessage(args: { payload: string}): void;
 }
 
-class WebEmulator implements EmulatorPlugin {
+class WebEmulator {
     canIUse(): Promise<{ ok: boolean}> {
         return Promise.resolve({ ok: false });
     }
@@ -16,20 +17,8 @@ function initPlugin(): EmulatorPlugin {
         return (Plugins.EmulatorPlugin as EmulatorPlugin);
     }
 
-    return new WebEmulator();
+    return new WebEmulator() as EmulatorPlugin;
 }
 
-export class HardwareEmulatorImpl {
-    private plugin: EmulatorPlugin;
-
-    constructor(plugin: EmulatorPlugin) {
-        this.plugin = plugin;
-    }
-
-    async canIUse(): Promise<boolean> {
-        return (await this.plugin.canIUse()).ok;
-    }
-}
-
-export const HardwareEmulator: HardwareEmulatorImpl = new HardwareEmulatorImpl(initPlugin());
+export const HardwareEmulatorPlugin = initPlugin();
 

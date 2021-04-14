@@ -10,6 +10,7 @@ import { IPlayerProps } from "./player";
 import { getPersonalBundleUrl, putPresonalBundle } from "../core/personal";
 import { User } from "../core/auth";
 import { cdnUrl } from "../core/cdn";
+import { hardwareTransportLayerFactory } from "../plugins/transport-layer";
 
 declare const zip: any;
 declare const Dos: DosFactoryType;
@@ -36,6 +37,7 @@ export function DosPlayer(props: IPlayerProps) {
     const rootRef = useRef<HTMLDivElement>(null);
     const [dos, setDos] = useState<DosInstance | null>(null);
     const [ci, _setCi] = useState<CommandInterface | null>(null);
+    const [canIUseHardware, setCanIUseHardware] = useState<boolean | null>(null);
 
     const isDhry2Bundle = props.bundleUrl?.indexOf(dhry2Bundle) >= 0;
 
@@ -47,6 +49,16 @@ export function DosPlayer(props: IPlayerProps) {
     }
 
     useEffect(() => {
+        if (canIUseHardware === null) {
+            hardwareTransportLayerFactory.canIUse().then((r) => setCanIUseHardware(r.ok === true));
+        }
+    }, [canIUseHardware]);
+
+    useEffect(() => {
+        if (canIUseHardware === null) {
+            return;
+        }
+
         const root = rootRef.current as HTMLDivElement;
         const preventListener = (e: any) => {
             e.preventDefault();
@@ -55,8 +67,9 @@ export function DosPlayer(props: IPlayerProps) {
         window.addEventListener("keydown", preventListener);
 
         const instance = Dos(root, {
-            emulatorFunction: props.turbo ? "janus" : "dosWorker",
-        });
+            emulatorFunction: props.turbo ? "janus" : (canIUseHardware ? "backend" : "dosWorker"),
+            createTransportLayer: hardwareTransportLayerFactory.createTransportLayer,
+        } as any);
 
         setDos(instance);
 
@@ -64,7 +77,7 @@ export function DosPlayer(props: IPlayerProps) {
             window.removeEventListener("keydown", preventListener);
             instance.stop();
         };
-    }, [props.embedded, props.turbo]);
+    }, [props.embedded, props.turbo, canIUseHardware]);
 
     useEffect(() => {
         if (dos === null) {

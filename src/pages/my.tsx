@@ -28,7 +28,7 @@ import { TurboOptions } from "./components/turbo-options";
 import { GET_TEXT } from "../core/xhr/GET";
 import { getPersonalBundleUrlIfExists } from "../core/personal";
 
-import { HardwareEmulator } from "../plugins/emulator-plugin";
+import { hardwareTransportLayerFactory } from "../plugins/transport-layer";
 
 
 import striptags from "striptags";
@@ -122,7 +122,7 @@ export function My(props: { user: User | null }) {
     }
 
     useEffect(() => {
-        HardwareEmulator.canIUse().then(setCanIUseHardware);
+        hardwareTransportLayerFactory.canIUse().then((r) => setCanIUseHardware(r.ok === true));
     }, []);
     useEffect(() => {
         let cancel = false;

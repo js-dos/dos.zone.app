@@ -13,7 +13,8 @@ import { EmulatorsUi } from "emulators-ui";
 import { TFunction } from "i18next";
 import { User } from "../core/auth";
 import { getTurboSession } from "../core/turbo";
-import { isMobile } from "../cap-config";
+import { BackButton, isMobile } from "../cap-config";
+import { layers } from "emulators-ui/dist/types/dom/layers";
 
 declare const emulatorsUi: EmulatorsUi;
 const keyOptions = Object.keys(emulatorsUi.controls.namedKeyCodes);
@@ -39,6 +40,18 @@ export function NavigatorPlayer(props: {
     const [endTimeWarn, setEndTimeWarn] = useState<boolean>(false);
 
     const showOverlay = overlay && hint !== null;
+
+    useEffect(() => {
+        BackButton.customHandler = () => {
+            if (dos !== null) {
+                dos.layers.notyf.error(t("use_back_button"));
+            }
+        };
+
+        return () => {
+            delete BackButton.customHandler;
+        };
+    }, [dos, t]);
 
     useEffect(() => {
         if (dos === null) {

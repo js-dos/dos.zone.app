@@ -31,6 +31,8 @@ import { parseQuery, QueryParams } from "./core/query-string";
 import { DosInstance } from "emulators-ui/dist/types/js-dos";
 import { getGameData } from "./core/game-query";
 
+declare const realtime: any;
+
 function App() {
     const { i18n } = useTranslation();
     const [user, setUser] = useState<User|null>(getCachedUser());
@@ -70,6 +72,11 @@ function App() {
 
     function resetUser() {
         setUser(null);
+    }
+
+    if (typeof realtime !== "undefined" && realtime.startFromMyPage() === true) {
+        window.location.pathname = "/" + lang + "/my";
+        return null;
     }
 
     return <Router>

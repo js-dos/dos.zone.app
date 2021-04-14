@@ -44,6 +44,7 @@ const en = {
         restoring: "Restoring your progress...",
     },
     navigator: {
+        use_back_button: "Please use button in top left corner to exit",
         home: "Home",
         studio: "Game Studio",
         database: "Database",
@@ -313,6 +314,7 @@ const ru = {
         restoring: "Востанавливаем ваш прогресс...",
     },
     navigator: {
+        use_back_button: "Для выхода используйте кнопку справа вверху",
         home: "Домой",
         studio: "Творческая студия",
         database: "База данных",
