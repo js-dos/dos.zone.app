@@ -1,14 +1,17 @@
 import DosBundle from "./dos/bundle/dos-bundle";
 import { Cache } from "./cache";
 import { DosConfig } from "./dos/bundle/dos-conf";
+import { TransportLayer } from "./protocol/protocol";
 export interface Emulators {
     pathPrefix: string;
     cacheSeed: string;
     cache: (cacheName?: string) => Promise<Cache>;
     dosBundle: () => Promise<DosBundle>;
-    dosDirect: (bundle: Uint8Array | Uint8Array[]) => Promise<CommandInterface>;
-    dosWorker: (bundle: Uint8Array | Uint8Array[]) => Promise<CommandInterface>;
+    dosboxNode: (bundle: Uint8Array | Uint8Array[]) => Promise<CommandInterface>;
+    dosboxDirect: (bundle: Uint8Array | Uint8Array[]) => Promise<CommandInterface>;
+    dosboxWorker: (bundle: Uint8Array | Uint8Array[]) => Promise<CommandInterface>;
     janus: (restUrl: string) => Promise<CommandInterface>;
+    backend: (bundle: Uint8Array | Uint8Array[], transportLayer: TransportLayer) => Promise<CommandInterface>;
 }
 export interface CommandInterface {
     config: () => Promise<DosConfig>;
