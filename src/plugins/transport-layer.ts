@@ -7,6 +7,9 @@ import base64 from "base64-js";
 
 const { Filesystem } = Plugins;
 
+const targetFrameRate = 30;
+const frameUpdateInterval = 1000 / targetFrameRate;
+
 declare const realtime: any;
 
 class HardwareTransportLayer implements TransportLayer {
@@ -14,11 +17,13 @@ class HardwareTransportLayer implements TransportLayer {
     private alive = true;
     private frameWidth = 0;
     private frameHeight = 0;
+    private frameUpdateAt = 0;
 
     private handler: MessageHandler = () => { /**/ };
 
     callMain() {
         HardwareEmulatorPlugin.sendMessage({ payload: "wc-install\n" + this.sessionId + "\n" });
+        this.frameUpdateAt = Date.now();
         requestAnimationFrame(this.update.bind(this));
     }
 
@@ -112,6 +117,10 @@ class HardwareTransportLayer implements TransportLayer {
                 props.bundle = decode(props.bundle);
                 this.handler(name, props);
             } break;
+            case "ws-stdout": {
+                // console.log(props);
+                this.handler(name, props);
+            } break;
             default: {
                 this.handler(name as ServerMessage, props);
             }
@@ -122,7 +131,12 @@ class HardwareTransportLayer implements TransportLayer {
         if (this.alive) {
             requestAnimationFrame(this.update.bind(this));
         }
-        this.updateFrame();
+        const now = Date.now();
+        if (now - this.frameUpdateAt >= frameUpdateInterval) {
+            this.updateFrame();
+            this.frameUpdateAt = now;
+        }
+
         this.updateSound();
     }
 
@@ -137,8 +151,8 @@ class HardwareTransportLayer implements TransportLayer {
         }
 
         const heapu8 = decode(frameRGBA);
-
-        if (heapu8.length != this.frameWidth * this.frameHeight * 4) {
+        if (heapu8.length === 0 ||
+            heapu8.length != this.frameWidth * this.frameHeight * 4) {
             return;
         }
 
@@ -158,6 +172,10 @@ class HardwareTransportLayer implements TransportLayer {
         }
 
         const heapu8 = decode(soundSamples);
+        if (heapu8.length === 0) {
+            return;
+        }
+
         const heap32 = new Float32Array(heapu8.buffer);
 
         this.handler("ws-sound-push", {
