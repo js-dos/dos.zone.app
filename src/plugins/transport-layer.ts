@@ -6,10 +6,6 @@ import { writeFile } from "capacitor-blob-writer";
 import base64 from "base64-js";
 
 const { Filesystem } = Plugins;
-
-const targetFrameRate = 30;
-const frameUpdateInterval = 1000 / targetFrameRate;
-
 declare const realtime: any;
 
 class HardwareTransportLayer implements TransportLayer {
@@ -17,13 +13,11 @@ class HardwareTransportLayer implements TransportLayer {
     private alive = true;
     private frameWidth = 0;
     private frameHeight = 0;
-    private frameUpdateAt = 0;
 
     private handler: MessageHandler = () => { /**/ };
 
     callMain() {
         HardwareEmulatorPlugin.sendMessage({ payload: "wc-install\n" + this.sessionId + "\n" });
-        this.frameUpdateAt = Date.now();
         requestAnimationFrame(this.update.bind(this));
     }
 
@@ -131,12 +125,7 @@ class HardwareTransportLayer implements TransportLayer {
         if (this.alive) {
             requestAnimationFrame(this.update.bind(this));
         }
-        const now = Date.now();
-        if (now - this.frameUpdateAt >= frameUpdateInterval) {
-            this.updateFrame();
-            this.frameUpdateAt = now;
-        }
-
+        this.updateFrame();
         this.updateSound();
     }
 
@@ -145,23 +134,46 @@ class HardwareTransportLayer implements TransportLayer {
             return;
         }
 
-        const frameRGBA = realtime.getFrameRGBA();
-        if (frameRGBA.length === 0) {
+        const framePayload = realtime.getFramePayload();
+        if (framePayload.length === 0) {
             return;
         }
 
-        const heapu8 = decode(frameRGBA);
-        if (heapu8.length === 0 ||
-            heapu8.length != this.frameWidth * this.frameHeight * 4) {
+        const framePayloadU8 = decode(framePayload);
+        if (framePayloadU8.length === 0) {
             return;
+        }
+
+        const lines: {
+            start: number,
+            heapu8: Uint8Array,
+        }[] = [];
+
+        const pitch = this.frameWidth * 3;
+        let offset = this.frameHeight;
+        let upBorder: number = -1;
+        for (let line = 0; line < this.frameHeight; ++line) {
+            const lastLine = line === this.frameHeight - 1;
+
+
+            if (framePayloadU8[line] === 1 && upBorder === -1){
+                upBorder = line;
+            } else if ((lastLine || framePayloadU8[line] === 0) && upBorder !== -1) {
+                const downBorder = framePayloadU8[line] === 1 ? line : line - 1;
+                const range = (downBorder - upBorder + 1) * pitch;
+                const heapu8 = framePayloadU8.slice(offset, offset + range);
+                lines.push({
+                    start: upBorder,
+                    heapu8,
+                });
+                offset += range;
+                upBorder = -1;
+            }
         }
 
         this.handler("ws-update-lines", {
             sessionId: this.sessionId,
-            lines: [{
-                start: 0,
-                heapu8,
-            }],
+            lines,
         });
     }
 

@@ -19,8 +19,7 @@ aws s3 sync . s3://dos.zone --delete
 ## Android deployment 
 
 ```
-yarn build
-./node_modules/.bin/cap copy android
+yarn build && ./node_modules/.bin/cap copy android
 ```
 
 ## Assembling Backend
