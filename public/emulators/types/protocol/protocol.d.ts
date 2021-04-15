@@ -22,7 +22,7 @@ export declare class CommandInterfaceOverTransportLayer implements CommandInterf
     private startedAt;
     private frameWidth;
     private frameHeight;
-    private rgba;
+    private rgb;
     private freq;
     private bundles?;
     private transport;
