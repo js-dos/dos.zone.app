@@ -2006,12 +2006,12 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@blueprintjs/core@^3.35.0":
-  version "3.35.0"
-  resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-3.35.0.tgz#ed48ad7e6692f7dc32e28200a7984e029102ce3f"
-  integrity sha512-2coEMDX1JJuHvDCt6wZSB6zntDlKvUmi4rqjLeGR+ZOo4TtFB92GSjycMtupka1PURM1A66oQZvnMiBIjuMW6Q==
+"@blueprintjs/core@^3.43.0":
+  version "3.43.0"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-3.43.0.tgz#3d5977c52d99466c7d9952004504c2ecf3caa74d"
+  integrity sha512-96V905Jbmujh5p8bw6uMPFRvS3Xqvssr9kuD30SE7K1Dgp4SbRUjsKN2+hbIdwNpgQoyitDSocnssjL47w38XQ==
   dependencies:
-    "@blueprintjs/icons" "^3.22.0"
+    "@blueprintjs/icons" "^3.26.0"
     "@types/dom4" "^2.0.1"
     classnames "^2.2"
     dom4 "^2.1.5"
@@ -2023,10 +2023,10 @@
     resize-observer-polyfill "^1.5.1"
     tslib "~1.13.0"
 
-"@blueprintjs/icons@^3.22.0":
-  version "3.22.0"
-  resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-3.22.0.tgz#6a7c177e9aa96f0ed10bc93d88f7c6687db336ad"
-  integrity sha512-clfdwRQlzqs2sDxjwQr4p10Z3bGNTnqpsLgN+4TN1ECf7plEEukhvQh6YK/Lfd5xDhEBEEZ/YQCawZbyAYjfXg==
+"@blueprintjs/icons@^3.26.0":
+  version "3.26.0"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-3.26.0.tgz#d3f0aa0d35a9ebe8648db9651af364dfcc529d9f"
+  integrity sha512-1+yhYH1Fjj5qGx8drZUL2L1R42MiN0WVHTTKYqGEV9TAzhvFHCSZgALD7WNQa+FEibw/8B4U+79IRgUPJNEjow==
   dependencies:
     classnames "^2.2"
     tslib "~1.13.0"
@@ -2798,10 +2798,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-router-dom@^5.1.5":
-  version "5.1.5"
-  resolved "https://registry.yarnpkg.com/@types/react-router-dom/-/react-router-dom-5.1.5.tgz#7c334a2ea785dbad2b2dcdd83d2cf3d9973da090"
-  integrity sha512-ArBM4B1g3BWLGbaGvwBGO75GNFbLDUthrDojV2vHLih/Tq8M+tgvY1DSwkuNrPSwdp/GUL93WSEpTZs8nVyJLw==
+"@types/react-router-dom@^5.1.7":
+  version "5.1.7"
+  resolved "https://registry.yarnpkg.com/@types/react-router-dom/-/react-router-dom-5.1.7.tgz#a126d9ea76079ffbbdb0d9225073eb5797ab7271"
+  integrity sha512-D5mHD6TbdV/DNHYsnwBTv+y73ei+mMjrkGrla86HthE4/PVvL1J94Bu3qABU+COXzpL23T1EZapVVpwHuBXiUg==
   dependencies:
     "@types/history" "*"
     "@types/react" "*"
