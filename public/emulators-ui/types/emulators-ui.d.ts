@@ -1,5 +1,6 @@
 import { layers } from "./dom/layers";
 import { resolveBundle } from "./network/xhr";
+import { _2d } from "./graphics/_2d";
 import { webGl } from "./graphics/webgl";
 import { video } from "./graphics/video";
 import { keyboard } from "./controls/keyboard";
@@ -21,6 +22,7 @@ export declare class EmulatorsUi {
     };
     graphics: {
         webGl: typeof webGl;
+        _2d: typeof _2d;
         video: typeof video;
     };
     sound: {
