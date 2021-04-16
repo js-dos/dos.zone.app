@@ -233,7 +233,7 @@ export function My(props: { user: User | null }) {
     return <div className="left-margin">
         <AndroidPromo />
         <h1>{t("selected")}</h1>
-        <div className="recently-played">
+        <div className="recently-played my-selected">
             <GameThumb canPlay={canPlay} key={"selected-" + selectedData.canonicalUrl} onClick={() => { if (canPlay) { runBundle({ turbo: false }) }}} game={selectedData} selected={true} />
             <div className="thumb-options">
                 <div>

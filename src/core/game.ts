@@ -53,5 +53,5 @@ function unescapeStrings(game: GameData | null) {
 }
 
 function replaceEntities(value: string) {
-    return (value || "").replaceAll("&#x26;", "&").replaceAll("&#x27;", "'");
+    return (value || "").replace(/&#x26;/g, "&").replace(/&#x27;/g, "'");
 }

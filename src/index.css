@@ -26,11 +26,15 @@ body {
     flex-wrap: wrap;
     height: auto;
     margin-left: 20px;
+    flex-direction: row;
+}
+
+.my-selected {
     flex-direction: column-reverse;
 }
 
 @media only screen and (min-width: 960px) {
-    .recently-played {
+    .my-selected {
         flex-direction: row;
     }
 }

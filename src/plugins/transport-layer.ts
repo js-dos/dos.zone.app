@@ -126,7 +126,6 @@ class HardwareTransportLayer implements TransportLayer {
             requestAnimationFrame(this.update.bind(this));
         }
         this.updateFrame();
-        this.updateSound();
     }
 
     private updateFrame() {
@@ -176,25 +175,6 @@ class HardwareTransportLayer implements TransportLayer {
             lines,
         });
     }
-
-    private updateSound() {
-        const soundSamples = realtime.getSoundSamples();
-        if (soundSamples.length === 0) {
-            return;
-        }
-
-        const heapu8 = decode(soundSamples);
-        if (heapu8.length === 0) {
-            return;
-        }
-
-        const heap32 = new Float32Array(heapu8.buffer);
-
-        this.handler("ws-sound-push", {
-            sessionId: this.sessionId,
-            samples: heap32,
-        });
-    }
 }
 
 
@@ -205,8 +185,12 @@ export class HardwareTransportLayerFactory {
         const plugin = (HardwareEmulatorPlugin as any);
         if (typeof plugin.addListener !== "undefined") {
             plugin.addListener("serverMessage", (payload: { json: string }) => {
+                if (payload.json.indexOf("ws-stdout") !== -1) {
+                    payload.json = payload.json.replace(/\n/g, "\\n");
+                }
+
                 try {
-                    const data = JSON.parse("{" + payload.json.slice(0, -1).replaceAll("\n", "\\n") + "}");
+                    const data = JSON.parse("{" + payload.json.slice(0, -1) + "}");
                     this.serverMessageHandler(data.name, data);
                 } catch (e) {
                     console.error("Can't parse", payload.json, e);
