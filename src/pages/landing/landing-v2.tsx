@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import { Capacitor } from "@capacitor/core";
@@ -9,7 +9,6 @@ import {
     Spinner,
 } from "@blueprintjs/core";
 
-import { AndroidPromo } from "../components/android-promo";
 import { Search } from "../components/search";
 import { User } from "../../core/auth";
 
@@ -78,8 +77,6 @@ export function Landing(props: { user: User | null }) {
     }
 
     return (<div className="landing2-root">
-        <AndroidPromo />
-
         <div className="landing2-header">
             <img src="/logo-wide.png" className="landing2-logo" />
             <Search onSearchResult={(searchTerm, response) => {

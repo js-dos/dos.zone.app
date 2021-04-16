@@ -16,6 +16,7 @@ function renderDeepLink(lang: string, url: string) {
 }
 
 export const isMobile = Capacitor.isNative || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+export const isAndroid = /(android)/i.test(navigator.userAgent);
 
 export const BackButton: {
     customHandler?: () => void,

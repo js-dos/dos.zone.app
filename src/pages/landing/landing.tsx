@@ -14,7 +14,6 @@ import { renderers } from "../../core/renderers";
 import { openRepository } from "../../core/browser-tab";
 import { useHistory } from "react-router-dom";
 
-import { AndroidPromo } from "../components/android-promo";
 import { getRecentlyPlayed, setRecentlyPlayed } from "../../core/storage/recently-played";
 import { User } from "../../core/auth";
 
@@ -52,8 +51,6 @@ export function Landing(props: { user: User | null }) {
 
     return <div className={[Classes.RUNNING_TEXT, Classes.TEXT_LARGE].join(" ")}
                 style={{padding: "0 40px"}}>
-        <AndroidPromo />
-
         <ReactMardown renderers={renderers}
                       source={t("header_1", {lang: i18n.language})}
                       escapeHtml={false}></ReactMardown>

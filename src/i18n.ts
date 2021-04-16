@@ -28,13 +28,6 @@ const en = {
         versions_5: "5 versions",
         no_mobile: "No mobile controls",
     },
-    promo: {
-        title: "Dos.Zone Android App",
-        second_line: "Install to have better experience",
-        price: "FREE",
-        store: "In Google Play",
-        view: "VIEW",
-    },
     turbo: {
         waiting_arn: "Connecting to Turbo cloud...",
         waiting_ip: "Starting up emulator",
@@ -67,8 +60,13 @@ your game progress in indexed db.<br/>
 This data can be suddenly wiped.<br/>
 `
     },
-    my: {
+    hardware: {
         native_acceleration: "Native acceleration",
+        native_acceleration_install: "Install ",
+        native_acceleration_android: " application from Google Play to enable native acceleration which gives a much better performance",
+        not_supported: " - NOT SUPPORTED",
+    },
+    my: {
         browse_database: "Browse database",
         selected: "Play",
         recently_played: "Others",
@@ -298,13 +296,6 @@ const ru = {
         versions_5: "5 версий",
         no_mobile: "Нет мобильной версии",
     },
-    promo: {
-        title: "Dos.Zone приложение",
-        second_line: "Установите что бы использовать все возможности",
-        price: "БЕСПЛАТНО",
-        store: "В Google Play",
-        view: "ОТКРЫТЬ",
-    },
     turbo: {
         waiting_arn: "Подключаемся к облаку...",
         waiting_ip: "Запускаем эмулятор",
@@ -338,8 +329,13 @@ const ru = {
 бразуером.<br/>
 `
     },
-    my: {
+    hardware: {
         native_acceleration: "Нативное ускорение",
+        native_acceleration_install: "Установите приложение ",
+        native_acceleration_android: " из Google Play что бы включить нативное ускорение для гораздо большей производительности",
+        not_supported: " - НЕ ПОДДЕРЖИВАЕТСЯ",
+    },
+    my: {
         browse_database: "Поиск в базе",
         selected: "Запустить",
         recently_played: "Другие",

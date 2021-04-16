@@ -23,12 +23,11 @@ import { GameData } from "../core/game";
 import { getGameData } from "../core/game-query";
 
 import { User } from "../core/auth";
-import { AndroidPromo } from "./components/android-promo";
 import { TurboOptions } from "./components/turbo-options";
 import { GET_TEXT } from "../core/xhr/GET";
 import { getPersonalBundleUrlIfExists } from "../core/personal";
 
-import { hardwareTransportLayerFactory } from "../plugins/transport-layer";
+import { HardwareIcon } from "./components/hardware-icon";
 
 
 import striptags from "striptags";
@@ -50,7 +49,6 @@ export function My(props: { user: User | null }) {
     const [selected, _setSelected] = useState<string | null>(null);
     const [selectedData, setSelectedData] = useState<GameData | null>(null);
     const [fullDescription, setFullDescription] = useState<boolean>(false);
-    const [canIUseHardware, setCanIUseHardware] = useState<boolean>(false);
     const { t, i18n } = useTranslation("my");
     const { url, listUrl } = useParams<{ url?: string, listUrl?: string }>();
     const history = useHistory();
@@ -121,9 +119,6 @@ export function My(props: { user: User | null }) {
         }
     }
 
-    useEffect(() => {
-        hardwareTransportLayerFactory.canIUse().then((r) => setCanIUseHardware(r.ok === true));
-    }, []);
     useEffect(() => {
         let cancel = false;
         setRecentlyPlayed(null); // reset state
@@ -231,7 +226,6 @@ export function My(props: { user: User | null }) {
         onClick={() => runBundle({ turbo: false })}>{t("play")}</Button>);
 
     return <div className="left-margin">
-        <AndroidPromo />
         <h1>{t("selected")}</h1>
         <div className="recently-played my-selected">
             <GameThumb canPlay={canPlay} key={"selected-" + selectedData.canonicalUrl} onClick={() => { if (canPlay) { runBundle({ turbo: false }) }}} game={selectedData} selected={true} />
@@ -249,11 +243,7 @@ export function My(props: { user: User | null }) {
                         <Button onClick={openBuild} icon={IconNames.FORK}></Button>
                         <Button onClick={remove} icon={IconNames.TRASH}></Button>
                     </ButtonGroup>
-                    <div className="hardware-info">
-                        { Capacitor.platform === "android" ?
-                          <div><Icon intent={canIUseHardware ? Intent.SUCCESS : Intent.DANGER} icon={IconNames.OFFLINE} iconSize={10}></Icon>&nbsp;&nbsp;{t("native_acceleration")}</div> : null
-                        }
-                    </div>
+                    <HardwareIcon />
                     { canTurbo ? <TurboOptions
                                      intent={!canPlay ? Intent.PRIMARY : Intent.NONE}
                                      user={user}
