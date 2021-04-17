@@ -4,6 +4,13 @@ import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 
 const en = {
+    editor: {
+        layers: "Layers",
+        add_new_layer: "Add new layer",
+        edit: "Edit",
+        delete: "Delete",
+        name: "Name",
+    },
     subscriptions: {
         subscriptions: "Subscriptions",
         donate_title: "Developers donation",
@@ -272,6 +279,13 @@ Thank you!
 }
 
 const ru = {
+    editor: {
+        layers: "Слои",
+        add_new_layer: "Добавить слой",
+        edit: "Редактировать",
+        delete: "Удалить",
+        name: "Название",
+    },
     subscriptions: {
         subscriptions: "Подписки",
         donate_title: "Пожертвования разработчикам",

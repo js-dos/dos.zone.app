@@ -31,6 +31,8 @@ import { parseQuery, QueryParams } from "./core/query-string";
 import { DosInstance } from "emulators-ui/dist/types/js-dos";
 import { getGameData } from "./core/game-query";
 
+import  { LayersEditor } from "./pages/editor/layers-editor";
+
 declare const realtime: any;
 
 function App() {
@@ -123,6 +125,9 @@ function App() {
             <Route path="/:lang/player/:url">
                 <NavigatorHidden dos={dos} />
                 <PlayerWrapper user={user} embedded={true} queryParams={queryParams} onDosInstance={setDosInsatnce} />
+            </Route>
+            <Route path="/:lang/layers/editor">
+                <LayersEditor />
             </Route>
             <Route path="/:lang/dl/:url">
                 <Deeplink setUser={setUser} />

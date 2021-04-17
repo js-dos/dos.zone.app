@@ -1,0 +1,54 @@
+.layers-editor-container {
+    flex-grow: 1;
+    width: 95%;
+    align-self: center;
+}
+
+.layers-editor-stack {
+    width: 100%;
+    height: 100%;
+}
+
+.layers-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    flex-direction: column;
+}
+
+.layers-empty span {
+    margin-top: -26px;
+    margin-bottom: 6px;
+    color: #BFCCD6;
+    cursor: pointer;
+}
+
+.layers-container {
+    padding-top: 15px;
+}
+
+.layers-entry {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.layers-actions {
+    margin-left: 32px;
+}
+
+.layers-layer-title {
+    flex-grow: 1;
+}
+
+.layer-name-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.layer-name-container div {
+    margin-right: 10px;
+}
