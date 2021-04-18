@@ -14,7 +14,9 @@ import { TFunction } from "i18next";
 import { User } from "../core/auth";
 import { getTurboSession } from "../core/turbo";
 import { BackButton, isMobile } from "../cap-config";
-import { layers } from "emulators-ui/dist/types/dom/layers";
+
+import { Capacitor } from "@capacitor/core";
+
 
 declare const emulatorsUi: EmulatorsUi;
 const keyOptions = Object.keys(emulatorsUi.controls.namedKeyCodes);
@@ -48,8 +50,27 @@ export function NavigatorPlayer(props: {
             }
         };
 
+        function onBeforeUnload(event: BeforeUnloadEvent) {
+            setTimeout(() => {
+                if (dos !== null) {
+                    dos.layers.notyf.error(t("use_back_button"));
+                }
+            }, 16);
+
+            event.preventDefault();
+            event.returnValue = t("use_back_button");
+        }
+
+        if (!Capacitor.isNative) {
+            window.addEventListener("beforeunload", onBeforeUnload);
+        }
+
+
         return () => {
             delete BackButton.customHandler;
+            if (!Capacitor.isNative) {
+                window.removeEventListener("beforeunload", onBeforeUnload);
+            }
         };
     }, [dos, t]);
 
