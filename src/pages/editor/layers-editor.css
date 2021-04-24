@@ -78,3 +78,22 @@
 .layer-grid-canvas {
     cursor: pointer;
 }
+
+.layer-control-move {
+    position: absolute;
+    right: 0;
+}
+
+.layer-control-delete {
+    position: absolute;
+    top: 70px;
+    right: 0;
+}
+
+.layer-select-position {
+    color: red;
+    background: wheat;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}

@@ -11,6 +11,10 @@ const en = {
         delete: "Delete",
         name: "Name",
         grid: "Grid",
+        symbol: "Symbol",
+        required: "(required)",
+        control_type: "Control type",
+        select_position: "Select new position",
     },
     subscriptions: {
         subscriptions: "Subscriptions",
@@ -288,6 +292,10 @@ const ru = {
         delete: "Удалить",
         name: "Название",
         grid: "Сетка",
+        symbol: "Символ",
+        required: "(обязательный)",
+        control_type: "Тип элемента",
+        select_position: "Выбирите новую позицию",
     },
     subscriptions: {
         subscriptions: "Подписки",

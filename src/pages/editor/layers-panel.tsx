@@ -1,7 +1,7 @@
 import React from "react";
 
 import { PanelProps, Button, Icon, ButtonGroup, Intent } from "@blueprintjs/core";
-import { EditorStackProps } from "./layers-editor";
+import { EditorStackProps, LayerControlType } from "./layers-editor";
 import { IconNames } from "@blueprintjs/icons";
 
 export const LayersPanel: React.FC<PanelProps<EditorStackProps>> = props => {
@@ -13,7 +13,7 @@ export const LayersPanel: React.FC<PanelProps<EditorStackProps>> = props => {
         newLayersConfig.layers.push({
             grid: "honeycomb",
             title: "Layer#" + newBreadCrumbs.layer,
-            controls: [{ row: 0, column: 10 }],
+            controls: [{ row: 0, column: 10, symbol: "⚙", type: LayerControlType.Options }],
         });
 
         props.setLayersConfig(newLayersConfig);

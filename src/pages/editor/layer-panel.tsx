@@ -3,6 +3,7 @@ import React from "react";
 import { PanelProps, Button, Label, Classes, NumericInput, HTMLSelect } from "@blueprintjs/core";
 import { EditorStackProps } from "./layers-editor";
 import { LayerGrid } from "./layer-grid";
+import { getGrid } from "./grid";
 
 export const LayerPanel: React.FC<PanelProps<EditorStackProps>> = props => {
     const { config, breadCrumbs, t } = props;
@@ -18,6 +19,19 @@ export const LayerPanel: React.FC<PanelProps<EditorStackProps>> = props => {
     function onGridChange(event: any) {
         const newValue = event.target.value;
         layer.grid = newValue;
+        // validate grid
+        const { cells } = getGrid(layer.grid).getConfiguration(1, 1);
+        for (const next of layer.controls) {
+            if (next.row >= cells.length) {
+                next.row = cells.length - 1;
+            }
+
+            const cellsRow = cells[next.row];
+            if (next.column >= cellsRow.length) {
+                next.column = cellsRow.length - 1;
+            }
+        }
+
         props.setLayersConfig({...config});
     }
 
@@ -32,6 +46,8 @@ export const LayerPanel: React.FC<PanelProps<EditorStackProps>> = props => {
                     <option value="honeycomb">Honeycomb</option>
                 </HTMLSelect>
             </div>
+            { props.breadCrumbs.layerControlMove === true ?
+              <div className="layer-select-position">{t("select_position")}</div> : null}
             <LayerGrid {...props} />
         </div>
     );

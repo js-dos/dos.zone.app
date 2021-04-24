@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { EditorStackProps, LayerConfig } from "./layers-editor";
+import { EditorStackProps, LayerConfig, LayerPosition } from "./layers-editor";
 import { getGrid } from "./grid";
 import { IResizeEntry, ResizeSensor } from "@blueprintjs/core";
 
@@ -66,11 +66,30 @@ export function LayerGrid(props: EditorStackProps) {
             }
 
             const breadCrumbs = {...props.breadCrumbs};
-            breadCrumbs.layerControl = {
-                row,
-                column,
-            };
-            props.setBreadCrumbs(breadCrumbs);
+            if (breadCrumbs.layerControlMove === true) {
+                const position = breadCrumbs.layerControl as LayerPosition;
+                let controlIndex = 0;
+                for (const next of layer.controls) {
+                    if (next.column === position.column && next.row === position.row) {
+                        break;
+                    }
+                    ++controlIndex;
+                }
+                if (controlIndex === layer.controls.length) {
+                    return;
+                }
+                layer.controls[controlIndex].row = row;
+                layer.controls[controlIndex].column = column;
+                delete breadCrumbs.layerControl;
+                delete breadCrumbs.layerControlMove;
+                props.setBreadCrumbs(breadCrumbs);
+            } else {
+                breadCrumbs.layerControl = {
+                    row,
+                    column,
+                };
+                props.setBreadCrumbs(breadCrumbs);
+            }
         }
 
         canvas.addEventListener("click", onClick);
@@ -78,7 +97,10 @@ export function LayerGrid(props: EditorStackProps) {
         return () => {
             canvas.removeEventListener("click", onClick);
         };
-    }, [canvasRef]);
+    }, [canvasRef,
+        layer,
+        props.breadCrumbs.layerControlMove,
+        props.breadCrumbs.layerControl]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -106,7 +128,7 @@ export function LayerGrid(props: EditorStackProps) {
     }, [canvasRef, containerRect])
 
     if (context !== null && layer !== undefined) {
-        render(context, layer);
+        render(context, layer, props.breadCrumbs.layerControl);
     }
 
     return <ResizeSensor onResize={handleResize}>
@@ -116,7 +138,7 @@ export function LayerGrid(props: EditorStackProps) {
     </ResizeSensor>;
 }
 
-function render(context: CanvasRenderingContext2D, layer: LayerConfig) {
+function render(context: CanvasRenderingContext2D, layer: LayerConfig, selected?: LayerPosition) {
     const width = context.canvas.width;
     const height = context.canvas.height;
     const { columnsPadding, rowsPadding, cells, columnWidth, rowHeight } =
@@ -148,5 +170,25 @@ function render(context: CanvasRenderingContext2D, layer: LayerConfig) {
         context.beginPath();
         context.arc(centerX, centerY, radius, 0, 2 * Math.PI);
         context.fill();
+    }
+
+    context.fillStyle = "#FFF";
+    context.font = rowHeight * 0.75 + "px serif";
+    for (const next of layer.controls) {
+        const column = next.column;
+        const row = next.row;
+        const { centerX, centerY } = cells[row][column];
+        const metrics = context.measureText(next.symbol[0]);
+        context.fillText(next.symbol[0], centerX - metrics.width / 2, centerY + (metrics.actualBoundingBoxAscent - metrics.actualBoundingBoxDescent) / 2);
+    }
+
+    context.strokeStyle = "#F00";
+    if (selected !== undefined) {
+        const row = Math.min(selected.row, cells.length - 1);
+        const column = Math.min(selected.column, cells[row].length - 1);
+        const { centerX, centerY } = cells[row][column];
+        context.beginPath();
+        context.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+        context.stroke();
     }
 }

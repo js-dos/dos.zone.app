@@ -12,9 +12,18 @@ import { LayerControlPanel } from "./layer-control-panel";
 
 import { GridType } from "./grid";
 
-export interface LayerControl {
+export enum LayerControlType {
+    Options = "Options",
+}
+
+export interface LayerPosition {
     column: number;
     row: number;
+}
+
+export interface LayerControl extends LayerPosition {
+    type: LayerControlType,
+    symbol: string;
 }
 
 export interface LayerConfig {
@@ -29,7 +38,8 @@ export interface LayersConfig {
 
 export interface BreadCrumbs {
     layer?: number,
-    layerControl?: LayerControl,
+    layerControl?: LayerPosition,
+    layerControlMove?: boolean,
 }
 
 export interface EditorStackProps {
@@ -59,7 +69,7 @@ function createPanelsStack(props: EditorStackProps): Panel<EditorStackProps>[] {
         title: layer.title,
     })
 
-    if (props.breadCrumbs.layerControl === undefined) {
+    if (props.breadCrumbs.layerControl === undefined || props.breadCrumbs.layerControlMove === true) {
         return stack;
     }
     const layerControl = props.breadCrumbs.layerControl;
@@ -91,9 +101,12 @@ export function LayersEditor(props: {}) {
         const newBreadCrumbs = {...breadCrumbs};
         if (newBreadCrumbs.layerControl !== undefined) {
             delete newBreadCrumbs.layerControl;
+            delete newBreadCrumbs.layerControlMove;
             setBreadCrumbs(newBreadCrumbs);
         } else if (newBreadCrumbs.layer !== undefined) {
             delete newBreadCrumbs.layer;
+            delete newBreadCrumbs.layerControl;
+            delete newBreadCrumbs.layerControlMove;
             setBreadCrumbs(newBreadCrumbs);
         }
     };
