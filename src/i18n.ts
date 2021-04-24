@@ -10,6 +10,7 @@ const en = {
         edit: "Edit",
         delete: "Delete",
         name: "Name",
+        grid: "Grid",
     },
     subscriptions: {
         subscriptions: "Subscriptions",
@@ -72,6 +73,7 @@ This data can be suddenly wiped.<br/>
         native_acceleration_install: "Install ",
         native_acceleration_android: " application from Google Play to enable native acceleration which gives a much better performance",
         not_supported: " - NOT SUPPORTED",
+        comparsion: "comparsion",
     },
     my: {
         browse_database: "Browse database",
@@ -285,6 +287,7 @@ const ru = {
         edit: "Редактировать",
         delete: "Удалить",
         name: "Название",
+        grid: "Сетка",
     },
     subscriptions: {
         subscriptions: "Подписки",
@@ -348,6 +351,7 @@ const ru = {
         native_acceleration_install: "Установите приложение ",
         native_acceleration_android: " из Google Play что бы включить нативное ускорение для гораздо большей производительности",
         not_supported: " - НЕ ПОДДЕРЖИВАЕТСЯ",
+        comparsion: "сравнение",
     },
     my: {
         browse_database: "Поиск в базе",

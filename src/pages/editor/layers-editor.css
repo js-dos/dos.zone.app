@@ -25,7 +25,10 @@
 }
 
 .layers-container {
-    padding-top: 15px;
+    padding-top: 10px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .layers-entry {
@@ -46,9 +49,32 @@
 .layer-name-container {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
+}
+
+.layer-name-container div:last-child {
+    margin-top: 4px;
+    margin-right: 0px;
+    margin-right: 0px;
 }
 
 .layer-name-container div {
     margin-right: 10px;
+}
+
+.layer-panel-grid-input .bp3-input-group {
+    width: 5ch;
+}
+
+.layer-grid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    margin: 10px 0;
+}
+
+.layer-grid-canvas {
+    cursor: pointer;
 }

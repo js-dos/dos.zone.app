@@ -8,9 +8,19 @@ import { TFunction } from "i18next";
 
 import { LayersPanel } from "./layers-panel";
 import { LayerPanel } from "./layer-panel";
+import { LayerControlPanel } from "./layer-control-panel";
+
+import { GridType } from "./grid";
+
+export interface LayerControl {
+    column: number;
+    row: number;
+}
 
 export interface LayerConfig {
+    grid: GridType,
     title: string,
+    controls: LayerControl[],
 }
 
 export interface LayersConfig {
@@ -19,6 +29,7 @@ export interface LayersConfig {
 
 export interface BreadCrumbs {
     layer?: number,
+    layerControl?: LayerControl,
 }
 
 export interface EditorStackProps {
@@ -48,6 +59,16 @@ function createPanelsStack(props: EditorStackProps): Panel<EditorStackProps>[] {
         title: layer.title,
     })
 
+    if (props.breadCrumbs.layerControl === undefined) {
+        return stack;
+    }
+    const layerControl = props.breadCrumbs.layerControl;
+    stack.push({
+        props,
+        renderPanel: LayerControlPanel,
+        title: "Control [" + layerControl.row + ", " + layerControl.column + "]",
+    });
+
     return stack;
 };
 
@@ -68,16 +89,19 @@ export function LayersEditor(props: {}) {
 
     const onClose = () => {
         const newBreadCrumbs = {...breadCrumbs};
-        if (newBreadCrumbs.layer !== undefined) {
+        if (newBreadCrumbs.layerControl !== undefined) {
+            delete newBreadCrumbs.layerControl;
+            setBreadCrumbs(newBreadCrumbs);
+        } else if (newBreadCrumbs.layer !== undefined) {
             delete newBreadCrumbs.layer;
             setBreadCrumbs(newBreadCrumbs);
-            return;
         }
     };
 
+    const panelStack = createPanelsStack(editorProps);
     return <div className="layers-editor-container">
         <PanelStack2 className="layers-editor-stack"
-                     stack={createPanelsStack(editorProps) as any}
+                     stack={panelStack as any}
                      onClose={onClose}
         />
     </div>;

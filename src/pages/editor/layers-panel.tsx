@@ -10,7 +10,11 @@ export const LayersPanel: React.FC<PanelProps<EditorStackProps>> = props => {
         const newLayersConfig = {...config};
         const newBreadCrumbs = {...breadCrumbs};
         newBreadCrumbs.layer = newLayersConfig.layers.length;
-        newLayersConfig.layers.push({ title: "Layer#" + newBreadCrumbs.layer });
+        newLayersConfig.layers.push({
+            grid: "honeycomb",
+            title: "Layer#" + newBreadCrumbs.layer,
+            controls: [{ row: 0, column: 10 }],
+        });
 
         props.setLayersConfig(newLayersConfig);
         props.setBreadCrumbs(newBreadCrumbs);

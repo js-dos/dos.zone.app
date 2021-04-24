@@ -30,6 +30,7 @@ export function HardwareIcon(props: {}) {
                {t("native_acceleration_install")}
                <a target="_blank" href="https://play.google.com/store/apps/details?id=zone.dos.app">Dos.Zone</a>
                {t("native_acceleration_android")}
+               &nbsp;(<a target="_blank" href="https://youtu.be/U4gPnbtBrJw">{t("comparsion")}</a>)
             </div>
         </div>;
     }
