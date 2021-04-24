@@ -33,10 +33,22 @@ export const LayersPanel: React.FC<PanelProps<EditorStackProps>> = props => {
         props.setLayersConfig(newLayersConfig);
     }
 
+    function asJson() {
+        const newBreadCrumbs = {...breadCrumbs};
+        newBreadCrumbs.asJson = true;
+        props.setBreadCrumbs(newBreadCrumbs);
+    }
+
     if (config.layers.length === 0) {
         return <div className="layers-empty">
             <Icon onClick={addNewLayer} icon={IconNames.INSERT} iconSize={52}></Icon>
             <div>{t("add_new_layer")}</div>
+            <div className="layers-empty-close">
+                <Button minimal={true}
+                        icon={IconNames.CROSS}
+                        intent={Intent.DANGER}
+                        onClick={props.onClose}></Button>
+            </div>
         </div>;
     }
 
@@ -51,8 +63,12 @@ export const LayersPanel: React.FC<PanelProps<EditorStackProps>> = props => {
                     </ButtonGroup>
                 </div>
             })}
-            <div className="layers-entry">
+            <div className="layers-controls">
                 <Button icon={IconNames.INSERT} onClick={addNewLayer}>{t("add_new_layer")}</Button>
+                <span>&nbsp;</span>
+                <Button icon={IconNames.EDIT} onClick={asJson}>{t("as_json")}</Button>
+                <span className="layers-container-spring"></span>
+                <Button icon={IconNames.CROSS} minimal={true} intent={Intent.DANGER} onClick={props.onClose}></Button>
             </div>
         </div>
     );

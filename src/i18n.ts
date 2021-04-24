@@ -15,6 +15,8 @@ const en = {
         required: "(required)",
         control_type: "Control type",
         select_position: "Select new position",
+        as_json: "JSON",
+        close: "Close",
     },
     subscriptions: {
         subscriptions: "Subscriptions",
@@ -296,6 +298,8 @@ const ru = {
         required: "(обязательный)",
         control_type: "Тип элемента",
         select_position: "Выбирите новую позицию",
+        as_json: "JSON",
+        close: "Закрыть",
     },
     subscriptions: {
         subscriptions: "Подписки",

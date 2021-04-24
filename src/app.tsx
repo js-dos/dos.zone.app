@@ -127,7 +127,7 @@ function App() {
                 <PlayerWrapper user={user} embedded={true} queryParams={queryParams} onDosInstance={setDosInsatnce} />
             </Route>
             <Route path="/:lang/layers/editor">
-                <LayersEditor />
+                <LayersEditor onClose={() => {}} />
             </Route>
             <Route path="/:lang/dl/:url">
                 <Deeplink setUser={setUser} />

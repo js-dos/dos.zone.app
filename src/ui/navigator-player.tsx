@@ -17,6 +17,9 @@ import { BackButton, isMobile } from "../cap-config";
 
 import { Capacitor } from "@capacitor/core";
 
+import { LayersEditor } from "../pages/editor/layers-editor";
+
+import "./navigator.css";
 
 declare const emulatorsUi: EmulatorsUi;
 const keyOptions = Object.keys(emulatorsUi.controls.namedKeyCodes);
@@ -40,6 +43,7 @@ export function NavigatorPlayer(props: {
     const [saving, setSaving] = useState<boolean>(false);
     const [endTime, setEndTime] = useState<number>(0);
     const [endTimeWarn, setEndTimeWarn] = useState<boolean>(false);
+    const [showLayersEditor, setShowLayersEditor] = useState<boolean>(false);
 
     const showOverlay = overlay && hint !== null;
 
@@ -219,12 +223,17 @@ export function NavigatorPlayer(props: {
                 { rtt }
                 { turbo || rtt !== null ? <Navbar.Divider /> : null }
                 <Button
+                    icon={IconNames.COG}
+                    minimal={true}
+                    onClick={() => setShowLayersEditor(true) } />
+                { false ?
+                <Button
                     intent={showOverlay ? Intent.PRIMARY : Intent.NONE}
                     disabled={hint === null }
                     icon={IconNames.INFO_SIGN}
                     minimal={true}
                     onClick={() => setOverlay(!overlay) }>
-                </Button>
+                </Button> : null }
                 <Button
                     intent={(mobileMode ? Intent.PRIMARY : Intent.NONE)}
                     icon={IconNames.MOBILE_PHONE}
@@ -251,7 +260,8 @@ export function NavigatorPlayer(props: {
                 </Button>
             </Navbar.Group>
         </Navbar>
-        <Overlay
+        { false ?
+          <Overlay
             isOpen={showOverlay}
             onClose={() => {setOverlay(false)}}
             className={Classes.OVERLAY_SCROLL_CONTAINER}>
@@ -262,7 +272,11 @@ export function NavigatorPlayer(props: {
             }}>
                 {hint}
             </Card>
-        </Overlay>
+          </Overlay>: null }
+        { showLayersEditor ?
+          <div className="navigator-player-layers-editor">
+              <LayersEditor onClose={() => setShowLayersEditor(false) }/>
+          </div> : null }
     </div>;
 }
 

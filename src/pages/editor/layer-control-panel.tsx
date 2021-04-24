@@ -7,10 +7,11 @@ import { LayerGrid } from "./layer-grid";
 import { layers } from "emulators-ui/dist/types/dom/layers";
 import { IconNames } from "@blueprintjs/icons";
 
-const allowedSymbols = ["⚙"];
+const allowedSymbols = ["⚙", "↑", "↓", "←", "→"];
 
 export const LayerControlPanel: React.FC<PanelProps<EditorStackProps>> = props => {
     const [ readOnly, setReadOnly ] = useState<boolean>(false);
+    const [ version, setVersion ] = useState<number>(0);
     const { t } = props;
     const { column, row } = props.breadCrumbs.layerControl as LayerPosition;
     const layer = props.config.layers[props.breadCrumbs.layer as number] as LayerConfig;
@@ -37,7 +38,12 @@ export const LayerControlPanel: React.FC<PanelProps<EditorStackProps>> = props =
 
     const control = layer.controls[controlIndex];
 
-    function onSymbolChange() {
+    function onTypeChange() {
+    }
+
+    function onSymbolChange(event: any) {
+        control.symbol = event.currentTarget.value;
+        setVersion(version + 1);
     }
 
     function onMove() {
@@ -59,7 +65,7 @@ export const LayerControlPanel: React.FC<PanelProps<EditorStackProps>> = props =
         <FormGroup
             label={t("control_type")}
             inline={true}>
-            <HTMLSelect onChange={onSymbolChange} options={Object.keys(LayerControlType)} value={control.type}>
+            <HTMLSelect onChange={onTypeChange} options={Object.keys(LayerControlType)} value={control.type}>
             </HTMLSelect>
         </FormGroup>
         <FormGroup

@@ -38,13 +38,17 @@ export const LayerPanel: React.FC<PanelProps<EditorStackProps>> = props => {
     return (
         <div className="layers-container">
             <div className="layer-name-container">
-                <div>{t("name")}</div>
-                <div><input className={Classes.INPUT} value={layer.title} onChange={onChangeName} /></div>
-                <div>{t("grid")}</div>
-                <HTMLSelect value={layer.grid} onChange={onGridChange}>
-                    <option value="square">Square</option>
-                    <option value="honeycomb">Honeycomb</option>
-                </HTMLSelect>
+                <div>
+                    <div>{t("name")}</div>
+                    <div><input className={Classes.INPUT} value={layer.title} onChange={onChangeName} /></div>
+                </div>
+                <div>
+                    <div>{t("grid")}</div>
+                    <HTMLSelect value={layer.grid} onChange={onGridChange}>
+                        <option value="square">Square</option>
+                        <option value="honeycomb">Honeycomb</option>
+                    </HTMLSelect>
+                </div>
             </div>
             { props.breadCrumbs.layerControlMove === true ?
               <div className="layer-select-position">{t("select_position")}</div> : null}

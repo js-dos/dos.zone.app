@@ -7,6 +7,7 @@ import "./layers-editor.css";
 import { TFunction } from "i18next";
 
 import { LayersPanel } from "./layers-panel";
+import { LayersAsJson } from "./layers-asjson";
 import { LayerPanel } from "./layer-panel";
 import { LayerControlPanel } from "./layer-control-panel";
 
@@ -40,6 +41,7 @@ export interface BreadCrumbs {
     layer?: number,
     layerControl?: LayerPosition,
     layerControlMove?: boolean,
+    asJson?: boolean,
 }
 
 export interface EditorStackProps {
@@ -48,6 +50,7 @@ export interface EditorStackProps {
     breadCrumbs: BreadCrumbs,
     setLayersConfig: (config: LayersConfig) => void;
     setBreadCrumbs: (breadCrumbs: BreadCrumbs) => void;
+    onClose: () => void;
 }
 
 function createPanelsStack(props: EditorStackProps): Panel<EditorStackProps>[] {
@@ -57,6 +60,15 @@ function createPanelsStack(props: EditorStackProps): Panel<EditorStackProps>[] {
         renderPanel: LayersPanel,
         title: props.t("layers"),
     });
+
+    if (props.breadCrumbs.asJson === true) {
+        stack.push({
+            props,
+            renderPanel: LayersAsJson,
+            title: "JSON",
+        });
+        return stack;
+    }
 
     if (props.breadCrumbs.layer === undefined) {
         return stack;
@@ -82,7 +94,9 @@ function createPanelsStack(props: EditorStackProps): Panel<EditorStackProps>[] {
     return stack;
 };
 
-export function LayersEditor(props: {}) {
+export function LayersEditor(props: {
+    onClose: () => void,
+}) {
     const { t, i18n } = useTranslation("editor");
     const [ layersConfig, setLayersConfig ] = useState<LayersConfig>({
         layers: [],
@@ -95,11 +109,18 @@ export function LayersEditor(props: {}) {
         breadCrumbs,
         setLayersConfig,
         setBreadCrumbs,
+        onClose: props.onClose,
     };
 
     const onClose = () => {
         const newBreadCrumbs = {...breadCrumbs};
-        if (newBreadCrumbs.layerControl !== undefined) {
+        if (newBreadCrumbs.asJson !== undefined) {
+            delete newBreadCrumbs.asJson;
+            setBreadCrumbs(newBreadCrumbs);
+        } else if (newBreadCrumbs.layerControlMove !== undefined) {
+            delete newBreadCrumbs.layerControlMove;
+            setBreadCrumbs(newBreadCrumbs);
+        } else if (newBreadCrumbs.layerControl !== undefined) {
             delete newBreadCrumbs.layerControl;
             delete newBreadCrumbs.layerControlMove;
             setBreadCrumbs(newBreadCrumbs);

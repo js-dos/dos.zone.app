@@ -1,7 +1,6 @@
 .layers-editor-container {
-    flex-grow: 1;
-    width: 95%;
-    align-self: center;
+    width: 100%;
+    height: 100%;
 }
 
 .layers-editor-stack {
@@ -25,7 +24,7 @@
 }
 
 .layers-container {
-    padding-top: 10px;
+    padding: 10px 10px;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -61,6 +60,9 @@
 
 .layer-name-container div {
     margin-right: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
 }
 
 .layer-panel-grid-input .bp3-input-group {
@@ -96,4 +98,24 @@
     position: absolute;
     bottom: 0;
     right: 0;
+}
+
+.layers-empty-close {
+    position: absolute;
+    right: 0;
+    top: 32px;
+    cursor: pointer;
+}
+
+.layers-controls {
+    display: flex;
+    flex-direction: row;
+}
+
+.layers-container-spring {
+    flex-grow: 1;
+}
+
+.layers-asjson {
+    flex-grow: 1;
 }
