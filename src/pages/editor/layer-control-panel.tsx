@@ -1,13 +1,9 @@
 import React, { useState } from "react";
 
-import { PanelProps, Button,
-    Label, Classes, NumericInput, HTMLSelect, FormGroup, Intent } from "@blueprintjs/core";
+import { PanelProps, Button, FormGroup, Intent, HTMLSelect } from "@blueprintjs/core";
 import { EditorStackProps, LayerConfig, LayerControlType, LayerPosition } from "./layers-editor";
-import { LayerGrid } from "./layer-grid";
-import { layers } from "emulators-ui/dist/types/dom/layers";
 import { IconNames } from "@blueprintjs/icons";
-
-const allowedSymbols = ["⚙", "↑", "↓", "←", "→"];
+import { controlsMapping } from "./controls/controls";
 
 export const LayerControlPanel: React.FC<PanelProps<EditorStackProps>> = props => {
     const [ readOnly, setReadOnly ] = useState<boolean>(false);
@@ -31,18 +27,16 @@ export const LayerControlPanel: React.FC<PanelProps<EditorStackProps>> = props =
         layer.controls.push({
             row,
             column,
-            symbol: "?",
-            type: LayerControlType.Options
+            symbol: "",
+            type: LayerControlType.Key,
         })
     }
 
     const control = layer.controls[controlIndex];
 
-    function onTypeChange() {
-    }
-
-    function onSymbolChange(event: any) {
-        control.symbol = event.currentTarget.value;
+    function onTypeChange(event: any) {
+        clearControl(control);
+        control.type = event.currentTarget.value;
         setVersion(version + 1);
     }
 
@@ -61,6 +55,8 @@ export const LayerControlPanel: React.FC<PanelProps<EditorStackProps>> = props =
         props.setLayersConfig({...props.config});
     }
 
+    const controlElement = React.createElement(controlsMapping[control.type], props);
+
     return (<div className="layers-container">
         <FormGroup
             label={t("control_type")}
@@ -68,12 +64,9 @@ export const LayerControlPanel: React.FC<PanelProps<EditorStackProps>> = props =
             <HTMLSelect onChange={onTypeChange} options={Object.keys(LayerControlType)} value={control.type}>
             </HTMLSelect>
         </FormGroup>
-        <FormGroup
-            label={t("symbol")}
-            inline={true}>
-            <HTMLSelect onChange={onSymbolChange} options={allowedSymbols} value={control.symbol}>
-            </HTMLSelect>
-        </FormGroup>
+        <div className="layers-control-container">
+            {controlElement}
+        </div>
         <div className="layer-control-move">
             <Button intent={Intent.SUCCESS} minimal={true} icon={IconNames.MOVE} onClick={onMove}></Button>
         </div>
@@ -82,3 +75,12 @@ export const LayerControlPanel: React.FC<PanelProps<EditorStackProps>> = props =
         </div>
     </div>);
 };
+
+function clearControl(obj: any) {
+    for (const next of Object.keys(obj)) {
+        if (next === "row" || next === "column") {
+            continue;
+        }
+        delete obj[next];
+    }
+}

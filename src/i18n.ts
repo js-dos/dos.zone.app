@@ -17,6 +17,7 @@ const en = {
         select_position: "Select new position",
         as_json: "JSON",
         close: "Close",
+        key: "Key",
     },
     subscriptions: {
         subscriptions: "Subscriptions",
@@ -300,6 +301,7 @@ const ru = {
         select_position: "Выбирите новую позицию",
         as_json: "JSON",
         close: "Закрыть",
+        key: "Кнопка",
     },
     subscriptions: {
         subscriptions: "Подписки",

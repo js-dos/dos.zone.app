@@ -15,6 +15,7 @@ import { GridType } from "./grid";
 
 export enum LayerControlType {
     Options = "Options",
+    Key = "Key",
 }
 
 export interface LayerPosition {
