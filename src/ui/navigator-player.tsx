@@ -8,7 +8,7 @@ import { IconNames } from "@blueprintjs/icons";
 import { useTranslation } from "react-i18next";
 import { DosInstance } from "emulators-ui/dist/types/js-dos";
 import { Button as ButtonType } from "emulators-ui/dist/types/controls/button";
-import { LayersType } from "../pages/layers";
+import { LayersType } from "../pages/studio/steps/layers";
 import { EmulatorsUi } from "emulators-ui";
 import { TFunction } from "i18next";
 import { User } from "../core/auth";
@@ -16,8 +16,6 @@ import { getTurboSession } from "../core/turbo";
 import { BackButton, isMobile } from "../cap-config";
 
 import { Capacitor } from "@capacitor/core";
-
-import { LayersEditor } from "../pages/editor/layers-editor";
 
 import "./navigator.css";
 
@@ -43,7 +41,6 @@ export function NavigatorPlayer(props: {
     const [saving, setSaving] = useState<boolean>(false);
     const [endTime, setEndTime] = useState<number>(0);
     const [endTimeWarn, setEndTimeWarn] = useState<boolean>(false);
-    const [showLayersEditor, setShowLayersEditor] = useState<boolean>(false);
 
     const showOverlay = overlay && hint !== null;
 
@@ -194,7 +191,7 @@ export function NavigatorPlayer(props: {
     }
 
     function toggleKeyboard() {
-        if (dos == null) {
+        if (dos === null) {
             return;
         }
 
@@ -222,10 +219,6 @@ export function NavigatorPlayer(props: {
                 { turbo && endTime > 0 && rtt !== null ? <Navbar.Divider /> : null}
                 { rtt }
                 { turbo || rtt !== null ? <Navbar.Divider /> : null }
-                <Button
-                    icon={IconNames.COG}
-                    minimal={true}
-                    onClick={() => setShowLayersEditor(true) } />
                 { false ?
                 <Button
                     intent={showOverlay ? Intent.PRIMARY : Intent.NONE}
@@ -273,10 +266,6 @@ export function NavigatorPlayer(props: {
                 {hint}
             </Card>
           </Overlay>: null }
-        { showLayersEditor ?
-          <div className="navigator-player-layers-editor">
-              <LayersEditor onClose={() => setShowLayersEditor(false) }/>
-          </div> : null }
     </div>;
 }
 

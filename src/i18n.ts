@@ -7,6 +7,7 @@ const en = {
     editor: {
         layers: "Layers",
         add_new_layer: "Add new layer",
+        add: "Add",
         edit: "Edit",
         delete: "Delete",
         name: "Name",
@@ -18,6 +19,7 @@ const en = {
         as_json: "JSON",
         close: "Close",
         key: "Key",
+        apply: "Apply",
     },
     subscriptions: {
         subscriptions: "Subscriptions",
@@ -290,7 +292,8 @@ Thank you!
 const ru = {
     editor: {
         layers: "Слои",
-        add_new_layer: "Добавить слой",
+        add_new_layer: "Создать слой",
+        add: "Создать",
         edit: "Редактировать",
         delete: "Удалить",
         name: "Название",
@@ -302,6 +305,7 @@ const ru = {
         as_json: "JSON",
         close: "Закрыть",
         key: "Кнопка",
+        apply: "Применить",
     },
     subscriptions: {
         subscriptions: "Подписки",

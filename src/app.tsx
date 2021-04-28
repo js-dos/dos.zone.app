@@ -20,7 +20,7 @@ import { NavigatorPlayer } from "./ui/navigator-player";
 import { NavigatorHidden } from "./ui/navigator-hidden";
 
 import { Landing } from "./pages/landing/landing-v2";
-import { GameStudio } from "./pages/game-studio";
+import { GameStudio } from "./pages/studio/game-studio";
 import { FeaturesGuide } from "./pages/guides/features";
 import { My } from "./pages/my";
 import { Profile } from "./pages/profile";
@@ -31,7 +31,7 @@ import { parseQuery, QueryParams } from "./core/query-string";
 import { DosInstance } from "emulators-ui/dist/types/js-dos";
 import { getGameData } from "./core/game-query";
 
-import  { LayersEditor } from "./pages/editor/layers-editor";
+import  { LayersEditor } from "./pages/studio/layers/layers-editor";
 
 declare const realtime: any;
 
@@ -127,7 +127,7 @@ function App() {
                 <PlayerWrapper user={user} embedded={true} queryParams={queryParams} onDosInstance={setDosInsatnce} />
             </Route>
             <Route path="/:lang/layers/editor">
-                <LayersEditor onClose={() => {}} />
+                <LayersEditor onClose={() => {}} onApply={() => {}} />
             </Route>
             <Route path="/:lang/dl/:url">
                 <Deeplink setUser={setUser} />

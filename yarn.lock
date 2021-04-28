@@ -4214,17 +4214,7 @@ caniuse-api@^3.0.0:
     lodash.memoize "^4.1.2"
     lodash.uniq "^4.5.0"
 
-caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000981, caniuse-lite@^1.0.30001020, caniuse-lite@^1.0.30001035:
-  version "1.0.30001209"
-  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001209.tgz"
-  integrity sha512-2Ktt4OeRM7EM/JaOZjuLzPYAIqmbwQMNnYbgooT+icoRGrKOyAxA1xhlnotBD1KArRSPsuJp3TdYcZYrL7qNxA==
-
-caniuse-lite@^1.0.30001125, caniuse-lite@^1.0.30001135:
-  version "1.0.30001209"
-  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001209.tgz"
-  integrity sha512-2Ktt4OeRM7EM/JaOZjuLzPYAIqmbwQMNnYbgooT+icoRGrKOyAxA1xhlnotBD1KArRSPsuJp3TdYcZYrL7qNxA==
-
-caniuse-lite@^1.0.30001181:
+caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000981, caniuse-lite@^1.0.30001020, caniuse-lite@^1.0.30001035, caniuse-lite@^1.0.30001125, caniuse-lite@^1.0.30001135, caniuse-lite@^1.0.30001181:
   version "1.0.30001209"
   resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001209.tgz"
   integrity sha512-2Ktt4OeRM7EM/JaOZjuLzPYAIqmbwQMNnYbgooT+icoRGrKOyAxA1xhlnotBD1KArRSPsuJp3TdYcZYrL7qNxA==
@@ -5528,10 +5518,10 @@ emojis-list@^3.0.0:
   resolved "https://registry.yarnpkg.com/emojis-list/-/emojis-list-3.0.0.tgz#5570662046ad29e2e916e71aae260abdff4f6a78"
   integrity sha512-/kyM18EfinwXZbno9FyUGeFh87KC8HRQBQGildHZbEuRyWFOmv1U10o9BBp8XVZDVNNuQKyIGIu5ZYAAXJ0V2Q==
 
-emulators-ui@^0.0.60:
-  version "0.0.60"
-  resolved "https://registry.yarnpkg.com/emulators-ui/-/emulators-ui-0.0.60.tgz#68c4d80380b9dfe36328d231733d130b8822d51e"
-  integrity sha512-6ZATeagePu14HuuJX8cWSXrV1Ba0f46tYJaSSks122G2RsLLNhFwK59qZl+PGF09CI3G9S69s4+yOHj50u11uw==
+emulators-ui@^0.0.61:
+  version "0.0.61"
+  resolved "https://registry.yarnpkg.com/emulators-ui/-/emulators-ui-0.0.61.tgz#70ff398b6efc8a4715d24688421d84296754806f"
+  integrity sha512-62Bl81MTt/mKhLn8Xo1itcJ38yuknGpTk3c/Otvg845gbqQ/Nmy+HifscnbhLX0QDVOK4Mr74Kx4K+wKrV9IxQ==
 
 emulators@^0.0.62:
   version "0.0.62"
