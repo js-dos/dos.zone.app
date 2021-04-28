@@ -13,6 +13,12 @@ import { Player } from "../../../player/player";
 import ReactMarkdown from "react-markdown";
 import { renderers } from "../../../core/renderers";
 
+import { LayersEditor } from "../layers/layers-editor";
+
+import "./steps.css";
+import { DosInstance } from "emulators-ui/dist/types/js-dos";
+import { LayersConfig } from "emulators-ui/dist/types/controls/layers-config";
+
 const { Filesystem } = Plugins;
 
 export function DownloadArchive(props: StepProps) {
@@ -25,6 +31,7 @@ export function DownloadArchive(props: StepProps) {
     });
     const [bundleUrl, setBundleUrl] = useState<string|undefined>(url);
     const [platformUri, setPlatformUri] = useState<string|undefined>(undefined);
+    const [dos, setDos] = useState<DosInstance | null>(null);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -85,26 +92,46 @@ export function DownloadArchive(props: StepProps) {
         return gameTopicComponent;
     }
 
-    return <div>
-        <div style={{
-            position: "relative",
-            width: "64vw",
-            height: "40vw",
-            background: "black",
-        }}>
-            <Player bundleUrl={bundleUrl as string} user={null} embedded={true} turbo={false} />
+    function applyLayersConfig(config: LayersConfig) {
+        if (dos === null) {
+            return;
+        }
+        dos.setLayersConfig(config);
+    }
+
+    return <div className="download-archive-container">
+        <div className="download-archive-player">
+            { bundleUrl === undefined ? null :
+              <Player
+                  onDosInstance={setDos}
+                  bundleUrl={bundleUrl}
+                  user={null}
+                  embedded={true}
+                  turbo={false} />
+            }
         </div>
         <br/>
-        <ButtonGroup>
+        <div className="download-archive-actions">
             <Button onClick={back} icon={IconNames.ARROW_LEFT}>{t("back")}</Button>
             { platformUri === undefined ?
-              <Button onClick={onDownload} icon={IconNames.ARCHIVE} intent={Intent.PRIMARY}>{t("download")}</Button> :
+              <Button onClick={onDownload}
+                      icon={IconNames.ARCHIVE}
+                      intent={Intent.PRIMARY}>{t("download")}</Button> :
               null
             }
-            { gameTopicComponent }
-            <Button onClick={onStopStart} icon={IconNames.STOP} intent={Intent.WARNING}>{bundleUrl ? t("stop") : t("start")}</Button>
-        </ButtonGroup>
+            <Button onClick={onStopStart}
+                    icon={bundleUrl ? IconNames.STOP : IconNames.PLAY}
+                    intent={bundleUrl ? Intent.WARNING : Intent.SUCCESS}>{bundleUrl ? t("stop") : t("start")}</Button>
+        </div>
         <br/>
+        <div className="download-archive-layers">
+            <LayersEditor onApply={applyLayersConfig} />
+        </div>
+        <br/>
+        <div className="download-archive-actions">
+            { gameTopicComponent }
+        </div>
+
         { platformUri !== undefined ? <div className="platformUri"><br/><strong>{t("downloded_to")}:</strong>&nbsp;{platformUri}</div> : null }
         <br/>
         <ReactMarkdown renderers={markdownRenderers}

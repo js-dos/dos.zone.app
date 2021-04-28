@@ -1,0 +1,30 @@
+.download-archive-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.download-archive-player {
+    position: relative;
+    width: 90vw;
+    height: 56vw;
+    margin: 0 -20px;
+    background: black;
+    align-self: center;
+}
+
+.download-archive-actions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.download-archive-actions button,
+.download-archive-actions a {
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.download-archive-layers {
+    height: 100vw;
+    max-height: 90vh;
+}

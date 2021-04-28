@@ -45,12 +45,14 @@ export const LayersPanel: React.FC<PanelProps<EditorStackProps>> = props => {
         return <div className="layers-empty">
             <Icon onClick={addNewLayer} icon={IconNames.INSERT} iconSize={52}></Icon>
             <div>{t("add_new_layer")}</div>
-            <div className="layers-empty-close">
-                <Button minimal={true}
-                        icon={IconNames.REDO}
-                        intent={Intent.DANGER}
-                        onClick={props.onClose}></Button>
-            </div>
+            { props.onClose === undefined ? null :
+              <div className="layers-empty-close">
+                  <Button minimal={true}
+                          icon={IconNames.REDO}
+                          intent={Intent.DANGER}
+                          onClick={props.onClose}></Button>
+              </div>
+            }
         </div>;
     }
 
@@ -72,7 +74,9 @@ export const LayersPanel: React.FC<PanelProps<EditorStackProps>> = props => {
                 <span>&nbsp;</span>
                 <Button icon={IconNames.TICK} intent={Intent.SUCCESS} onClick={() => props.onApply(config)}>{t("apply")}</Button>
                 <span className="layers-container-spring"></span>
-                <Button icon={IconNames.REDO} minimal={true} intent={Intent.DANGER} onClick={props.onClose}></Button>
+                { props.onClose === undefined ? null :
+                  <Button icon={IconNames.REDO} minimal={true} intent={Intent.DANGER} onClick={props.onClose}></Button>
+                }
             </div>
         </div>
     );

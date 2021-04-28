@@ -64,15 +64,15 @@ export function GameStudio() {
                   [InitFromUrl(decodeURIComponent(url)), ...commonSteps];
     const stepComponent = React.createElement(steps[step - 1], props);
 
-    return <div className={Classes.TEXT_LARGE}
-                style={{padding: "40px"}}>
-        <H1>{t("welcome")}</H1>
+    return <div style={{padding: "20px"}}>
+        { step === 1 ? <H1>{t("welcome")}</H1> : null }
+        { step === 1 ?
         <p>
             {t("description")}&nbsp;
             (<Link to={"/" + i18n.language + "/guide/studio"}>
                 {t("read_guide")}
             </Link>)
-        </p>
+        </p> : null }
 
         <div style={{display: "flex", alignItems: "center"}}>
             <H2>{t("step")} {step}/{steps.length}</H2>

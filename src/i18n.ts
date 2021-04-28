@@ -261,6 +261,7 @@ Our database is community drived. Database sources is [here](https://github.com/
         gesture: "Gesture",
         key: "Key",
         add: "Add",
+        layers_editor: "Controls",
         help: `
 ### Help to community
 
@@ -550,6 +551,7 @@ DOS.Zone - это управляемая сообществом <span style="col
         gesture: "Жест",
         key: "Клавиша",
         add: "Добавить",
+        layers_editor: "Управление",
         help: `
 ### Помогите сообществу
 

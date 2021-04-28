@@ -28,7 +28,7 @@ export interface EditorStackProps {
     setLayersConfig: (config: LayersConfig) => void;
     setBreadCrumbs: (breadCrumbs: BreadCrumbs) => void;
     onApply: (config: LayersConfig) => void;
-    onClose: () => void;
+    onClose?: () => void;
 }
 
 function createPanelsStack(props: EditorStackProps): Panel<EditorStackProps>[] {
@@ -74,7 +74,7 @@ function createPanelsStack(props: EditorStackProps): Panel<EditorStackProps>[] {
 
 export function LayersEditor(props: {
     onApply: (config: LayersConfig) => void,
-    onClose: () => void,
+    onClose?: () => void,
 }) {
     const { t, i18n } = useTranslation("editor");
     const [ layersConfig, setLayersConfig ] = useState<LayersConfig>({
