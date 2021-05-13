@@ -75,13 +75,18 @@ function createPanelsStack(props: EditorStackProps): Panel<EditorStackProps>[] {
 export function LayersEditor(props: {
     onApply: (config: LayersConfig) => void,
     onClose?: () => void,
+    layersConfig?: LayersConfig,
 }) {
     const { t, i18n } = useTranslation("editor");
-    const [ layersConfig, setLayersConfig ] = useState<LayersConfig>({
+    const [ layersConfig, setLayersConfig ] = useState<LayersConfig>(props.layersConfig || {
         version: 1,
         layers: [],
     });
-    const [ breadCrumbs, setBreadCrumbs] = useState<BreadCrumbs>({});
+    const [ breadCrumbs, _setBreadCrumbs] = useState<BreadCrumbs>({});
+    function setBreadCrumbs(breadCrumbs: BreadCrumbs) {
+        _setBreadCrumbs(breadCrumbs);
+        props.onApply(layersConfig);
+    };
 
     const editorProps: EditorStackProps = {
         t,

@@ -61,6 +61,9 @@ export function DosPlayer(props: IPlayerProps) {
 
         const root = rootRef.current as HTMLDivElement;
         const preventListener = (e: any) => {
+            if (e.target.className.indexOf("not-prevent-key-events") >= 0) {
+                return;
+            }
             e.preventDefault();
         };
 

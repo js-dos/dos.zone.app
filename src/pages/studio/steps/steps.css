@@ -3,28 +3,61 @@
     flex-direction: column;
 }
 
-.download-archive-player {
-    position: relative;
-    width: 90vw;
-    height: 56vw;
-    margin: 0 -20px;
-    background: black;
+.download-archive-player-and-layers {
+    display: flex;
+    width: 96vw;
     align-self: center;
+    flex-direction: column;
+    margin: 20px 0;
+    justify-content: space-around;
 }
 
+.download-archive-player {
+    position: relative;
+    width: 96vw;
+    height: 56vw;
+    margin-bottom: 5px;
+}
+
+.download-archive-layers {
+    width: 96vw;
+    height: 96vw;
+}
+
+@media (min-width: 800px) {
+    .download-archive-player-and-layers {
+        flex-direction: row;
+    }
+
+    .download-archive-player {
+        position: relative;
+        width: 47vw;
+        height: 47vw;
+        margin-bottom: 0;
+    }
+
+    .download-archive-layers {
+        width: 47vw;
+        height: 47vw;
+    }
+}
+
+
+.configure-dosbox-actions,
 .download-archive-actions {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 }
 
+.configure-dosbox-actions button,
+.configure-dosbox-actions a,
 .download-archive-actions button,
 .download-archive-actions a {
     margin-right: 5px;
     margin-bottom: 5px;
 }
 
-.download-archive-layers {
-    height: 100vw;
-    max-height: 90vh;
+.download-archive-layers .bp3-panel-stack-header {
+    background: #0A6640;
 }

@@ -15,7 +15,7 @@ export const LayersPanel: React.FC<PanelProps<EditorStackProps>> = props => {
         newLayersConfig.layers.push({
             grid: "honeycomb",
             title: "Layer#" + newBreadCrumbs.layer,
-            controls: [{ row: 0, column: 10, symbol: "⚙", type: "Options" }],
+            controls: [{ row: 0, column: 9, symbol: "⚙", type: "Options" }],
         });
 
         props.setLayersConfig(newLayersConfig);

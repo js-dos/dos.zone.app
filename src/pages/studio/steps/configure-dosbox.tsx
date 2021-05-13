@@ -3,11 +3,11 @@ import {
     H1, H2, Classes, FileInput, Intent, Spinner,
     Tree, ITreeNode, Button, AnchorButton, ButtonGroup
 } from "@blueprintjs/core";
-import { IconNames } from "@blueprintjs/icons";
 import { Emulators } from "emulators";
 import { DosConfigUi } from "./dos-config-ui";
 import { DosConfig } from "emulators/dist/types/dos/bundle/dos-conf";
 import { StepProps } from "../state";
+import { createArchive as createZipArchive } from "./create-archive";
 
 declare const emulators: Emulators;
 
@@ -38,17 +38,7 @@ export function ConfigureDosbox(props: StepProps) {
 
     const createArchive = async () => {
         setLoading(true);
-        const dosBundle = await emulators.dosBundle();
-        dosBundle.config = config as DosConfig;
-
-        const blob = new Blob([state.zip as Uint8Array]);
-        const url = URL.createObjectURL(blob);
-
-        dosBundle
-            .extract(url);
-
-        const archive = await dosBundle.toUint8Array(true);
-        URL.revokeObjectURL(url);
+        const archive = await createZipArchive(config as DosConfig, state.zip as Uint8Array);
 
         nextStep({
             ...state,
@@ -72,10 +62,12 @@ export function ConfigureDosbox(props: StepProps) {
 
     return <div>
         {error}
-        <DosConfigUi config={config as DosConfig} t={t}></DosConfigUi>
-        <ButtonGroup>
+        <br/>
+        <div className="configure-dosbox-actions">
             <Button onClick={() => createArchive().catch(setError)} intent={Intent.PRIMARY}>{t("create")}</Button>
             { state.canSkipArchiveCreation ? <Button onClick={() => startArchive()}>{t("skip_create")}</Button> : null }
-        </ButtonGroup>
+        </div>
+        <br/>
+        <DosConfigUi config={config as DosConfig} t={t}></DosConfigUi>
     </div>;
 }

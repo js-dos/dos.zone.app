@@ -66,7 +66,7 @@ function emptyLayer(): LayerType {
     }
 }
 
-export interface DosConfigWithLayers extends DosConfig {
+interface DosConfigWithLayers extends DosConfig {
     layers?: LayersType,
 };
 

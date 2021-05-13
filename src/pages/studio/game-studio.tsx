@@ -64,7 +64,7 @@ export function GameStudio() {
                   [InitFromUrl(decodeURIComponent(url)), ...commonSteps];
     const stepComponent = React.createElement(steps[step - 1], props);
 
-    return <div style={{padding: "20px"}}>
+    return <div style={{padding: "20px", width: "100%"}}>
         { step === 1 ? <H1>{t("welcome")}</H1> : null }
         { step === 1 ?
         <p>

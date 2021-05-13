@@ -2,8 +2,6 @@ import React, { useState, FormEvent } from "react";
 import { DosConfigCategory, DosConfigOption, DosConfigValue, DosConfig } from "emulators/dist/types/dos/bundle/dos-conf";
 import { EmulatorsUi } from "emulators-ui";
 
-import { Layers } from "./layers";
-
 import {
     H3,
     Button,
@@ -25,10 +23,6 @@ export function DosConfigUi(props: { config: DosConfig, t: TFunction }) {
     const config = props.config;
     const t = props.t;
     return <div>
-        <br/>
-        <Layers config={config}
-                       t={t}/>
-        <br/>
         <Category category={config.dosbox}
                   localizedDescription={t("dosbox_config")}
                   t={t}></Category>

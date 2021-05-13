@@ -19,11 +19,16 @@ import "./steps.css";
 import { DosInstance } from "emulators-ui/dist/types/js-dos";
 import { LayersConfig } from "emulators-ui/dist/types/controls/layers-config";
 
+import { createArchive } from "./create-archive";
+import { config } from "process";
+
 const { Filesystem } = Plugins;
+
+declare const emulators: Emulators;
 
 export function DownloadArchive(props: StepProps) {
     const {t, state, back} = props;
-    const [url] = useState<string>(() => {
+    const [url, setUrl] = useState<string>(() => {
         const blob = new Blob([state.bundle as Uint8Array], {
             type: "application/zip"
         });
@@ -32,16 +37,27 @@ export function DownloadArchive(props: StepProps) {
     const [bundleUrl, setBundleUrl] = useState<string|undefined>(url);
     const [platformUri, setPlatformUri] = useState<string|undefined>(undefined);
     const [dos, setDos] = useState<DosInstance | null>(null);
+    const [config, setConfig] = useState<{ layersConfig?: LayersConfig }>(state.config as any || {});
 
     useEffect(() => {
         window.scrollTo(0, 0);
-    }, []);
 
-    const onDownload = () => {
+        return () => {
+            URL.revokeObjectURL(url);
+        }
+    }, [url]);
+
+    const onDownload = async () => {
+        URL.revokeObjectURL(url);
+        const archive = await createArchive(config as DosConfig, state.zip as Uint8Array);
+        const blob = new Blob([archive], {
+            type: "application/zip"
+        });
+        const newUrl = URL.createObjectURL(blob);
         const fileName = state.name + ".jsdos";
         if (Capacitor.isNative) {
             const reader = new FileReader();
-            reader.readAsDataURL(new Blob([state.bundle as Uint8Array]));
+            reader.readAsDataURL(new Blob([archive]));
             reader.onloadend = async () => {
                 const result = await Filesystem.writeFile({
                     path: fileName,
@@ -55,13 +71,15 @@ export function DownloadArchive(props: StepProps) {
         }
 
         const a = document.createElement("a");
-        a.href = url;
+        a.href = newUrl;
         a.download = fileName;
         a.style.display = "none";
         document.body.appendChild(a);
 
         a.click();
         a.remove();
+
+        setUrl(newUrl);
     }
 
     const onStopStart = () => {
@@ -92,25 +110,17 @@ export function DownloadArchive(props: StepProps) {
         return gameTopicComponent;
     }
 
-    function applyLayersConfig(config: LayersConfig) {
+    function applyLayersConfig(layersConfig: LayersConfig) {
         if (dos === null) {
             return;
         }
-        dos.setLayersConfig(config);
+        dos.setLayersConfig(layersConfig);
+        const newConfig = {...config};
+        newConfig.layersConfig = layersConfig;
+        setConfig(newConfig);
     }
 
     return <div className="download-archive-container">
-        <div className="download-archive-player">
-            { bundleUrl === undefined ? null :
-              <Player
-                  onDosInstance={setDos}
-                  bundleUrl={bundleUrl}
-                  user={null}
-                  embedded={true}
-                  turbo={false} />
-            }
-        </div>
-        <br/>
         <div className="download-archive-actions">
             <Button onClick={back} icon={IconNames.ARROW_LEFT}>{t("back")}</Button>
             { platformUri === undefined ?
@@ -123,11 +133,21 @@ export function DownloadArchive(props: StepProps) {
                     icon={bundleUrl ? IconNames.STOP : IconNames.PLAY}
                     intent={bundleUrl ? Intent.WARNING : Intent.SUCCESS}>{bundleUrl ? t("stop") : t("start")}</Button>
         </div>
-        <br/>
-        <div className="download-archive-layers">
-            <LayersEditor onApply={applyLayersConfig} />
+        <div className="download-archive-player-and-layers">
+            <div className="download-archive-player">
+                { bundleUrl === undefined ? null :
+                  <Player
+                      onDosInstance={setDos}
+                      bundleUrl={bundleUrl}
+                      user={null}
+                      embedded={true}
+                      turbo={false} />
+                }
+            </div>
+            <div className="download-archive-layers">
+                <LayersEditor onApply={applyLayersConfig} layersConfig={config.layersConfig} />
+            </div>
         </div>
-        <br/>
         <div className="download-archive-actions">
             { gameTopicComponent }
         </div>

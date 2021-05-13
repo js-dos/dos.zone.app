@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from "react";
 
-import { LayerControl } from "emulators-ui/dist/types/controls/layers-config";
+import { LayerControl, LayerKeyControl } from "emulators-ui/dist/types/controls/layers-config";
 
 import { EditorStackProps } from "../layers-editor";
 import { getControl, keyOptions, namedKeyCodes, getKeyCodeNameForCode } from "./controls";
 import { HTMLSelect, FormGroup, InputGroup, IOptionProps } from "@blueprintjs/core";
 
-interface KeyControl extends LayerControl {
-    mapTo: number;
-}
-
 export const KeyControl: React.FC<EditorStackProps> = props => {
     const { t } = props;
-    const [optional, setControl] = useState<KeyControl | null>(null);
+    const [optional, setControl] = useState<LayerKeyControl | null>(null);
     const [version, setVersion] = useState<number>(0);
     const options: IOptionProps[] = Object.keys(namedKeyCodes).map((key) => {
         return {
@@ -65,8 +61,8 @@ export const KeyControl: React.FC<EditorStackProps> = props => {
     </div>;
 }
 
-function initDefault(layerControl: LayerControl): KeyControl {
-    const control = layerControl as KeyControl;
+function initDefault(layerControl: LayerControl): LayerKeyControl {
+    const control = layerControl as LayerKeyControl;
     control.symbol = control.symbol || mapKBDToSymbol("KBD_up");
     control.mapTo = control.mapTo || namedKeyCodes.KBD_up;
     return control;
