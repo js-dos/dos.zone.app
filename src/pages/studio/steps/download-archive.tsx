@@ -121,7 +121,7 @@ export function DownloadArchive(props: StepProps) {
     }
 
     return <div className="download-archive-container">
-        <div className="download-archive-actions">
+        <div className="download-archive-actions" style={{ visibility: Capacitor.isNative ? "hidden" : "visible" }}>
             <Button onClick={back} icon={IconNames.ARROW_LEFT}>{t("back")}</Button>
             { platformUri === undefined ?
               <Button onClick={onDownload}
