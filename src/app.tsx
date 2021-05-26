@@ -35,6 +35,11 @@ import  { LayersEditor } from "./pages/studio/layers/layers-editor";
 
 declare const realtime: any;
 
+const redirects: {[bundle: string]: string} = {
+    "80c8fbe524842580537590f14c3b6b370d5198ca.zip": "https://play.google.com/store/apps/details?id=playerforsoftware.wwwplayer",
+    "ad8184c54a28a7f89542fa0b136a2c86adc9379d.zip": "https://play.google.com/store/apps/details?id=playerforsoftware.wwwplayer",
+}
+
 function App() {
     const { i18n } = useTranslation();
     const [user, setUser] = useState<User|null>(getCachedUser());
@@ -79,6 +84,13 @@ function App() {
     if (typeof realtime !== "undefined" && realtime.startFromMyPage() === true) {
         window.location.pathname = "/" + lang + "/my";
         return null;
+    }
+
+    for (const next of Object.keys(redirects)) {
+        if (window.location.pathname.indexOf(next) >= 0) {
+            window.location.href = redirects[next];
+            return null;
+        }
     }
 
     return <Router>
