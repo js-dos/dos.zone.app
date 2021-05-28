@@ -6,7 +6,7 @@ import { EditorStackProps } from "../layers-editor";
 import { getControl } from "./controls";
 import { HTMLSelect, FormGroup } from "@blueprintjs/core";
 
-export const OptionsControl: React.FC<EditorStackProps> = props => {
+export const KeyboardControl: React.FC<EditorStackProps> = props => {
     const { t } = props;
     const [control, setControl] = useState<LayerControl | null>(null);
 
@@ -30,6 +30,6 @@ export const OptionsControl: React.FC<EditorStackProps> = props => {
 }
 
 function initDefault(control: LayerControl): LayerControl {
-    control.symbol = "⚙";
+    control.symbol = "⌨";
     return control;
 }

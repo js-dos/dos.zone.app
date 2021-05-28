@@ -6,6 +6,9 @@ import LanguageDetector from "i18next-browser-languagedetector";
 const en = {
     editor: {
         layers: "Layers",
+        layer: "Layer",
+        direction: "Direction",
+        button: "Button",
         add_new_layer: "Add new layer",
         add: "Add",
         edit: "Edit",
@@ -293,6 +296,9 @@ Thank you!
 const ru = {
     editor: {
         layers: "Слои",
+        layer: "Слой",
+        direction: "Направление",
+        button: "Кнопка",
         add_new_layer: "Создать слой",
         add: "Создать",
         edit: "Редактировать",

@@ -5,6 +5,10 @@ import { EditorStackProps } from "../layers-editor";
 
 import { OptionsControl } from "./options";
 import { KeyControl } from "./key";
+import { KeyboardControl } from "./keyboard";
+import { SwitchControl } from "./switch";
+import { ScreenMoveControl } from "./screen-move";
+import { PointerButtonControl } from "./pointer-button";
 
 import { EmulatorsUi } from "emulators-ui";
 
@@ -16,8 +20,12 @@ export const namedKeyCodes = emulatorsUi.controls.namedKeyCodes;
 export const keyOptions = Object.keys(emulatorsUi.controls.namedKeyCodes);
 
 export const controlsMapping: {[type: string]: React.FC<EditorStackProps>} = {
-    "Options": OptionsControl,
-    "Key": KeyControl,
+    Options: OptionsControl,
+    Key: KeyControl,
+    Keyboard: KeyboardControl,
+    Switch: SwitchControl,
+    ScreenMove: ScreenMoveControl,
+    PointerButton: PointerButtonControl,
 }
 
 export function getControl(props: EditorStackProps): LayerControl {

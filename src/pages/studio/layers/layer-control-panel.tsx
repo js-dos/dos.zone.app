@@ -63,7 +63,7 @@ export const LayerControlPanel: React.FC<PanelProps<EditorStackProps>> = props =
         <FormGroup
             label={t("control_type")}
             inline={true}>
-            <HTMLSelect onChange={onTypeChange} options={["Options", "Key"]} value={control.type}>
+            <HTMLSelect onChange={onTypeChange} options={Object.keys(controlsMapping)} value={control.type}>
             </HTMLSelect>
         </FormGroup>
         <div className="layers-control-container">
