@@ -344,3 +344,14 @@ body {
       animation-timing-function: ease-out;
   }
 }
+
+.portal-center {
+    bottom: 0;
+}
+
+.overlay-center {
+    position: absolute !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

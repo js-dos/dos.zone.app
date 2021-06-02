@@ -30,6 +30,7 @@ import { HardwareIcon } from "./components/hardware-icon";
 
 
 import striptags from "striptags";
+import { YoutubeModal } from "./components/youtube-modal";
 
 const isSafari = navigator.vendor && navigator.vendor.indexOf("Apple") > -1 &&
                  navigator.userAgent &&
@@ -49,6 +50,7 @@ export function My(props: { user: User | null }) {
     const [selected, _setSelected] = useState<string | null>(null);
     const [selectedData, setSelectedData] = useState<GameData | null>(null);
     const [fullDescription, setFullDescription] = useState<boolean>(false);
+    const [showVideo, setShowVideo] = useState<boolean>(false);
     const { t, i18n } = useTranslation("my");
     const { url, listUrl } = useParams<{ url?: string, listUrl?: string }>();
     const history = useHistory();
@@ -221,21 +223,12 @@ export function My(props: { user: User | null }) {
 
         history.push("/" + i18n.language + "/studio/" + encodeURIComponent(selectedData.canonicalUrl));
     }
-    let playButton = (<Button disabled={!canPlay}
+
+    const playButton = (<Button disabled={!canPlay}
         className={canPlay ? "heartbeat" : ""}
         icon={IconNames.PLAY}
         intent={canPlay ? Intent.PRIMARY : Intent.NONE}
         onClick={() => runBundle({ turbo: false })}>{t("play")}</Button>);
-
-    if (isSuperUser(user)) {
-        playButton = <ButtonGroup>
-            {playButton}
-            <Button disabled={!canPlay}
-                icon={IconNames.RECORD}
-                onClick={() => runBundle({ turbo: false, logLayers: true })}
-             />
-        </ButtonGroup>;
-    }
 
     return <div className="left-margin">
         <h1>{t("selected")}</h1>
@@ -244,12 +237,15 @@ export function My(props: { user: User | null }) {
             <div className="thumb-options">
                 <div>
                     <ButtonGroup>
-    { canPlay ?
-      playButton :
-      <Popover content={<div className="popover-inner-card">{t("turbo_mode_required")}</div>} position={Position.TOP} isOpen={true}>
-        {playButton}
-      </Popover>
-    }
+                        {
+                            canPlay ?
+                            playButton :
+                            <Popover content={<div className="popover-inner-card">{t("turbo_mode_required")}</div>} position={Position.TOP} isOpen={true}>
+                                {playButton}
+                            </Popover>
+                        }
+                        { selectedData.video !== undefined && selectedData.video.length > 0 ? <Button icon={IconNames.VIDEO} onClick={() => setShowVideo(true)}/> : null }
+                        { isSuperUser(user) ? <Button disabled={!canPlay} icon={IconNames.RECORD} onClick={() => runBundle({ turbo: false, logLayers: true })} /> : null}
                         { slug !== undefined && slug.length > 0 ? <Button onClick={openSlug} icon={IconNames.COMMENT}></Button> : null }
                         { user !== null ? <Button icon={IconNames.ARCHIVE} onClick={downloadArchive}></Button> : null }
                         <Button onClick={openBuild} icon={IconNames.FORK}></Button>
@@ -278,6 +274,7 @@ export function My(props: { user: User | null }) {
         <div className="recently-played">{
             keys.map((a) => <GameThumb canPlay={false} onClick={() => setSelected(a)} gamePromise={gamesData[a]} key={"all-" + a} selected={false} />)
         }</div>
+        { showVideo ? <YoutubeModal url={selectedData.video} onClose={() => setShowVideo(false)} /> : null }
     </div>
 }
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
@@ -7,7 +7,10 @@ import { Card,
          H5,
          Button,
          Elevation,
-         Intent} from "@blueprintjs/core";
+         Intent,
+         ButtonGroup,
+         Overlay,
+         Callout} from "@blueprintjs/core";
 
 import { GameData } from "../../core/game";
 
@@ -16,6 +19,8 @@ import striptags from "striptags";
 
 import "./game-preview.css";
 import { openSlug } from "../../core/browser-tab";
+import { IconNames } from "@blueprintjs/icons";
+import { YoutubeModal } from "./youtube-modal";
 
 export function GamePreview(props: {
     game: GameData,
@@ -31,6 +36,7 @@ export function GamePreview(props: {
     const description = striptags(data.description[i18n.language]?.description || data.description.en?.description || "");
     const warnNoMobile = props.warnAboutMobile && data.title.indexOf("mobile") === -1;
     const openInternalWhiteList = props.openInternalWhiteList || [];
+    const [showVideo, setShowVideo] = useState<boolean>(false);
 
     if (!openInternal) {
         for (const next of openInternalWhiteList) {
@@ -49,23 +55,34 @@ export function GamePreview(props: {
         }
     }
 
-    return <Card className="preview-card" onClick={onClick} interactive={true} elevation={Elevation.TWO}>
-        <div className="preview-column">
-            <H5 className="preview-header">{data.game}</H5>
-            <img className="preview-image" src={cdnUrl(data.screenshot) || "/default.jpg"} alt="screenshot"></img>
-            <div className="preview-footer">
-                <div className="preview-desc">
-                    {description.substr(0, 150) + "..."}
-                </div>
-                <Button className="preview-button" intent={ warnNoMobile ? Intent.NONE : (openInternal ? Intent.PRIMARY : Intent.SUCCESS) }>
+    const actionButton =
+                <Button className="preview-action" intent={ warnNoMobile ? Intent.NONE : (openInternal ? Intent.PRIMARY : Intent.SUCCESS) } onClick={onClick} >
                     { warnNoMobile ?
                       t("no_mobile") :
                       (openInternal ?
                        t("play") :
                        t("versions_" + Math.min(versionsCount, 5)))
                     }
-                </Button>
+                </Button>;
+
+    return <Card className="preview-card" interactive={true} elevation={Elevation.TWO}>
+        <div className="preview-column">
+            <H5 className="preview-header" onClick={onClick}>{data.game}</H5>
+            <img className="preview-image" src={cdnUrl(data.screenshot) || "/default.jpg"} alt="screenshot" onClick={onClick} ></img>
+            <div className="preview-footer">
+                <div className="preview-desc" onClick={onClick} >
+                    {description.substr(0, 150) + "..."}
+                </div>
+                <ButtonGroup className="preview-button">
+                    {actionButton}
+                    { data.video !== undefined && data.video.length > 0 ? <Button icon={IconNames.VIDEO} intent={Intent.SUCCESS} onClick={() => setShowVideo(true)} /> : null }
+                </ButtonGroup>
             </div>
         </div>
+        {
+            showVideo ?
+            <YoutubeModal url={data.video as string} onClose={() => setShowVideo(false)} /> :
+            null
+        }
     </Card>;
 }

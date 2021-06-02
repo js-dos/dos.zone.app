@@ -54,6 +54,10 @@ const en = {
         sec: "sec",
     },
     player: {
+        tutorial: "Tutorial",
+        watch_tutorial: "Is it your first time playing this game? Do you want to watch short video how to play?",
+        close: "Close",
+        watch: "Watch",
         restoring: "Restoring your progress...",
     },
     navigator: {
@@ -344,7 +348,11 @@ const ru = {
         sec: "сек",
     },
     player: {
+        tutorial: "Обучение",
         restoring: "Востанавливаем ваш прогресс...",
+        close: "Закрыть",
+        watch: "Смотреть",
+        watch_tutorial: "Вы первый раз играете в эту игру? Хотите посмотреть короткое обучающее видео?",
     },
     navigator: {
         use_back_button: "Для выхода используйте кнопку справа вверху",

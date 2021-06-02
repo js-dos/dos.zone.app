@@ -16,6 +16,7 @@ import { SelectExecutable } from "./steps/select-executable";
 import { ConfigureDosbox } from "./steps/configure-dosbox";
 import { DownloadArchive } from "./steps/download-archive";
 
+import { Youtube } from "../components/youtube";
 
 const commonSteps = [
     SelectExecutable,
@@ -89,16 +90,7 @@ export function GameStudio() {
             step === 1 ?
             (<div>
                 <H2>{t("quick_tour")}</H2>
-                <iframe
-                    title="game"
-                    width="560"
-                    height="315"
-                    style={{maxWidth: "100%"}}
-                    src="https://www.youtube.com/embed/KPetnv4atXg"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen>
-                </iframe>
+                <Youtube url="https://www.youtube.com/embed/KPetnv4atXg" />
             </div>) :
             null
         }

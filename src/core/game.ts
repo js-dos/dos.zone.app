@@ -13,6 +13,7 @@ export interface GameData {
     slug: {[locale: string]: string},
     turbo: "optional" | "required" | "no",
     canonicalUrl: string,
+    video?: string,
 }
 
 export async function getGame(bundleUrl: string): Promise<GameData | null> {

@@ -37,3 +37,7 @@
     margin: 0 5px;
 }
 
+.preview-action {
+    flex-grow: 1 !important;
+}
+
