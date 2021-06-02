@@ -1,3 +1,5 @@
+/* eslint-disable no-lone-blocks */
+
 import { TransportLayer, ClientMessage, MessageHandler, ServerMessage } from "emulators/dist/types/protocol/protocol";
 import { HardwareEmulatorPlugin } from "./emulator-plugin";
 

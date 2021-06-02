@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 
-import { LayerConfig, LayerControlType, LayerPosition } from "emulators-ui/dist/types/controls/layers-config";
-
-import { PanelProps, Button, FormGroup, Intent, HTMLSelect } from "@blueprintjs/core";
-import { EditorStackProps } from "./layers-editor";
+import { Button, FormGroup, HTMLSelect, Intent, PanelProps } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
+import { LayerConfig, LayerPosition } from "emulators-ui/dist/types/controls/layers-config";
 import { controlsMapping } from "./controls/controls";
+import { EditorStackProps } from "./layers-editor";
 
 export const LayerControlPanel: React.FC<PanelProps<EditorStackProps>> = props => {
     const [ readOnly, setReadOnly ] = useState<boolean>(false);

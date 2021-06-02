@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { CommandInterface } from "emulators";
-import { DosInstance } from "emulators-ui/dist/types/js-dos";
 
 export function Dhry2(props: {
     ci: CommandInterface,
@@ -28,6 +27,7 @@ export function Dhry2(props: {
                 return;
             }
 
+            // eslint-disable-next-line
             const [_, runs, deltaStr, vaxRatingStr] = message.split(" ");
             const delta = Number.parseFloat(deltaStr);
             const vaxRating = Number.parseFloat(vaxRatingStr);

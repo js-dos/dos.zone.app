@@ -1,14 +1,13 @@
-import React, { FormEvent, useEffect, useState } from "react";
+import React from "react";
+
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 
 import { Card,
-         Icon, Spinner,
          H5,
          Button,
          Elevation,
          Intent} from "@blueprintjs/core";
-import { IconNames } from "@blueprintjs/icons";
 
 import { GameData } from "../../core/game";
 

@@ -5,7 +5,7 @@ import { IconNames } from "@blueprintjs/icons";
 import { EditorStackProps } from "./layers-editor";
 
 export const LayersAsJson: React.FC<PanelProps<EditorStackProps>> = props => {
-    const { t, setLayersConfig } = props;
+    const { t } = props;
     const [json, setJson] = useState<string>(JSON.stringify(props.config, null, 4));
     function onChange(e: any) {
         setJson(e.target.value);

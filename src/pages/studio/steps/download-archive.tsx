@@ -1,26 +1,19 @@
 import React, { useEffect, useState } from "react";
-import {
-    H1, H2, Classes, FileInput, Intent, Spinner,
-    Tree, ITreeNode, Button, AnchorButton, ButtonGroup
-} from "@blueprintjs/core";
-import { IconNames } from "@blueprintjs/icons";
-import { Emulators } from "emulators";
-import { DosConfig } from "emulators/dist/types/dos/bundle/dos-conf";
-import { Capacitor, FilesystemDirectory, Plugins } from "@capacitor/core";
-import { StepProps } from "../state";
 
-import { Player } from "../../../player/player";
+import { AnchorButton, Button, Intent } from "@blueprintjs/core";
+import { IconNames } from "@blueprintjs/icons";
+import { Capacitor, FilesystemDirectory, Plugins } from "@capacitor/core";
+import { Emulators } from "emulators";
+import { LayersConfig } from "emulators-ui/dist/types/controls/layers-config";
+import { DosInstance } from "emulators-ui/dist/types/js-dos";
+import { DosConfig } from "emulators/dist/types/dos/bundle/dos-conf";
 import ReactMarkdown from "react-markdown";
 import { renderers } from "../../../core/renderers";
-
+import { Player } from "../../../player/player";
 import { LayersEditor } from "../layers/layers-editor";
-
-import "./steps.css";
-import { DosInstance } from "emulators-ui/dist/types/js-dos";
-import { LayersConfig } from "emulators-ui/dist/types/controls/layers-config";
-
+import { StepProps } from "../state";
 import { createArchive } from "./create-archive";
-import { config } from "process";
+import "./steps.css";
 
 const { Filesystem } = Plugins;
 

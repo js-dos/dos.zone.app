@@ -9,7 +9,7 @@ import { Capacitor } from "@capacitor/core";
 import "./hardware-icon.css";
 
 export function HardwareIcon(props: {}) {
-    const { t, i18n } = useTranslation("hardware");
+    const { t } = useTranslation("hardware");
     const [canIUseHardware, setCanIUseHardware] = useState<boolean | null>(null);
 
     useEffect(() => {
@@ -28,9 +28,9 @@ export function HardwareIcon(props: {}) {
             </div>
             <div className="hardware-icon-promo-text">
                {t("native_acceleration_install")}
-               <a target="_blank" href="https://play.google.com/store/apps/details?id=zone.dos.app">Dos.Zone</a>
+               <a target="_blank" href="https://play.google.com/store/apps/details?id=zone.dos.app" rel="noreferrer">Dos.Zone</a>
                {t("native_acceleration_android")}
-               &nbsp;(<a target="_blank" href="https://youtu.be/U4gPnbtBrJw">{t("comparsion")}</a>)
+               &nbsp;(<a target="_blank" href="https://youtu.be/U4gPnbtBrJw" rel="noreferrer">{t("comparsion")}</a>)
             </div>
         </div>;
     }

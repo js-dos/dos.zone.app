@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Capacitor } from "@capacitor/core";
-import { useParams, useHistory, Link } from "react-router-dom";
+
+import { useParams, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
     Spinner,
@@ -9,7 +9,6 @@ import {
     ButtonGroup,
     Popover,
     Position,
-    Icon
 } from "@blueprintjs/core";
 
 import { getRecentlyPlayed, RecentlyPlayed,
@@ -174,7 +173,7 @@ export function My(props: { user: User | null }) {
 
     const description = striptags(selectedData.description[i18n.language]?.description || selectedData.description.en?.description || "");
     const canPlay = selectedData.turbo !== "required";
-    const canTurbo = !canPlay || selectedData.turbo !== "no" && !isSafari;
+    const canTurbo = !canPlay || (selectedData.turbo !== "no" && !isSafari);
     const runUrl = "/" + i18n.language + "/play/" + encodeURIComponent(selectedData.canonicalUrl);
 
     function runBundle(options: RunOptions) {

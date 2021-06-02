@@ -77,7 +77,7 @@ export function LayersEditor(props: {
     onClose?: () => void,
     layersConfig?: LayersConfig,
 }) {
-    const { t, i18n } = useTranslation("editor");
+    const { t } = useTranslation("editor");
     const [ layersConfig, setLayersConfig ] = useState<LayersConfig>(props.layersConfig || {
         version: 1,
         layers: [],

@@ -5,7 +5,7 @@ import { logError } from "../log";
 import { User } from "../auth";
 import { storageGet, storagePut } from "../config";
 
-const { Storage } = Plugins;
+const CapStorage = Plugins.Storage;
 
 const MAX_VALUE_SIZE   = 1024;
 const NEXT_PART_SYMBOL = "@";
@@ -71,13 +71,13 @@ async function set(appKey: string, value: string, user?: User | null): Promise<b
 };
 
 async function localGet(key: string): Promise<{ time: number, payload: string } | null> {
-    const valueOrNull = (await Storage.get({ key })).value;
+    const valueOrNull = (await CapStorage.get({ key })).value;
     if (valueOrNull === null) {
         return null;
     }
 
     function readStringFromKey(key: string) {
-        return Storage.get({key}).then((value) => {
+        return CapStorage.get({key}).then((value) => {
             if (value.value === null) {
                 return "";
             }
@@ -108,7 +108,7 @@ async function localSet(key: string, payload: string): Promise<void> {
     });
 
     function writeStringToKey(key: string, value: string) {
-        return Storage.set({
+        return CapStorage.set({
             key,
             value,
         });

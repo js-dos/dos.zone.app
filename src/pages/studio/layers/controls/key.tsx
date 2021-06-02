@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 
+import { FormGroup, HTMLSelect, InputGroup, IOptionProps } from "@blueprintjs/core";
 import { LayerControl, LayerKeyControl } from "emulators-ui/dist/types/controls/layers-config";
-
 import { EditorStackProps } from "../layers-editor";
-import { getControl, keyOptions, namedKeyCodes, getKeyCodeNameForCode } from "./controls";
-import { HTMLSelect, FormGroup, InputGroup, IOptionProps } from "@blueprintjs/core";
+import { getControl, getKeyCodeNameForCode, namedKeyCodes } from "./controls";
 
 export const KeyControl: React.FC<EditorStackProps> = props => {
     const { t } = props;

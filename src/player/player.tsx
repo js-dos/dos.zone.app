@@ -1,11 +1,10 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
 
-import { User, isSuperUser } from "../core/auth";
+import { DosInstance } from "emulators-ui/dist/types/js-dos";
+import { isSuperUser, User } from "../core/auth";
+import { getCachedGameData } from "../core/game-query";
 import { DosPlayer } from "./dos-player";
 import { TurboPlayer } from "./turbo-player";
-import { getCachedGameData } from "../core/game-query";
-import { DosInstance } from "emulators-ui/dist/types/js-dos";
 
 export interface IPlayerProps {
     user: User | null;
@@ -21,7 +20,6 @@ export interface IPlayerProps {
 }
 
 export function Player(props: IPlayerProps) {
-    const { t, i18n } = useTranslation("player");
     const user = props.user;
     const newProps = {...props};
 

@@ -1,20 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+
 import { Link, useParams } from "react-router-dom";
 
 import { useTranslation } from "react-i18next";
 import {
-    H1, H2, Classes, FileInput, Intent, Spinner,
-    Tree, ITreeNode, Button, AnchorButton, ButtonGroup
+    H1, H2, Classes, Intent, AnchorButton
 } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 
-import { Emulators } from "emulators";
-
-
-import { DosConfig } from "emulators/dist/types/dos/bundle/dos-conf";
-
-
-import { State, StepProps } from "./state";
+import { State } from "./state";
 
 import { InitFromFile } from "./steps/init-from-file";
 import { InitFromUrl } from "./steps/init-from-url";
@@ -96,6 +90,7 @@ export function GameStudio() {
             (<div>
                 <H2>{t("quick_tour")}</H2>
                 <iframe
+                    title="game"
                     width="560"
                     height="315"
                     style={{maxWidth: "100%"}}

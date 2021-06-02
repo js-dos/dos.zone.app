@@ -1,10 +1,8 @@
 import React from "react";
 
-import { Button as ButtonType } from "emulators-ui/dist/types/controls/button"
-
-import { PanelProps, Button, Icon, ButtonGroup, Intent } from "@blueprintjs/core";
-import { EditorStackProps } from "./layers-editor";
+import { Button, ButtonGroup, Icon, Intent, PanelProps } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
+import { EditorStackProps } from "./layers-editor";
 
 export const LayersPanel: React.FC<PanelProps<EditorStackProps>> = props => {
     const { config, breadCrumbs, t } = props;

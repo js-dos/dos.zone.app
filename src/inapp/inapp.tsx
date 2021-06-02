@@ -84,7 +84,7 @@ async function subscribeToUpdates(store: IapStore.IStore | null,
 
 export function Subscriptions(props: { user: User | null }) {
     const user = props.user;
-    const { t, i18n } = useTranslation("subscriptions");
+    const { t } = useTranslation("subscriptions");
     const inappSupported = store !== undefined;
     const [subscriptionsState, setSubscriptionsState] = useState<SubscriptionsState | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -168,7 +168,7 @@ export function Subscriptions(props: { user: User | null }) {
 }
 
 function Actions(props: { state: State, store: IapStore.IStore | null, id: string}) {
-    const { t, i18n } = useTranslation("subscriptions");
+    const { t } = useTranslation("subscriptions");
     const state = props.state;
     const store = props.store;
     const havePurchases = props.store !== null;

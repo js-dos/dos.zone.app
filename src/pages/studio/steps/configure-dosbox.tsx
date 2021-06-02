@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react";
-import {
-    H1, H2, Classes, FileInput, Intent, Spinner,
-    Tree, ITreeNode, Button, AnchorButton, ButtonGroup
-} from "@blueprintjs/core";
+import React, { useState } from "react";
+
+import { Button, Intent, Spinner } from "@blueprintjs/core";
 import { Emulators } from "emulators";
-import { DosConfigUi } from "./dos-config-ui";
 import { DosConfig } from "emulators/dist/types/dos/bundle/dos-conf";
 import { StepProps } from "../state";
 import { createArchive as createZipArchive } from "./create-archive";
+import { DosConfigUi } from "./dos-config-ui";
 
 declare const emulators: Emulators;
 

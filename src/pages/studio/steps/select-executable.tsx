@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+
 import {
-    H1, H2, Classes, FileInput, Intent, Spinner,
-    Tree, ITreeNode, Button, AnchorButton, ButtonGroup
+    Button, Classes, Intent,
+    ITreeNode, Spinner,
+    Tree
 } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 import { StepProps } from "../state";

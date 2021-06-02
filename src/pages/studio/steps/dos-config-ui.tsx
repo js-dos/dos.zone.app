@@ -1,6 +1,6 @@
 import React, { useState, FormEvent } from "react";
+
 import { DosConfigCategory, DosConfigOption, DosConfigValue, DosConfig } from "emulators/dist/types/dos/bundle/dos-conf";
-import { EmulatorsUi } from "emulators-ui";
 
 import {
     H3,
@@ -16,8 +16,6 @@ import {
 } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 import { TFunction } from "i18next";
-
-declare const emulatorsUi: EmulatorsUi;
 
 export function DosConfigUi(props: { config: DosConfig, t: TFunction }) {
     const config = props.config;

@@ -78,7 +78,7 @@ export function Landing(props: { user: User | null }) {
 
     return (<div className="landing2-root">
         <div className="landing2-header">
-            <img src="/logo-wide.png" className="landing2-logo" />
+            <img src="/logo-wide.png" className="landing2-logo" alt="Dos.Zone Logo" />
             <Search onSearchResult={(searchTerm, response) => {
                 setSearchTerm(searchTerm);
                 setSearchResponse(response);

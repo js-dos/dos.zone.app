@@ -13,7 +13,9 @@ export function getCachedGameData(bundleUrl: string) {
         !bundleUrl.startsWith("https://") &&
         bundleUrl.indexOf("@") > 0 &&
         bundleUrl.indexOf(":") > 0) {
+        // eslint-disable-next-line
         const [slug, rest] = bundleUrl.split("@");
+        // eslint-disable-next-line
         const [name, hash] = rest.split(":");
         const canonicalUrl = decodeHashToUrl(hash);
 

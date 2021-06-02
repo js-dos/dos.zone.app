@@ -1,13 +1,14 @@
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, useState } from "react";
+
 import { useTranslation } from "react-i18next";
 import { IconNames } from "@blueprintjs/icons";
 import "./search.css";
 
 import {
     Classes,
-    Intent, Overlay, Icon,
-    Card, Button,
-    H2, Spinner, InputGroup,
+    Intent,
+    Button,
+    Spinner, InputGroup,
     Popover, Position,
     NonIdealState,
 } from "@blueprintjs/core";
@@ -15,7 +16,7 @@ import i18n from "../../i18n";
 import { GameData, searchGame } from "../../core/game";
 import { openSearch } from "../../core/browser-tab";
 
-type SearchResponse = GameData[];
+type SearchResponseData = GameData[];
 
 const minimalSearchTerm = 3;
 
@@ -26,9 +27,9 @@ export function Search(props: { onSearchResult: (searchTerm: string, result: Gam
     const [ popoverShown, setPopoverShown ] = useState<boolean>(false);
 
     const [ searchRequestTerm, setSearchRequestTerm ] = useState<string>("");
-    const [ searchResponse, _setSearchResponse ] = useState<SearchResponse | null>(null);
+    const [ searchResponse, _setSearchResponse ] = useState<SearchResponseData | null>(null);
 
-    function setSearchResponse(searchTerm: string, response: SearchResponse | null) {
+    function setSearchResponse(searchTerm: string, response: SearchResponseData | null) {
         props.onSearchResult(searchTerm, response);
         _setSearchResponse(response);
     }
@@ -91,7 +92,7 @@ export function Search(props: { onSearchResult: (searchTerm: string, result: Gam
 
 function SearchResponse(props: {
     searchRequestTerm: string,
-    searchResponse: SearchResponse | null,
+    searchResponse: SearchResponseData | null,
 }) {
     const { t } = useTranslation("search");
     const { searchRequestTerm, searchResponse } = props;

@@ -1,17 +1,10 @@
 import React, { useEffect, useState } from "react";
-import {
-    H1, H2, Classes, FileInput, Intent, Spinner,
-    Tree, ITreeNode, Button, AnchorButton, ButtonGroup
-} from "@blueprintjs/core";
-import { IconNames } from "@blueprintjs/icons";
-import { Emulators } from "emulators";
-import { DosConfigUi } from "./dos-config-ui";
-import { DosConfig } from "emulators/dist/types/dos/bundle/dos-conf";
-import { StepProps } from "../state";
-import { restoreConfig } from "../state";
-import { ZipExecutables } from "../../../core/zip-explorer";
-import { GET_BUFFER } from "../../../core/xhr/GET";
+
+import { Spinner } from "@blueprintjs/core";
 import { getCachedGameData } from "../../../core/game-query";
+import { GET_BUFFER } from "../../../core/xhr/GET";
+import { ZipExecutables } from "../../../core/zip-explorer";
+import { restoreConfig, StepProps } from "../state";
 
 export function InitFromUrl(url: string) {
     return function InitFromUrlSteps(props: StepProps) {
