@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { User } from "../../core/auth";
+import { isSuperUser, User } from "../../core/auth";
 
 import {
     Popover,
@@ -127,7 +127,7 @@ export function TurboOptions(props: {
                 &nbsp;&nbsp;{timeInfo(turboTime, t)}&nbsp;&nbsp;
                 <Button intent={props.intent} icon={IconNames.CONSOLE} minimal={true} onClick={() => onRun({ turbo: true, logVisual: true })}></Button>
                 {
-                    user?.email === "caiiiycuk@gmail.com" ?
+                    isSuperUser(user) ?
                     <Button intent={props.intent} icon={IconNames.LAB_TEST} minimal={true} onClick={() => onRun({ turbo: true, logVisual: true, local: true })}></Button> :
                     null
                 }

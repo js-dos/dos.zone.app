@@ -1,7 +1,7 @@
 import { TransportLayer, ClientMessage, MessageHandler, ServerMessage } from "emulators/dist/types/protocol/protocol";
 import { HardwareEmulatorPlugin } from "./emulator-plugin";
 
-import { Plugins, FilesystemDirectory, FilesystemEncoding } from '@capacitor/core'
+import { Plugins, FilesystemDirectory, FilesystemEncoding } from "@capacitor/core"
 import { writeFile } from "capacitor-blob-writer";
 import base64 from "base64-js";
 

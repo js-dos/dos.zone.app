@@ -194,6 +194,7 @@ function PlayerWrapper(props: {
     const turbo = (props.queryParams().turbo || "0") === "1";
     const local = (props.queryParams().local || "0") === "1";
     const logVisual = (props.queryParams().logVisual || "0") === "1";
+    const logLayers = (props.queryParams().logLayers || "0") === "1";
     return <Player
                user={props.user}
                bundleUrl={decodeURIComponent(url)}
@@ -201,6 +202,7 @@ function PlayerWrapper(props: {
                turbo={turbo}
                local={local}
                logVisual={logVisual}
+               logLayers={logLayers}
                onDosInstance={props.onDosInstance}
            ></Player>;
 }

@@ -22,7 +22,7 @@ import { openRepository } from "../core/browser-tab";
 import { GameData } from "../core/game";
 import { getGameData } from "../core/game-query";
 
-import { User } from "../core/auth";
+import { isSuperUser, User } from "../core/auth";
 import { TurboOptions } from "./components/turbo-options";
 import { GET_TEXT } from "../core/xhr/GET";
 import { getPersonalBundleUrlIfExists } from "../core/personal";
@@ -41,6 +41,7 @@ export interface RunOptions {
     turbo: boolean;
     local?: boolean;
     logVisual?: boolean;
+    logLayers?: boolean;
 }
 
 export function My(props: { user: User | null }) {
@@ -179,7 +180,9 @@ export function My(props: { user: User | null }) {
     function runBundle(options: RunOptions) {
         const turboMode = options.turbo;
         const startTurbo = canTurbo && turboMode;
-        const url = runUrl + "?turbo=" + (startTurbo ? "1" : "0") + (options.local ? "&local=1" : "") + (options.logVisual ? "&logVisual=1" : "");
+        const url = runUrl + "?turbo=" + (startTurbo ? "1" : "0") +
+            (options.local ? "&local=1" : "") + (options.logVisual ? "&logVisual=1" : "") +
+            (options.logLayers ? "&logLayers=1" : "");
         if (startTurbo && window.location.protocol === "https:") {
             window.location.href = "http://dos.zone" + url;
         } else {
@@ -219,11 +222,21 @@ export function My(props: { user: User | null }) {
 
         history.push("/" + i18n.language + "/studio/" + encodeURIComponent(selectedData.canonicalUrl));
     }
-    const playButton = (<Button disabled={!canPlay}
+    let playButton = (<Button disabled={!canPlay}
         className={canPlay ? "heartbeat" : ""}
         icon={IconNames.PLAY}
         intent={canPlay ? Intent.PRIMARY : Intent.NONE}
         onClick={() => runBundle({ turbo: false })}>{t("play")}</Button>);
+
+    if (isSuperUser(user)) {
+        playButton = <ButtonGroup>
+            {playButton}
+            <Button disabled={!canPlay}
+                icon={IconNames.RECORD}
+                onClick={() => runBundle({ turbo: false, logLayers: true })}
+             />
+        </ButtonGroup>;
+    }
 
     return <div className="left-margin">
         <h1>{t("selected")}</h1>

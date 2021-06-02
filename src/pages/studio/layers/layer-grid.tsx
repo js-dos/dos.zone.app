@@ -36,7 +36,7 @@ export function LayerGrid(props: EditorStackProps) {
         setContext(context);
 
         function onClick(e: MouseEvent) {
-            var rect = (e.target as any).getBoundingClientRect();
+            let rect = (e.target as any).getBoundingClientRect();
             const width = context.canvas.width;
             const height = context.canvas.height;
             const x = (e.clientX - rect.left) / rect.width * width;

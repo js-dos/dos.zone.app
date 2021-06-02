@@ -14,6 +14,7 @@ export interface IPlayerProps {
     turbo: boolean;
     local?: boolean;
     logVisual?: boolean;
+    logLayers?: boolean;
     janusServerUrl?: string;
 
     onDosInstance?: (dos: DosInstance | null) => void;

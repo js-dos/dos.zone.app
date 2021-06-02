@@ -1,0 +1,9 @@
+.log-layers-container {
+    position: absolute;
+    left: 45%;
+    bottom: 12px;
+}
+
+.log-layers-container .bp3-callout {
+    background-color: #394B59EE !important;
+}

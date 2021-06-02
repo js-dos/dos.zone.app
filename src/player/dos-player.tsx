@@ -3,6 +3,7 @@ import { DosFactoryType, DosInstance } from "emulators-ui/dist/types/js-dos";
 
 import { LogVisual } from "./log-visual";
 import { Dhry2 } from "./dhry2";
+import { LogLayers } from "./log-layers";
 import { CommandInterface } from "emulators";
 import { dhry2Bundle } from "../core/storage/recently-played";
 
@@ -142,6 +143,8 @@ export function DosPlayer(props: IPlayerProps) {
             decorator = <LogVisual ci={ci} dos={dos} />;
         } else if (isDhry2Bundle) {
             decorator = <Dhry2 ci={ci} />;
+        } else if (props.logLayers) {
+            decorator = <LogLayers ci={ci} />;
         }
     }
     return <div ref={rootRef} className="player">
