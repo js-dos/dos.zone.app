@@ -128,7 +128,7 @@ function App() {
             </Route>
             <Route path="/:lang/play/:url">
                 <div className="play-player-root">
-                    <NavigatorPlayer dos={dos} user={user} />
+                    <NavigatorPlayerWrapper user={user} dos={dos} />
                     <div className="play-player-container">
                         <PlayerWrapper user={user} embedded={false} queryParams={queryParams} onDosInstance={setDosInsatnce} />
                     </div>
@@ -183,6 +183,15 @@ function GoogleAnalytics(props: { location: any }) {
 
     return null;
 }
+
+function NavigatorPlayerWrapper(props: {
+    user: User | null,
+    dos: DosInstance | null,
+}) {
+    const { url } = useParams<{url: string}>();
+    const { user, dos } = props;
+    return <NavigatorPlayer dos={dos} user={user} bundleUrl={decodeURIComponent(url)} />
+};
 
 function PlayerWrapper(props: {
     user: User | null,

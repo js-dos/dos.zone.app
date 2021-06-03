@@ -52,6 +52,18 @@ class HardwareTransportLayer implements TransportLayer {
             case "wc-add-key": {
                 realtime.addKey(props.key, props.pressed ? 1 : 0, props.timeMs);
             } break;
+            case "wc-pause": {
+                HardwareEmulatorPlugin.sendMessage({ payload: "wc-pause\n" + this.sessionId + "\n" });
+            } break;
+            case "wc-resume": {
+                HardwareEmulatorPlugin.sendMessage({ payload: "wc-resume\n" + this.sessionId + "\n" });
+            } break;
+            case "wc-mute": {
+                HardwareEmulatorPlugin.sendMessage({ payload: "wc-mute\n" + this.sessionId + "\n" });
+            } break;
+            case "wc-unmute": {
+                HardwareEmulatorPlugin.sendMessage({ payload: "wc-unmute\n" + this.sessionId + "\n" });
+            } break;
             case "wc-exit": {
                 this.alive = false;
                 HardwareEmulatorPlugin.sendMessage({ payload: "wc-exit\n" + this.sessionId + "\n" });

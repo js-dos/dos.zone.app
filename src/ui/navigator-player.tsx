@@ -1,48 +1,44 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
-import { useHistory } from "react-router-dom";
-
-import { Navbar, Alignment, Button, Intent, Overlay, Classes, Card, Spinner } from "@blueprintjs/core";
+import { Alignment, Button, Intent, Navbar, Spinner } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
-
-import { useTranslation } from "react-i18next";
+import { Capacitor } from "@capacitor/core";
+import { CommandInterface } from "emulators";
 import { DosInstance } from "emulators-ui/dist/types/js-dos";
-import { Button as ButtonType } from "emulators-ui/dist/types/controls/button";
-import { LayersType } from "../pages/studio/steps/layers";
-import { EmulatorsUi } from "emulators-ui";
 import { TFunction } from "i18next";
+import { useTranslation } from "react-i18next";
+import { useHistory } from "react-router-dom";
+import { BackButton, isMobile } from "../cap-config";
 import { User } from "../core/auth";
 import { getTurboSession } from "../core/turbo";
-import { BackButton, isMobile } from "../cap-config";
-
-import { Capacitor } from "@capacitor/core";
 
 import "./navigator.css";
-
-declare const emulatorsUi: EmulatorsUi;
-const keyOptions = Object.keys(emulatorsUi.controls.namedKeyCodes);
+import { Tutorial } from "../player/tutorial";
+import { GameData } from "../core/game";
+import { getCachedGameData } from "../core/game-query";
 
 export function NavigatorPlayer(props: {
     dos: DosInstance | null,
     user: User | null,
+    bundleUrl: string,
 }) {
     const { t, i18n } = useTranslation("navigator");
     const lang = i18n.language;
     const history = useHistory();
-    const dos = props.dos;
-    const user = props.user;
+    const { user, dos, bundleUrl } = props;
     const turbo = history.location.search.indexOf("turbo=1") >= 0;
 
     const [mobileMode, setMobileMode] = useState<boolean>(isMobile);
-    const [overlay, setOverlay] = useState<boolean>(false);
-    const [hint, setHintComponent] = useState<JSX.Element | null>(null);
     const [rtt, setRttComponent] = useState<JSX.Element | null>(null);
     const [keyboardVisible, setKeyboardVisible] = useState<boolean>(false);
     const [saving, setSaving] = useState<boolean>(false);
     const [endTime, setEndTime] = useState<number>(0);
     const [endTimeWarn, setEndTimeWarn] = useState<boolean>(false);
+    const [paused, setPaused] = useState<boolean>(false);
+    const [muted, setMuted] = useState<boolean>(false);
+    const [ci, setCi] = useState<CommandInterface | null>(null);
 
-    const showOverlay = overlay && hint !== null;
+    const game = getCachedGameData(bundleUrl);
 
     useEffect(() => {
         BackButton.customHandler = () => {
@@ -85,8 +81,12 @@ export function NavigatorPlayer(props: {
         }
 
         let cancel = false;
-        dos.ciPromise?.then((ci) => {
-            ci.events().onStdout((message) => {
+        dos.ciPromise?.then((commandInterface) => {
+            if (cancel) {
+                return;
+            }
+
+            commandInterface.events().onStdout((message) => {
                 if (cancel) {
                     return;
                 }
@@ -95,18 +95,7 @@ export function NavigatorPlayer(props: {
                     setRttComponent(renderRttComponent(message));
                 }
             });
-            return ci.config();
-        }).then((config) => {
-            if (cancel) {
-                return;
-            }
-
-            const layers = (config as any).layers as LayersType;
-            if (layers === undefined) {
-                return;
-            }
-
-            setHintComponent(renderHintComponent(layers, t));
+            setCi(commandInterface);
         });
 
         return () => {
@@ -185,6 +174,7 @@ export function NavigatorPlayer(props: {
         }
 
         setSaving(true);
+        restoreFocus();
         return dos.layers.save()
                   .then(() => setSaving(false))
                   .catch(() => setSaving(false))
@@ -203,7 +193,38 @@ export function NavigatorPlayer(props: {
         doSave().then(() => history.replace("/" + lang + "/my"));
     }
 
+    function togglePause() {
+        if (ci === null) {
+            return;
+        }
+
+        setPaused(!paused);
+        if (paused) {
+            ci.resume();
+        } else {
+            ci.pause();
+        }
+
+        restoreFocus();
+    }
+
+    function toggleMute() {
+        if (ci === null) {
+            return;
+        }
+
+        setMuted(!muted);
+        if (muted) {
+            ci.unmute();
+        } else {
+            ci.mute();
+        }
+
+        restoreFocus();
+    }
+
     return <div>
+        { ci === null ? null : <Tutorial url={game?.video} user={user} togglePause={togglePause} /> }
         <Navbar fixedToTop={false}>
             <Navbar.Group align={Alignment.LEFT}>
                 <Navbar.Heading>
@@ -219,15 +240,8 @@ export function NavigatorPlayer(props: {
                 { turbo && endTime > 0 && rtt !== null ? <Navbar.Divider /> : null}
                 { rtt }
                 { turbo || rtt !== null ? <Navbar.Divider /> : null }
-                { false ?
                 <Button
-                    intent={showOverlay ? Intent.PRIMARY : Intent.NONE}
-                    disabled={hint === null }
-                    icon={IconNames.INFO_SIGN}
-                    minimal={true}
-                    onClick={() => setOverlay(!overlay) }>
-                </Button> : null }
-                <Button
+                    disabled={ci === null}
                     intent={(mobileMode ? Intent.PRIMARY : Intent.NONE)}
                     icon={IconNames.MOBILE_PHONE}
                     minimal={true}
@@ -235,6 +249,21 @@ export function NavigatorPlayer(props: {
                 </Button>
                 <Navbar.Divider />
                 <Button
+                    disabled={ci === null}
+                    intent={paused ? Intent.SUCCESS : Intent.NONE}
+                    icon={ paused ? IconNames.PLAY : IconNames.PAUSE}
+                    minimal={true}
+                    onClick={togglePause}>
+                </Button>
+                <Button
+                    disabled={ci === null}
+                    intent={muted ? Intent.PRIMARY : Intent.NONE}
+                    icon={ muted ? IconNames.VOLUME_OFF : IconNames.VOLUME_UP}
+                    minimal={true}
+                    onClick={toggleMute}>
+                </Button>
+                <Button
+                    disabled={ci === null}
                     intent={keyboardVisible ? Intent.PRIMARY : Intent.NONE}
                     icon={IconNames.MANUALLY_ENTERED_DATA}
                     minimal={true}
@@ -242,30 +271,18 @@ export function NavigatorPlayer(props: {
                 </Button>
                 <Button
                     icon={IconNames.FLOPPY_DISK}
-                    disabled={saving}
+                    disabled={ci === null || saving}
                     minimal={true}
                     onClick={doSave}>
                 </Button>
                 <Button
+                    disabled={ci === null}
                     icon={IconNames.MAXIMIZE}
                     minimal={true}
                     onClick={toggleFullscreen}>
                 </Button>
             </Navbar.Group>
         </Navbar>
-        { false ?
-          <Overlay
-            isOpen={showOverlay}
-            onClose={() => {setOverlay(false)}}
-            className={Classes.OVERLAY_SCROLL_CONTAINER}>
-            <Card className={Classes.DARK} elevation={4} style={{
-                left: "max(0px, 50vw - 320px)",
-                width: "640px",
-                maxWidth: "100%",
-            }}>
-                {hint}
-            </Card>
-          </Overlay>: null }
     </div>;
 }
 
@@ -274,95 +291,6 @@ function renderRttComponent(rttdata: string) {
     return <div style={{fontSize: "10px", color: "#BFCCD6"}}>
         {rttTime}ms | {bitrate}kbs
     </div>;
-}
-
-function renderHintComponent(layers: LayersType, t: TFunction) {
-    const names = Object.keys(layers);
-    names.sort();
-    return <div>
-        {names.map((name) => {
-            const gestures = layers[name].gestures;
-            const buttons = layers[name].buttons;
-            const mapper = layers[name].mapper;
-            let gesturesComponent = null;
-            if (gestures !== undefined && gestures.length > 0) {
-                gesturesComponent = <div className="hint-part">
-                    <p className="hint-control-title">{t("joysticks")}:</p>
-                    {gestures.map((g, index) => {
-                        if (g.event === "end:release" || g.mapTo === 0) {
-                            return null;
-                        }
-                        return <React.Fragment key={"g-" + index}>
-                            <p><b className="hint-src">{g.joystickId}:{g.event}</b> -&gt; {getKeyCodeName(g.mapTo)}</p>
-                        </React.Fragment>;
-                    })}
-                </div>;
-            }
-            let buttonsComponent = null;
-            if (buttons !== undefined && buttons.length > 0) {
-                buttonsComponent = <div className="hint-part">
-                    <p className="hint-control-title">{t("buttons")}:</p>
-                    {buttons.map((b, index) => {
-                        if (b.mapTo === 0) {
-                            return null;
-                        }
-                        return <React.Fragment key={"b-" + index}>
-                            <p><b className="hint-src">{symbolOfButton(b)}</b> -&gt; {getKeyCodeName(b.mapTo)}</p>
-                        </React.Fragment>;
-                    })}
-                </div>;
-            }
-            let mapperComponent = null;
-            if (mapper === undefined || Object.keys(mapper).length > 0) {
-                const keys = Object.keys(mapper);
-                keys.sort();
-                mapperComponent = <div className="hint-part">
-                    <p className="hint-control-title">{t("mapper")}:</p>
-                    {keys.map((key, index) => {
-                        const keyCode = Number.parseInt(key, 10);
-                        if (isNaN(keyCode) || keyCode === 0 || mapper[keyCode] === 0) {
-                            return null;
-                        }
-                        return <React.Fragment key={"m-" + index}>
-                            <p><b className="hint-src">{getKeyCodeName(keyCode)}</b> -&gt; {getKeyCodeName(mapper[keyCode])}</p>
-                        </React.Fragment>;
-                    })}
-                </div>;
-            }
-            return <React.Fragment key={"layer-" + name}>
-                <p className="hint-layer-name"><b>{name}:</b></p>
-                {gesturesComponent}
-                {buttonsComponent}
-                {mapperComponent}
-            </React.Fragment>;
-        })}
-    </div>;
-}
-
-function symbolOfButton(button: ButtonType) {
-    if (button.symbol !== undefined) {
-        return button.symbol;
-    }
-
-    return getKeyCodeName(button.mapTo).substr(4, 2).toUpperCase();
-}
-
-function getKeyCodeName(keyCode: number | string) {
-    if (typeof keyCode === "number") {
-        return getKeyCodeNameForCode(keyCode);
-    }
-
-    return keyCode;
-}
-
-function getKeyCodeNameForCode(keyCode: number) {
-    for (const next of keyOptions) {
-        if (emulatorsUi.controls.namedKeyCodes[next] === keyCode) {
-            return next;
-        }
-    }
-
-    return "KBD_none";
 }
 
 function timeInfo(time: number, t: TFunction) {
