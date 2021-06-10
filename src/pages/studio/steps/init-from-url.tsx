@@ -5,6 +5,7 @@ import { getCachedGameData } from "../../../core/game-query";
 import { GET_BUFFER } from "../../../core/xhr/GET";
 import { ZipExecutables } from "../../../core/zip-explorer";
 import { restoreConfig, StepProps } from "../state";
+import { cdnUrl } from "../../../core/cdn";
 
 export function InitFromUrl(url: string) {
     return function InitFromUrlSteps(props: StepProps) {
@@ -17,7 +18,7 @@ export function InitFromUrl(url: string) {
             }
 
             let cancel = false;
-            GET_BUFFER(url)
+            GET_BUFFER(cdnUrl(url))
                 .then(async (data) => {
                     if (cancel) {
                         return;

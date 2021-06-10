@@ -9,6 +9,7 @@ import { User } from "../core/auth";
 import { DosPlayer } from "./dos-player";
 import { Loader } from "./loader";
 import { logError } from "../core/log";
+import { getAutoRegion } from "../core/latency";
 
 const initialCountDown = 50;
 
@@ -21,6 +22,7 @@ export function TurboPlayer(props: IPlayerProps) {
     const history = useHistory();
     const user = props.user;
     const bundle = props.bundleUrl;
+    const region = props.turboRegion === "auto" ? getAutoRegion() : props.turboRegion;
 
     const [arn, setArn] = useState<string | null>(null);
     const [publicIp, setPublicIp] = useState<string | null>(null);
@@ -45,7 +47,7 @@ export function TurboPlayer(props: IPlayerProps) {
             closeTurboSession(user, arn);
         }
 
-        openTurboSession(user, bundle).then(async (newArn) => {
+        openTurboSession(user, bundle, region).then(async (newArn) => {
             if (newArn === null) {
                 goBack(history, i18n.language);
             } else if (cancel) {
@@ -83,19 +85,24 @@ export function TurboPlayer(props: IPlayerProps) {
     }, [user, bundle]);
 
     if (user === null) {
-        return <Redirect to={"/" + i18n.language + "/my" } />
+        return <Redirect to={"/" + i18n.language + "/my"} />
     }
 
     if (arn === null) {
-        return <Loader pre2={t("waiting_arn")} />;
+        return <Loader
+            pre2={t("waiting_arn")}
+            pre3={props.turboRegion === "auto" ? "auto:" + region : region} />;
     }
 
     if (publicIp === null) {
-        return <Loader pre2={t("waiting_ip") + " (" + countDown + ") " + t("sec")} />;
+        return <Loader
+            pre2={t("waiting_ip") + " (" + countDown + ") " + t("sec")}
+            pre3={props.turboRegion === "auto" ? "auto:" + region : region}
+        />;
     }
 
-    const playerProps: IPlayerProps = {...props};
-    playerProps.janusServerUrl =  "http://" + publicIp + ":8088/janus";
+    const playerProps: IPlayerProps = { ...props };
+    playerProps.janusServerUrl = "http://" + publicIp + ":8088/janus";
     return <DosPlayer {...playerProps} />;
 }
 

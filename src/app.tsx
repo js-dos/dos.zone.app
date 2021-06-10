@@ -32,6 +32,7 @@ import { DosInstance } from "emulators-ui/dist/types/js-dos";
 import { getGameData } from "./core/game-query";
 
 import  { LayersEditor } from "./pages/studio/layers/layers-editor";
+import { estimateLatencies } from "./core/latency";
 
 declare const realtime: any;
 
@@ -200,15 +201,18 @@ function PlayerWrapper(props: {
     onDosInstance: (dos: DosInstance | null) => void;
 }) {
     const { url } = useParams<{url: string}>();
-    const turbo = (props.queryParams().turbo || "0") === "1";
-    const local = (props.queryParams().local || "0") === "1";
-    const logVisual = (props.queryParams().logVisual || "0") === "1";
-    const logLayers = (props.queryParams().logLayers || "0") === "1";
+    const queryParams = props.queryParams();
+    const turbo = (queryParams.turbo || "0") === "1";
+    const turboRegion = queryParams.turboRegion || "auto";
+    const local = (queryParams.local || "0") === "1";
+    const logVisual = (queryParams.logVisual || "0") === "1";
+    const logLayers = (queryParams.logLayers || "0") === "1";
     return <Player
                user={props.user}
                bundleUrl={decodeURIComponent(url)}
                embedded={props.embedded}
                turbo={turbo}
+               turboRegion={turboRegion}
                local={local}
                logVisual={logVisual}
                logLayers={logLayers}
@@ -218,3 +222,4 @@ function PlayerWrapper(props: {
 
 export default App;
 
+estimateLatencies();

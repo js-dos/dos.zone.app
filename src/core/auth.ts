@@ -97,9 +97,9 @@ export function authenticate(sso: string, sig:  string): Promise<User | null> {
 
 async function initDefaults(user: User) {
     const userStorage = storage(user);
-    const region = await userStorage.get("region");
+    const region = await userStorage.get("turbo.region");
     if (region === null) {
-        await userStorage.set("region", navigator.language.toLocaleLowerCase() === "en-us" ? "us-east-1" : "eu-central-1");
+        await userStorage.set("turbo.region", "auto");
     }
 }
 

@@ -226,6 +226,14 @@ body {
     text-transform: uppercase;
 }
 
+.loader-pre-3 {
+    margin: 1em 0;
+    font-size: 1vw;
+    font-family: monospace;
+    font-weight: 100;
+    text-transform: lowercase;
+}
+
 .loader-icon {
     background: url(loader.gif) no-repeat;
     background-size: cover;

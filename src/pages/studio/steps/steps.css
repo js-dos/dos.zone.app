@@ -61,3 +61,8 @@
 .download-archive-layers .bp3-panel-stack-header {
     background: #0A6640;
 }
+
+.studio-bundle-url {
+    font-size: 8px;
+    color: #5C7080;
+}

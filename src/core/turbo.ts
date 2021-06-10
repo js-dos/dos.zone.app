@@ -20,9 +20,10 @@ export async function getTurboSession(user: User): Promise<TurboSession | null> 
     }
 }
 
-export async function openTurboSession(user: User, bundleUrl: string): Promise<string | null> {
+export async function openTurboSession(user: User, bundleUrl: string, region: string): Promise<string | null> {
     try {
-        return (await GET_OBJECT(turboConnect + "?sso=" + user.sso + "&sig=" + user.sig + "&bundleUrl=" + encodeURIComponent(bundleUrl))).session.arn;
+        return (await GET_OBJECT(turboConnect + "?sso=" + user.sso + "&sig=" + user.sig + "&bundleUrl=" + encodeURIComponent(bundleUrl) +
+            "&region=" + region)).session.arn;
     } catch(e) {
         logError(e);
         return null;

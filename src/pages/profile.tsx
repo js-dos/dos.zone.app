@@ -16,6 +16,7 @@ import { IconNames } from "@blueprintjs/icons";
 import { Storage, storage } from "../core/storage/storage";
 
 import { Subscriptions } from "../inapp/inapp";
+import { turboRegions } from "../core/config";
 
 export function Profile(props: { user: User | null }) {
     const { t, i18n } = useTranslation("profile");
@@ -39,7 +40,7 @@ export function Profile(props: { user: User | null }) {
     useEffect(() => {
         if (user !== null && userStorage !== null) {
             getTurboSession(user).then(setTurboSession);
-            userStorage.get("region").then(setRegion);
+            userStorage.get("turbo.region").then(setRegion);
         }
     }, [version, userStorage, user]);
 
@@ -53,7 +54,7 @@ export function Profile(props: { user: User | null }) {
             setUpdating(true);
             const newRegion = event.currentTarget.value;
             if (userStorage !== null) {
-                userStorage.set("region", newRegion).then((success) => {
+                userStorage.set("turbo.region", newRegion).then((success) => {
                     if (success) {
                         setRegion(newRegion);
                     }
@@ -68,7 +69,7 @@ export function Profile(props: { user: User | null }) {
             <p>{t("rest_time")}<strong><span className={Classes.TEXT_LARGE}>{toMin(turboSession.restTime)} {t("min")}</span></strong></p>
             <div>{t("region")}&nbsp;
                 <HTMLSelect minimal={false}
-                            options={["eu-central-1", "us-east-1"]}
+                            options={turboRegions}
                             onChange={onChangeRegion}
                             disabled={updating}
                             value={ region === null ? undefined : region } />

@@ -29,6 +29,7 @@ export function GameStudio() {
     const { url } = useParams<{ url?: string }>();
     const [step, setStep] = useState<number>(1);
     const [state, setState] = useState<State>({
+        url,
         canSkipArchiveCreation: false,
     });
 

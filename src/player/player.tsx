@@ -11,6 +11,7 @@ export interface IPlayerProps {
     bundleUrl: string;
     embedded: boolean;
     turbo: boolean;
+    turboRegion: string;
     local?: boolean;
     logVisual?: boolean;
     logLayers?: boolean;

@@ -20,6 +20,7 @@ import { TFunction } from "i18next";
 import { Link } from "react-router-dom";
 import { Storage, storage } from "../../core/storage/storage";
 import { RunOptions } from "../my";
+import { turboRegions } from "../../core/config";
 
 
 
@@ -52,7 +53,7 @@ export function TurboOptions(props: {
 
                 setTurboTime(session.restTime);
             });
-            userStorage.get("region").then(setRegion);
+            userStorage.get("turbo.region").then(setRegion);
         }
     }, [userStorage, user]);
 
@@ -103,7 +104,7 @@ export function TurboOptions(props: {
         setUpdating(true);
         const newRegion = event.currentTarget.value;
         if (userStorage !== null) {
-            userStorage.set("region", newRegion).then((success) => {
+            userStorage.set("turbo.region", newRegion).then((success) => {
                 if (success) {
                     setRegion(newRegion);
                 }
@@ -119,22 +120,22 @@ export function TurboOptions(props: {
         <div className="turbo-border">
             <div className="turbo-options">
                 <ButtonGroup>
-                <Button className={props.intent === Intent.PRIMARY ? "heartbeat" : "" } intent={props.intent} icon={IconNames.FAST_FORWARD} onClick={() => onRun({ turbo: true })}>{t("play_turbo")}</Button>
+                <Button className={props.intent === Intent.PRIMARY ? "heartbeat" : "" } intent={props.intent} icon={IconNames.FAST_FORWARD} onClick={() => onRun({ turbo: true, turboRegion: region || "auto" })}>{t("play_turbo")}</Button>
                 <Link className={Classes.BUTTON} to={"/" + lang + "/profile"}>
                     <Icon icon={IconNames.COG} iconSize={16} />
                 </Link>
                 </ButtonGroup>
                 &nbsp;&nbsp;{timeInfo(turboTime, t)}&nbsp;&nbsp;
-                <Button intent={props.intent} icon={IconNames.CONSOLE} minimal={true} onClick={() => onRun({ turbo: true, logVisual: true })}></Button>
+                <Button intent={props.intent} icon={IconNames.CONSOLE} minimal={true} onClick={() => onRun({ turbo: true, logVisual: true, turboRegion: region || "auto"  })}></Button>
                 {
                     isSuperUser(user) ?
-                    <Button intent={props.intent} icon={IconNames.LAB_TEST} minimal={true} onClick={() => onRun({ turbo: true, logVisual: true, local: true })}></Button> :
+                    <Button intent={props.intent} icon={IconNames.LAB_TEST} minimal={true} onClick={() => onRun({ turbo: true, logVisual: true, local: true, turboRegion: region || "auto" })}></Button> :
                     null
                 }
             </div>
             <div className="my-region-selector">{t("region")}&nbsp;
                 <HTMLSelect minimal={true}
-                            options={[{label: "Europe", value: "eu-central-1"}, {label: "N. America", value: "us-east-1"}]}
+                            options={turboRegions}
                             onChange={onChangeRegion}
                             disabled={updating}
                             value={ region === null ? undefined : region } />

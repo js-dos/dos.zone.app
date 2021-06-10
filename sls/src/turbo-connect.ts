@@ -10,6 +10,7 @@ export const turboConnect: Handler = async (event: any) => {
     const sso = event.queryStringParameters.sso;
     const sig = event.queryStringParameters.sig;
     const bundleUrl = event.queryStringParameters.bundleUrl;
+    let region = event.queryStringParameters.region;
 
     if (!bundleUrl || bundleUrl.length === 0) {
         return badRequest();
@@ -33,8 +34,10 @@ export const turboConnect: Handler = async (event: any) => {
         return error("error_starting_to_often");
     }
 
-    const region = await getKey(user.email, "region");
+    if (!region) {
+        region = (await getKey(user.email, "turbo.region")) || (await getKey(user.email, "region")) || "eu-central-1";
+    }
 
     session.bundleUrl = bundleUrl;
-    return success( { session: await startTurboSession(session, region || "eu-central-1") });
+    return success( { session: await startTurboSession(session, region) });
 }

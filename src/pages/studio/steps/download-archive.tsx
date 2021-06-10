@@ -132,9 +132,11 @@ export function DownloadArchive(props: StepProps) {
                   <Player
                       onDosInstance={setDos}
                       bundleUrl={bundleUrl}
+                      turbo={false}
+                      turboRegion="auto"
                       user={null}
                       embedded={true}
-                      turbo={false} />
+                      />
                 }
             </div>
             <div className="download-archive-layers">
@@ -150,5 +152,7 @@ export function DownloadArchive(props: StepProps) {
         <ReactMarkdown renderers={markdownRenderers}
                       source={t("help", {lang: props.lang, game: state.name})}
                       escapeHtml={false}></ReactMarkdown>
+        <br/>
+        <div className="studio-bundle-url"><a href={decodeURIComponent(state.url || "#")}>source</a></div>
     </div>;
 }

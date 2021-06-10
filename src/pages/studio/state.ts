@@ -6,6 +6,7 @@ import { Emulators } from "emulators";
 declare const emulators: Emulators;
 
 export interface State {
+    url?: string,
     slug?: string,
     name?: string,
     zip?: Uint8Array,

@@ -1,13 +1,20 @@
 import React from "react";
 
-export function Loader(props: { pre2: string }) {
-    return  <div className="loader-container">
+export function Loader(props: { pre2: string, pre3?: string }) {
+    return <div className="loader-container">
         <pre className="loader-pre-1">
             {pre1}
         </pre>
         <pre className="loader-pre-2">
             {props.pre2}
         </pre>
+        {
+            props.pre3 ?
+                <pre className="loader-pre-3">
+                    {props.pre3}
+                </pre> :
+                null
+        }
         <div className="loader-icon">
         </div>
     </div>;

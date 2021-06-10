@@ -7,6 +7,7 @@ export const ssoUrl = endpointBase + "/sso/url";
 export const ssoLogin = endpointBase + "/sso/login";
 export const ssoLogout = endpointBase + "/sso/logout";
 
+export const turboRegions = [{label: "Automatic", value: "auto"}, {label: "Europe", value: "eu-central-1"}, {label: "N. America", value: "us-east-1"}];
 export const turboLimits = endpointBase + "/turbo/limits";
 export const turboConnect = endpointBase + "/turbo/connect";
 export const turboDisconnect = endpointBase + "/turbo/disconnect";

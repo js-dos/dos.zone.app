@@ -14,7 +14,6 @@ import { getTurboSession } from "../core/turbo";
 
 import "./navigator.css";
 import { Tutorial } from "../player/tutorial";
-import { GameData } from "../core/game";
 import { getCachedGameData } from "../core/game-query";
 
 export function NavigatorPlayer(props: {

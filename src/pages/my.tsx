@@ -39,6 +39,7 @@ const isSafari = navigator.vendor && navigator.vendor.indexOf("Apple") > -1 &&
 
 export interface RunOptions {
     turbo: boolean;
+    turboRegion?: string;
     local?: boolean;
     logVisual?: boolean;
     logLayers?: boolean;
@@ -183,7 +184,8 @@ export function My(props: { user: User | null }) {
         const startTurbo = canTurbo && turboMode;
         const url = runUrl + "?turbo=" + (startTurbo ? "1" : "0") +
             (options.local ? "&local=1" : "") + (options.logVisual ? "&logVisual=1" : "") +
-            (options.logLayers ? "&logLayers=1" : "");
+            (options.logLayers ? "&logLayers=1" : "") +
+            "&turboRegion=" + (options.turboRegion || "auto");
         if (startTurbo && window.location.protocol === "https:") {
             window.location.href = "http://dos.zone" + url;
         } else {
