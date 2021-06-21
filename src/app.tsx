@@ -32,7 +32,6 @@ import { DosInstance } from "emulators-ui/dist/types/js-dos";
 import { getGameData } from "./core/game-query";
 
 import  { LayersEditor } from "./pages/studio/layers/layers-editor";
-import { estimateLatencies } from "./core/latency";
 
 declare const realtime: any;
 
@@ -221,5 +220,3 @@ function PlayerWrapper(props: {
 }
 
 export default App;
-
-estimateLatencies();

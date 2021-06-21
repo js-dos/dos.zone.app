@@ -1,6 +1,7 @@
 import { turboRegions } from "./config";
 
-const pingImage = document.createElement("img");
+const timeoutMs = 500;
+const latencyCheckMethod = getLatencyForRegionWithImg;
 
 const regionLatency: { [region: string]: number[] } = (() => {
 	const latency: { [region: string]: number[] } = {};
@@ -10,77 +11,97 @@ const regionLatency: { [region: string]: number[] } = (() => {
 	return latency;
 })();
 
-export async function estimateLatencies() {
-	for (let i = 0; i < 10; ++i) {
-		for (const { value } of turboRegions) {
-			if (value === "auto") {
+export async function getAutoRegion(onLatencyUpdate: (region: string) => void) {
+	const regions = [...turboRegions];
+	regions.shift(); // remove auto region
+
+	const blackListedRegions: { [region: string]: boolean } = {};
+
+	// estimation
+	for (const { value } of regions) {
+		for (let i = 0; i < 5; ++i) {
+			if (blackListedRegions[value] === true) {
 				continue;
 			}
-			regionLatency[value].push(await getLatencyForRegionWithImg(value));
+			regionLatency[value].push(await latencyCheckMethod(value).catch(() => {
+				blackListedRegions[value] = true;
+				return 9999;
+			}));
+			onLatencyUpdate(value + " (" + min(regionLatency[value]) + " ms)");
 		}
 	}
 
+	let region = "eu-central-1";
+	let minLatency = -1;
 	let debugInfo = "";
 	for (const next of Object.keys(regionLatency)) {
-		if (next === "auto") {
-			continue;
+		if (blackListedRegions[next]) {
+			debugInfo += next + ": blacklisted\n";
+		} else {
+			const latency = min(regionLatency[next]);
+			if (latency > 0 && (minLatency === -1 || minLatency > latency)) {
+				region = next;
+				minLatency = latency;
+			}
+			debugInfo += next + ": " + latency + "\n";
 		}
-		debugInfo += next + ": " + q75(regionLatency[next]) + "\n";
 	}
 	// tslint:disable-next-line
 	console.log("Latency estimation:\n" + debugInfo);
 	// tslint:disable-next-line
-	console.log("Auto region:", getAutoRegion());
+	console.log("Auto region:", region);
+
+
+	return region;
 }
 
+const pingImage = document.createElement("img");
 function getLatencyForRegionWithImg(region: string) {
-	return new Promise<number>((resolve) => {
+	return new Promise<number>((resolve, reject) => {
 		const url = "http://dynamodb." + region + ".amazonaws.com/?time=" + Date.now();
-		const startedAt = Date.now();
+		let startedAt = 0;
+		let timeoutId: any = 0;
 		pingImage.onload = () => {
 			resolve(Date.now() - startedAt);
+			clearTimeout(timeoutId);
 		};
 		pingImage.onerror = () => {
 			resolve(Date.now() - startedAt);
+			clearTimeout(timeoutId);
 		};
+		timeoutId = setTimeout(() => {
+			reject();
+			pingImage.src = "";
+		}, timeoutMs);
+		startedAt = Date.now();
 		pingImage.src = url;
 	});
 }
 
 function getLatencyForRegionWithXhr(region: string) {
-	return new Promise<number>((resolve) => {
+	return new Promise<number>((resolve, reject) => {
 		const url = "http://dynamodb." + region + ".amazonaws.com/?time=" + Date.now();
 		const xhr = new XMLHttpRequest();
 
-		xhr.open("HEAD", url);
-		xhr.setRequestHeader("Cache-Control", "no-cache, no-store, max-age=0");
-		xhr.setRequestHeader("Expires", "Tue, 01 Jan 1980 1:00:00 GMT");
-		xhr.setRequestHeader("Pragma", "no-cache");
-
-		const startedAt = Date.now();
-		xhr.onreadystatechange = function () {
-			if (this.readyState === this.DONE) {
+		let startedAt = 0;
+		xhr.timeout = timeoutMs;
+		xhr.ontimeout = () => {
+			reject();
+		};
+		xhr.onreadystatechange = () => {
+			if (xhr.readyState === XMLHttpRequest.OPENED) {
+				startedAt = Date.now();
+				xhr.setRequestHeader("Cache-Control", "no-cache, no-store, max-age=0");
+				xhr.setRequestHeader("Expires", "Tue, 01 Jan 1980 1:00:00 GMT");
+				xhr.setRequestHeader("Pragma", "no-cache");
+			} else if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
 				resolve(Date.now() - startedAt);
 			}
 		};
+
+		xhr.open("OPTIONS", url);
 		xhr.send();
 	});
-}
-
-export function getAutoRegion() {
-	let region = "eu-central-1";
-	let minLatency = -1;
-	for (const next of Object.keys(regionLatency)) {
-		if (next === "auto") {
-			continue;
-		}
-		const latency = q75(regionLatency[next]);
-		if (latency > 0 && (minLatency === -1 || minLatency > latency)) {
-			region = next;
-			minLatency = latency;
-		}
-	}
-	return region;
 }
 
 const quantile = (arr: number[], q: number) => {
@@ -96,5 +117,13 @@ const quantile = (arr: number[], q: number) => {
 };
 
 const asc = (arr: number[]) => arr.sort((a, b) => a - b);
+
+const min = (arr: number[]) => {
+	if (arr.length === 0) {
+		return 0;
+	}
+
+	return asc(arr)[0];
+};
 
 const q75 = (arr: number[]) => quantile(arr, .75);

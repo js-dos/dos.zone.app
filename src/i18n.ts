@@ -51,6 +51,8 @@ const en = {
     turbo: {
         waiting_arn: "Connecting to Turbo cloud...",
         waiting_ip: "Starting up emulator",
+        detecting_region: "Checking for region with minimal latency...",
+        testing: "Checking ",
         sec: "sec",
     },
     player: {
@@ -345,6 +347,8 @@ const ru = {
     turbo: {
         waiting_arn: "Подключаемся к облаку...",
         waiting_ip: "Запускаем эмулятор",
+        detecting_region: "Выбор региона с минимальной задержкой",
+        testing: "Проверяем ",
         sec: "сек",
     },
     player: {

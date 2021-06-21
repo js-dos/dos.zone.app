@@ -22,11 +22,12 @@ export function TurboPlayer(props: IPlayerProps) {
     const history = useHistory();
     const user = props.user;
     const bundle = props.bundleUrl;
-    const region = props.turboRegion === "auto" ? getAutoRegion() : props.turboRegion;
 
     const [arn, setArn] = useState<string | null>(null);
     const [publicIp, setPublicIp] = useState<string | null>(null);
     const [countDown, setCountDown] = useState<number>(initialCountDown);
+    const [testRegion, setTestRegion] = useState<string>("");
+    const [region, setRegion] = useState<string | null>(props.turboRegion === "auto" ? null : props.turboRegion)
 
     useEffect(() => {
         return () => {
@@ -37,9 +38,21 @@ export function TurboPlayer(props: IPlayerProps) {
     }, [user, arn]);
 
     useEffect(() => {
+        if (region !== null) {
+            return;
+        }
+
+        getAutoRegion(setTestRegion).then(setRegion);
+    }, [region]);
+
+    useEffect(() => {
         let cancel = false;
 
         if (user === null) {
+            return;
+        }
+
+        if (region === null) {
             return;
         }
 
@@ -82,10 +95,16 @@ export function TurboPlayer(props: IPlayerProps) {
         return () => {
             cancel = true;
         }
-    }, [user, bundle]);
+    }, [user, bundle, region]);
 
     if (user === null) {
         return <Redirect to={"/" + i18n.language + "/my"} />
+    }
+
+    if (region === null) {
+        return <Loader
+            pre2={t("detecting_region")}
+            pre3={t("testing") + testRegion}/>;
     }
 
     if (arn === null) {
