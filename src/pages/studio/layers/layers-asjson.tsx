@@ -20,7 +20,7 @@ export const LayersAsJson: React.FC<PanelProps<EditorStackProps>> = props => {
         }
     }
     return <div className="layers-container">
-        <TextArea className="layers-asjson not-prevent-key-events" value={json} onChange={onChange}>
+        <TextArea className="layers-asjson" value={json} onChange={onChange}>
         </TextArea>
         <Button icon={IconNames.TICK} intent={Intent.SUCCESS} onClick={onApply}>{t("apply")}</Button>
     </div>;

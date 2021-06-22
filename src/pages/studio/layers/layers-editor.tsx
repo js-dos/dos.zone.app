@@ -119,7 +119,7 @@ export function LayersEditor(props: {
     };
 
     const panelStack = createPanelsStack(editorProps);
-    return <div className="layers-editor-container">
+    return <div className="layers-editor-container not-prevent-key-events">
         <PanelStack2 className="layers-editor-stack"
                      stack={panelStack as any}
                      onClose={onClose}

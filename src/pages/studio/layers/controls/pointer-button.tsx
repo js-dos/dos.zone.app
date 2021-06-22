@@ -4,7 +4,7 @@ import { LayerControl, LayerPointerButtonControl } from "emulators-ui/dist/types
 
 import { EditorStackProps } from "../layers-editor";
 import { getControl } from "./controls";
-import { HTMLSelect, FormGroup, InputGroup } from "@blueprintjs/core";
+import { HTMLSelect, FormGroup, InputGroup, Checkbox } from "@blueprintjs/core";
 
 export const PointerButtonControl: React.FC<EditorStackProps> = props => {
     const { t } = props;
@@ -27,7 +27,17 @@ export const PointerButtonControl: React.FC<EditorStackProps> = props => {
         setVersion(version + 1);
     }
 
+    function onClickChange() {
+        control.click = !control.click;
+        setVersion(version + 1);
+    }
+
     return <div className="key-container">
+        <FormGroup
+            label={t("symbol")}
+            inline={true}>
+            <InputGroup onChange={onSymbolChange} fill={false} value={control.symbol} />
+        </FormGroup>
         <FormGroup
             label={t("button")}
             inline={true}>
@@ -37,16 +47,17 @@ export const PointerButtonControl: React.FC<EditorStackProps> = props => {
                         value={control.button} />
         </FormGroup>
         <FormGroup
-            label={t("symbol")}
+            label="Click"
             inline={true}>
-            <InputGroup onChange={onSymbolChange} fill={false} value={control.symbol} />
+                <Checkbox checked={control.click} onChange={onClickChange} />
         </FormGroup>
     </div>;
 }
 
 function initDefault(layerControl: LayerControl): LayerPointerButtonControl {
     const control = layerControl as LayerPointerButtonControl;
-    control.symbol = "RMB";
-    control.button = 1;
+    control.symbol = control.symbol || "RMB";
+    control.button = control.button || 1;
+    control.click = control.click || false;
     return control;
 }

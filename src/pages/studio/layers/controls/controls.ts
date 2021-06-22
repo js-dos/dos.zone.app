@@ -9,6 +9,7 @@ import { KeyboardControl } from "./keyboard";
 import { SwitchControl } from "./switch";
 import { ScreenMoveControl } from "./screen-move";
 import { PointerButtonControl } from "./pointer-button";
+import { PointerMoveControl } from "./pointer-move";
 
 import { EmulatorsUi } from "emulators-ui";
 
@@ -26,6 +27,7 @@ export const controlsMapping: {[type: string]: React.FC<EditorStackProps>} = {
     Switch: SwitchControl,
     ScreenMove: ScreenMoveControl,
     PointerButton: PointerButtonControl,
+    PointerMove: PointerMoveControl,
 }
 
 export function getControl(props: EditorStackProps): LayerControl {
