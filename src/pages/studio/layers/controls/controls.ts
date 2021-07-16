@@ -10,6 +10,8 @@ import { SwitchControl } from "./switch";
 import { ScreenMoveControl } from "./screen-move";
 import { PointerButtonControl } from "./pointer-button";
 import { PointerMoveControl } from "./pointer-move";
+import { PointerResetControl } from "./pointer-reset";
+import { NippleActivatorControl } from "./nipple-activator";
 
 import { EmulatorsUi } from "emulators-ui";
 
@@ -28,6 +30,8 @@ export const controlsMapping: {[type: string]: React.FC<EditorStackProps>} = {
     ScreenMove: ScreenMoveControl,
     PointerButton: PointerButtonControl,
     PointerMove: PointerMoveControl,
+    PointerReset: PointerResetControl,
+    NippleActivator: NippleActivatorControl,
 }
 
 export function getControl(props: EditorStackProps): LayerControl {
