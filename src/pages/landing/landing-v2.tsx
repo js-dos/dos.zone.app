@@ -92,7 +92,7 @@ export function Landing(props: { user: User | null }) {
             {
                 searchResponse === null ?
                 <div className="landing2-games-header"><Button onClick={openRepository} minimal={true} intent={Intent.PRIMARY}>{t("open_catalog")}</Button></div> :
-                (searchResponse || []).map((game, i) => <GamePreview openInternalWhiteList={recentlyUrls} warnAboutMobile={isMobile} openInternal={Capacitor.platform !== "android" } game={game} key={"search-" + i + ":" + game.canonicalUrl} />)
+                (searchResponse || []).map((game, i) => <GamePreview openInternalWhiteList={recentlyUrls} warnAboutMobile={isMobile} openInternal={true} game={game} key={"search-" + i + ":" + game.canonicalUrl} />)
             }
         </div>
 
