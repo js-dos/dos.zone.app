@@ -5,8 +5,8 @@ const { Browser } = Plugins;
 
 const domain = "https://talks.dos.zone";
 
-const desktopCatalogUrl = domain + "/t/dos-games-on-mobile/47306";
-const mobileCatalogUrl = domain + "/t/dos-games-on-mobile/47305";
+const desktopCatalogUrl = "https://dos.zone";
+const mobileCatalogUrl = "https://dos.zone";
 const catalogUrl = isMobile ? mobileCatalogUrl : desktopCatalogUrl;
 
 Browser.prefetch({ urls: [catalogUrl] });

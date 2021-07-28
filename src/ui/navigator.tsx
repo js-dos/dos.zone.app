@@ -30,8 +30,7 @@ export function Navigator(props: {
             <Navbar.Group align={Alignment.LEFT}>
                 <Navbar.Heading>
                     { showTalksLink === false ?
-                      <Link className={[Classes.BUTTON, Classes.MINIMAL].join(" ")}
-                         to="/">DOS.Zone</Link> :
+                      <a className={[Classes.BUTTON, Classes.MINIMAL].join(" ")} href="/">DOS.Zone</a> :
                       <Button minimal={true} onClick={() => openTalks(i18n.language)}>Talks</Button>
                     }
                 </Navbar.Heading>
