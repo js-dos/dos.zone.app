@@ -11,9 +11,8 @@ yarn start
 ## Web deployment
 
 ```
-yarn build
 cd build
-aws s3 sync . s3://dos.zone --delete
+PUBLIC_URL=/app yarn build && aws s3 sync . s3://dos.zone/app --delete
 ```
 
 ## Android deployment 

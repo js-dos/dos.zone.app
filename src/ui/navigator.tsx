@@ -15,6 +15,7 @@ import { useTranslation } from "react-i18next";
 import { LoginButton } from "./login-button";
 import { User } from "../core/auth";
 import { openTalks } from "../core/browser-tab";
+import { publicUrl } from "../core/config";
 
 export function Navigator(props: {
     user: User | null,
@@ -41,10 +42,10 @@ export function Navigator(props: {
             <Navbar.Group align={Alignment.RIGHT}>
                 <Navbar.Divider />
                 <a href="https://twitter.com/intent/user?screen_name=doszone_db" target="_blank" rel="noopener noreferrer" style={{ marginRight: "5px"}} >
-                    <img src="/twitter.svg" alt="twitter" width="20px" />
+                    <img src={publicUrl + "/twitter.svg"} alt="twitter" width="20px" />
                 </a>
                 <a href="https://discord.com/invite/hMVYEbG" target="_blank" rel="noopener noreferrer">
-                    <img src="/discord.svg" alt="discord" width="24px" />
+                    <img src={publicUrl + "/discord.svg"} alt="discord" width="24px" />
                 </a>
             </Navbar.Group>
             <Navbar.Group align={Alignment.RIGHT}>

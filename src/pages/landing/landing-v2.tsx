@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
-import { Capacitor } from "@capacitor/core";
 
 import {
     Intent,
@@ -20,6 +19,7 @@ import { dhry2Url, getRecentlyPlayed, recentlyPlayedSorterFn  } from "../../core
 import { getGameData } from "../../core/game-query";
 import { openRepository, openSearch } from "../../core/browser-tab";
 import { isMobile } from "../../cap-config";
+import { publicUrl } from "../../core/config";
 
 export function Landing(props: { user: User | null }) {
     const { t, i18n } = useTranslation("landing2");
@@ -78,7 +78,7 @@ export function Landing(props: { user: User | null }) {
 
     return (<div className="landing2-root">
         <div className="landing2-header">
-            <img src="/logo-wide.png" className="landing2-logo" alt="Dos.Zone Logo" />
+            <img src={publicUrl + "/logo-wide.png"} className="landing2-logo" alt="Dos.Zone Logo" />
             <Search onSearchResult={(searchTerm, response) => {
                 setSearchTerm(searchTerm);
                 setSearchResponse(response);

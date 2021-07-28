@@ -21,6 +21,7 @@ import "./game-preview.css";
 import { openSlug } from "../../core/browser-tab";
 import { IconNames } from "@blueprintjs/icons";
 import { YoutubeModal } from "./youtube-modal";
+import { publicUrl } from "../../core/config";
 
 export function GamePreview(props: {
     game: GameData,
@@ -68,7 +69,7 @@ export function GamePreview(props: {
     return <Card className="preview-card" interactive={true} elevation={Elevation.TWO}>
         <div className="preview-column">
             <H5 className="preview-header" onClick={onClick}>{data.game}</H5>
-            <img className="preview-image" src={cdnUrl(data.screenshot) || "/default.jpg"} alt="screenshot" onClick={onClick} ></img>
+            <img className="preview-image" src={cdnUrl(data.screenshot) || publicUrl + "/default.jpg"} alt="screenshot" onClick={onClick} ></img>
             <div className="preview-footer">
                 <div className="preview-desc" onClick={onClick} >
                     {description.substr(0, 150) + "..."}

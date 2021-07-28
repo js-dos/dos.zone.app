@@ -2,6 +2,7 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
 import LanguageDetector from "i18next-browser-languagedetector";
+import { publicUrl } from "./core/config";
 
 const en = {
     editor: {
@@ -148,19 +149,19 @@ The process of bundle creation is simple:
 
 1. Click on \`Browse\` button, and choose program archive.
 
-![Browser button](/guides/bundle_guide_1.jpg)
+![Browser button](${publicUrl}/guides/bundle_guide_1.jpg)
 
 2. Select executable that will be runned when DOS emulator starts.
 
-![Select executable](/guides/bundle_guide_2.jpg)
+![Select executable](${publicUrl}/guides/bundle_guide_2.jpg)
 
 3. On next step you can change various of dosbox options, but usually defaults is pretty good. Scroll down and press \`create archive\`.
 
-![Create archive](/guides/bundle_guide_3.jpg)
+![Create archive](${publicUrl}/guides/bundle_guide_3.jpg)
 
 4. Bundle is ready and you can download it.
 
-![Download archive](/guides/bundle_guide_4.jpg)
+![Download archive](${publicUrl}/guides/bundle_guide_4.jpg)
 
 `,
         database: `
@@ -280,19 +281,19 @@ On the game page:
 
 1. Press "Reply" button
 
-![reply](/guides/reply.jpg)
+![reply](${publicUrl}/guides/reply.jpg)
 
 2. Press "Upload" button and select bundle
 
-![upload](/guides/upload.jpg)
+![upload](${publicUrl}/guides/upload.jpg)
 
 Enter description of bundle and press "Reply"
 
 3. Flag the message to add it in post header
 
-![flag](/guides/flag_0.jpg)
+![flag](${publicUrl}/guides/flag_0.jpg)
 
-![flag](/guides/flag.jpg)
+![flag](${publicUrl}/guides/flag.jpg)
 
 Thank you!
 `
@@ -444,19 +445,19 @@ Dos.Zone предоставляет минимальну функциональ�
 
 1. Нажмите кнопку \`Browse\` и выберите архив с программой.
 
-![Browser button](/guides/bundle_guide_1.jpg)
+![Browser button](${publicUrl}/guides/bundle_guide_1.jpg)
 
 2. Выберите запускаемый файл который будет запущен в эмуляторе.
 
-![Select executable](/guides/bundle_guide_2.jpg)
+![Select executable](${publicUrl}/guides/bundle_guide_2.jpg)
 
 3. На следующем шаге вы можете поменять настройки dosbox, но обычно настройки по умолчанию хорошо подходят. Нажмите \`Создать архив\` внизу страницы.
 
-![Create archive](/guides/bundle_guide_3.jpg)
+![Create archive](${publicUrl}/guides/bundle_guide_3.jpg)
 
 4. Пакет готов и вы можете скачать его.
 
-![Download archive](/guides/bundle_guide_4.jpg)
+![Download archive](${publicUrl}/guides/bundle_guide_4.jpg)
 
 Спасибо!
 `,
@@ -579,19 +580,19 @@ DOS.Zone - это управляемая сообществом <span style="col
 
 1. Нажмите кнопку "Ответить"
 
-![reply](/guides/reply.jpg)
+![reply](${publicUrl}/guides/reply.jpg)
 
 2. Нажмите кнопку "Загрузить" и выберите архив с игрой
 
-![upload](/guides/upload.jpg)
+![upload](${publicUrl}/guides/upload.jpg)
 
 Введите комментарий к вашему архиву, опубликуйте сообщение.
 
 3. Призовите администратора что бы опубликовать архив в шапке игры.
 
-![flag](/guides/flag_0.jpg)
+![flag](${publicUrl}/guides/flag_0.jpg)
 
-![flag](/guides/flag.jpg)
+![flag](${publicUrl}/guides/flag.jpg)
 
 Спасибо!
 `

@@ -9,6 +9,7 @@ import { GameData } from "../../core/game";
 import { cdnUrl } from "../../core/cdn";
 
 import LazyLoad from "react-lazyload";
+import { publicUrl } from "../../core/config";
 
 export function GameThumb(props: {
     canPlay: boolean,
@@ -51,7 +52,7 @@ export function GameThumb(props: {
         return <Card onClick={props.onClick} className={["thumb-frame", props.selected ? "thumb-frame-selected" : ""].join(" ")} interactive={true}>
             <div className="thumb-title">{t("loading")}</div>
             <div className="thumb-title-2">...</div>
-            <img src={"/default.jpg"} className="thumb-screenshot" alt="screenshot"></img>
+            <img src={publicUrl + "/default.jpg"} className="thumb-screenshot" alt="screenshot"></img>
             <div className="thumb-author"></div>
             <Spinner className="thumb-play" />
         </Card>;
@@ -61,7 +62,7 @@ export function GameThumb(props: {
         <div className="thumb-title">{data.game}</div>
         <div className="thumb-title-2">{data.title}</div>
         <LazyLoad once>
-            <img src={cdnUrl(data.screenshot) || "/default.jpg"} className="thumb-screenshot" alt="screenshot"></img>
+            <img src={cdnUrl(data.screenshot) || publicUrl + "/default.jpg"} className="thumb-screenshot" alt="screenshot"></img>
         </LazyLoad>
         <div className="thumb-author">{"@" + data.author}</div>
         {props.selected && props.canPlay ? <Icon icon={IconNames.PLAY} iconSize={32} className="thumb-play heartbeat"></Icon> : null}

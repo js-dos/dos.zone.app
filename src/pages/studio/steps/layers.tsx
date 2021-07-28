@@ -16,6 +16,7 @@ import {
     Checkbox,
 } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
+import { publicUrl } from "../../../core/config";
 
 declare const emulatorsUi: EmulatorsUi;
 
@@ -277,7 +278,7 @@ function Layer(props: {
             <div className="touch-options" style={{flexDirection: "column"}}>
                 {t("buttons_thumb")}&nbsp;&nbsp;
                 <div>
-                    <img className="layout-thumb" src={ "/layers/all-buttons.jpg" } />
+                    <img className="layout-thumb" src={ publicUrl + "/layers/all-buttons.jpg" } />
                 </div>
             </div>
             <br/>

@@ -1,3 +1,5 @@
+export const publicUrl = process.env.PUBLIC_URL;
+
 export const uploadsS3Url = "https://doszone-uploads.s3.dualstack.eu-central-1.amazonaws.com";
 export const uploadsPersonalBase = "personal";
 
