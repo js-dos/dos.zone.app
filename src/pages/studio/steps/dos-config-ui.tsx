@@ -100,7 +100,15 @@ function RenderOption(props: { option: DosConfigOption,
         const onAllowedValueChange = (e: FormEvent<HTMLInputElement>) => {
             const newValue = e.currentTarget.value;
             setValue(newValue);
-            option.value = newValue === "fixed" ? newValue + " " + fixed : newValue;
+            if (newValue === "fixed") {
+                option.value = newValue + " " + fixed;
+            } else if (newValue === "true") {
+                option.value = true;
+            } else if (newValue === "false") {
+                option.value = false;
+            } else {
+                option.value = newValue;
+            }
         };
 
         const onFixedChange = (newFixed: number) => {

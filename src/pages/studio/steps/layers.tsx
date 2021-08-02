@@ -283,7 +283,7 @@ function Layer(props: {
             </div>
             <br/>
             {buttons.map((button, index) => {
-                if (index == 12) {
+                if (index === 12) {
                     // special button
                     return <React.Fragment key={index}></React.Fragment>;
                 }

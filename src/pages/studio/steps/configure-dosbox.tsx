@@ -31,6 +31,7 @@ export function ConfigureDosbox(props: StepProps) {
     });
 
     const setError = (error: Error) => {
+        setLoading(false);
         _setError(error.message + "\n\n" + JSON.stringify(error.stack));
     };
 
