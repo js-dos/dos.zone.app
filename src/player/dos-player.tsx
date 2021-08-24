@@ -112,7 +112,7 @@ export function DosPlayer(props: IPlayerProps) {
                 dos.layers.setOnSave(() => Promise.resolve());
             }
         } else if (props.user !== null && props.bundleUrl !== undefined) {
-            const personalBundleUrl = getPersonalBundleUrl(props.user.email, props.bundleUrl);
+            const personalBundleUrl = getPersonalBundleUrl(props.user.email, props.bundleUrl) + "?dt=" + Date.now();
             dos.run(cdnUrl(props.bundleUrl), personalBundleUrl).then((ci) => {
                 setCiIfNeeded(ci);
                 if (props.local || isDhry2Bundle) {

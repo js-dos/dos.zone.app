@@ -11,6 +11,7 @@ import { ScreenMoveControl } from "./screen-move";
 import { PointerButtonControl } from "./pointer-button";
 import { PointerMoveControl } from "./pointer-move";
 import { PointerResetControl } from "./pointer-reset";
+import { PointerToggleControl } from "./pointer-toggle";
 import { NippleActivatorControl } from "./nipple-activator";
 
 import { EmulatorsUi } from "emulators-ui";
@@ -31,6 +32,7 @@ export const controlsMapping: {[type: string]: React.FC<EditorStackProps>} = {
     PointerButton: PointerButtonControl,
     PointerMove: PointerMoveControl,
     PointerReset: PointerResetControl,
+    PointerToggle: PointerToggleControl,
     NippleActivator: NippleActivatorControl,
 }
 
