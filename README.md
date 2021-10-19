@@ -1,4 +1,8 @@
-# Dos.Zone cross-platform application
+# Arhived, this repository was splitted in multiple projects.
+
+Projects: https://github.com/js-dos/
+
+## Dos.Zone cross-platform application
 
 [Try it](https://dos.zone)
 
